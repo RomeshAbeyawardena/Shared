@@ -1,0 +1,17 @@
+﻿using System;
+using System.Threading.Tasks;
+
+namespace Shared.Contracts
+{
+    public interface IAppHost
+    {
+        object Run(string methodName);
+        Task RunAsync(string methodName);
+    }
+
+    public interface IAppHost<TStartup> : IAppHost
+    {
+        object Run(Func<TStartup, object> getMember);
+        Task RunAsync(Func<TStartup, Task> getMemberTask);
+    }
+}
