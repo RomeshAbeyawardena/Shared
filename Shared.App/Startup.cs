@@ -15,6 +15,12 @@ namespace Shared.App
         public async Task Start()
         {
             var testRepository = repositoryFactory.GetRepository<TestDbContext, Property>();
+
+            await testRepository.SaveChangesAsync(new Property
+            {
+                Id = 23,
+                Reference = "SDC346787"
+            });
         }
 
         public Startup(IRepositoryFactory repositoryFactory)
@@ -38,5 +44,6 @@ namespace Shared.App
     {
         [Key]
         public int Id {get;set;}
+        public string Reference { get; internal set; }
     }
 }

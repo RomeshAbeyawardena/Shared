@@ -14,7 +14,6 @@ namespace Shared.Library.Extensions
             {
                 forPropertiesAction(propertyInfo, source, instance);
             }
-
         }
     }
 }
