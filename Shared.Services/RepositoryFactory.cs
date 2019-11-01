@@ -2,8 +2,6 @@
 using Shared.Contracts;
 using Shared.Library.Extensions;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Shared.Services
 {

@@ -1,5 +1,4 @@
-﻿using System;
-using Shared.Domains;
+﻿using Shared.Domains;
 
 namespace Shared.Library
 {

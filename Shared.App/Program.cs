@@ -1,9 +1,9 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IO;
 using Shared.Contracts;
 using Shared.Library;
 using Shared.Services;
-using System;
 using System.Threading.Tasks;
 
 namespace Shared.App
@@ -20,7 +20,7 @@ namespace Shared.App
             .RegisterServices(services =>
             {
                 services
-                .AddDbContext<TestDbContext>()
+                .AddDbContext<TestDbContext>(options => options.UseSqlServer("Server=localhost;Database=PaymentsCalculator;Trusted_Connection=true;MultipleActiveResultSets=true"))
                 .AddSingleton<RecyclableMemoryStreamManager>()
                     .AddSingleton<IRepositoryFactory, RepositoryFactory>()
                     .AddSingleton<IBinarySerializer, BinarySerializer>()

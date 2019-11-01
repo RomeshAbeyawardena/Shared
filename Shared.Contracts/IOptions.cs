@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Shared.Contracts
+﻿namespace Shared.Contracts
 {
     public interface IOptions<TOptions> where TOptions : class
     {

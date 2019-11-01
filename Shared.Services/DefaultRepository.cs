@@ -1,11 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Shared.Contracts;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Shared.Services
@@ -35,10 +32,20 @@ namespace Shared.Services
 
         public async Task<TEntity> SaveChangesAsync(TEntity entity, bool saveChanges = true)
         {
-            var entry = DbSet.Attach(entity);
+            var model = dbContext.Model.GetEntityTypes().SingleOrDefault(entityType => entityType.ClrType == typeof(TEntity));
+            
+            foreach (var key in model.GetKeys())
+            {
+                var keyPropertyInfo = key.Properties.SingleOrDefault().PropertyInfo;
 
-            Console.WriteLine(entry.State);
-
+                var nullObject = keyPropertyInfo.PropertyType.IsValueType ? Activator.CreateInstance(keyPropertyInfo.PropertyType) : null;
+                
+                var keyValue = keyPropertyInfo.GetValue(entity);
+                if(keyValue.Equals(nullObject))
+                    DbSet.Add(entity);
+                else
+                    DbSet.Update(entity);
+            }
             if(saveChanges)
                 await dbContext.SaveChangesAsync();
 

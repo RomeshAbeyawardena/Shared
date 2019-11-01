@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Shared.Domains
+﻿namespace Shared.Domains
 {
     public enum CloneType
     {

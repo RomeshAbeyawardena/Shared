@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Reflection;
-using System.Runtime.Serialization;
 using Shared.Domains;
 
 namespace Shared.Contracts

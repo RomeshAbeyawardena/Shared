@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Shared.Contracts;
 using System;
-using System.Threading.Tasks;
 
 namespace Shared.Services
 {

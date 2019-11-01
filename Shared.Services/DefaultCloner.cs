@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Runtime.Serialization;
 using Shared.Contracts;
 using Shared.Domains;
 using Shared.Library;

@@ -1,9 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.IO;
+﻿using Humanizer;
+using Microsoft.EntityFrameworkCore;
 using Shared.Contracts;
 using System;
 using System.ComponentModel.DataAnnotations;
-using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace Shared.App
@@ -14,12 +13,16 @@ namespace Shared.App
 
         public async Task Start()
         {
-            var testRepository = repositoryFactory.GetRepository<TestDbContext, Property>();
+            var testRepository = repositoryFactory.GetRepository<TestDbContext, Account>();
 
-            await testRepository.SaveChangesAsync(new Property
+            await testRepository.SaveChangesAsync(new Account
             {
-                Id = 23,
-                Reference = "SDC346787"
+                
+                Reference = "SDC346787",
+                ShortName = "SDC",
+                Name = "Samuel Duncan",
+                Registered = DateTimeOffset.Now,
+                Created = DateTimeOffset.Now
             });
         }
 
@@ -37,13 +40,23 @@ namespace Shared.App
 
         }
 
-        public DbSet<Property> Properties {get;set;}
+        public DbSet<Account> Accounts {get;set;}
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            foreach(var entityType in modelBuilder.Model.GetEntityTypes())
+                entityType.SetTableName(entityType.GetTableName().Singularize());
+        }
     }
 
-    public class Property
+    public class Account
     {
         [Key]
         public int Id {get;set;}
-        public string Reference { get; internal set; }
+        public string Reference { get; set; }
+        public string ShortName { get; set; }
+        public string Name { get; set; }
+        public DateTimeOffset Registered { get; set; }
+        public DateTimeOffset Created { get; set; }
     }
 }

@@ -1,6 +1,4 @@
-﻿using System.Runtime.InteropServices.ComTypes;
-
-namespace Shared.Contracts
+﻿namespace Shared.Contracts
 {
     public interface IMessagePackBinarySerializer : IBinarySerializer
     {
