@@ -1,8 +1,11 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IO;
 using Shared.Contracts;
+using Shared.Contracts.Providers;
 using Shared.Library;
+using Shared.Services.Providers;
 using System;
+using Microsoft.Extensions.Internal;
 using System.Collections.Generic;
 using System.Text;
 
@@ -13,7 +16,11 @@ namespace Shared.Services
         public void RegisterServices(IServiceCollection services, Action<IServiceCollection> registerExternalServices = null)
         {
             registerExternalServices?.Invoke(services);
-            services.AddSingleton<RecyclableMemoryStreamManager>()
+
+            services
+                .AddSingleton<ISystemClock, SystemClock>()
+                .AddSingleton<IClockProvider, DefaultSystemClockProvider>()
+                .AddSingleton<RecyclableMemoryStreamManager>()
                 .AddSingleton<IEncryptionService, EncryptionService>()
                 .AddSingleton<ICacheFactory, DefaultCacheFactory>()
                 .AddSingleton<IMemoryStreamManager, MemoryStreamManager>()
