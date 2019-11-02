@@ -10,9 +10,12 @@ namespace Shared.Services
 {
     public class DefaultServiceRegistration : IServiceRegistration
     {
-        public void RegisterServices(IServiceCollection services)
+        public void RegisterServices(IServiceCollection services, Action<IServiceCollection> registerExternalServices = null)
         {
+            registerExternalServices?.Invoke(services);
             services.AddSingleton<RecyclableMemoryStreamManager>()
+                .AddSingleton<IEncryptionService, EncryptionService>()
+                .AddSingleton<ICacheFactory, DefaultCacheFactory>()
                 .AddSingleton<IMemoryStreamManager, MemoryStreamManager>()
                     .AddSingleton<IRepositoryFactory, RepositoryFactory>()
                     .AddSingleton<IBinarySerializer, BinarySerializer>()

@@ -14,7 +14,7 @@ namespace Shared.Services
         {
             var cachedResult = await distributedCache.GetAsync(cacheKeyName);
 
-            if(cachedResult == null || cachedResult.Length == 0)
+            if (cachedResult == null || cachedResult.Length == 0)
                 return default;
 
             return messagePackBinarySerializer.Deserialize<T>(cachedResult);
@@ -22,12 +22,11 @@ namespace Shared.Services
 
         public async Task<T> Set<T>(string cacheKeyName, T value) where T : class
         {
-            var data = Array.Empty<byte>();
-            
-            if(value != null)
-                messagePackBinarySerializer.Serialize(value);
+            if (value == null)
+                return value;
 
-             await distributedCache.SetAsync(cacheKeyName, data);
+            var data = messagePackBinarySerializer.Serialize(value);
+            await distributedCache.SetAsync(cacheKeyName, data);
 
             return value;
         }
@@ -37,7 +36,7 @@ namespace Shared.Services
             await distributedCache.RemoveAsync(key);
         }
 
-        public DistributedMemoryCacheService(IDistributedCache distributedCache, 
+        public DistributedMemoryCacheService(IDistributedCache distributedCache,
             IMessagePackBinarySerializer messagePackBinarySerializer)
         {
             this.distributedCache = distributedCache;

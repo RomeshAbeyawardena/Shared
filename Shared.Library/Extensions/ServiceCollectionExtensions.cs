@@ -8,10 +8,9 @@ namespace Shared.Library.Extensions
 {
     public static class ServiceCollectionExtensions
     {
-        public static TService Resolve<TService>(this IServiceProvider serviceProvider)
+        public static object Resolve(this IServiceProvider serviceProvider, Type serviceType)
         {
             var constructorParameters = new List<object>();
-            var serviceType =typeof(TService);
             var publicConstructor = serviceType.GetConstructors().FirstOrDefault(c => c.IsPublic);
             foreach (var t in publicConstructor.GetParameters())
             {
@@ -19,7 +18,12 @@ namespace Shared.Library.Extensions
             }
 
             var resolvedService = Activator.CreateInstance(serviceType, constructorParameters.ToArray());
-            return (TService)resolvedService;
+            return resolvedService;
+        }
+
+        public static TService Resolve<TService>(this IServiceProvider serviceProvider)
+        {
+            return (TService)serviceProvider.Resolve(typeof(TService));
         }
 
         public static IServiceCollection RegisterServiceBroker<TServiceBroker>(this IServiceCollection services)
