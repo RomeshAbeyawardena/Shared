@@ -1,17 +1,18 @@
 ﻿using System;
 using Shared.Contracts;
-using Microsoft.IO;
 
 namespace Shared.Services
 {
     public class MessagePackBinarySerializer : IMessagePackBinarySerializer
     {
+        private readonly IMemoryStreamManager memoryStreamManager;
+
         public byte[] Serialize<T>(T value) where T : class
         {
             if(value == null)
                 return Array.Empty<byte>();
 
-            using (var memoryStream = recyclableMemoryStreamManager.GetStream())
+            using (var memoryStream = memoryStreamManager.GetStream())
             {
 
                 MessagePack.MessagePackSerializer.Serialize(memoryStream, value);
@@ -24,17 +25,16 @@ namespace Shared.Services
             if (value == null || value.Length == 0)
                 return default;
 
-            using (var memoryStream = recyclableMemoryStreamManager.GetStream()){
-                memoryStream.Write(value);
+            using (var memoryStream = memoryStreamManager.GetStream(value)){
                 return MessagePack.MessagePackSerializer.Deserialize<T>(memoryStream);
             }
         }
 
-        public MessagePackBinarySerializer(RecyclableMemoryStreamManager recyclableMemoryStreamManager)
+        public MessagePackBinarySerializer(IMemoryStreamManager memoryStreamManager)
         {
-            this.recyclableMemoryStreamManager = recyclableMemoryStreamManager;
+            this.memoryStreamManager = memoryStreamManager;
         }
 
-        private readonly RecyclableMemoryStreamManager recyclableMemoryStreamManager;
+        
     }
 }

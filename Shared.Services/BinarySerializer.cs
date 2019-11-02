@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Runtime.Serialization.Formatters.Binary;
-using Microsoft.IO;
 using Shared.Contracts;
 
 namespace Shared.Services
@@ -8,13 +7,14 @@ namespace Shared.Services
     public class BinarySerializer : IBinarySerializer
     {
         private readonly BinaryFormatter binaryFormatter;
+        private readonly IMemoryStreamManager memoryStreamManager;
 
         public virtual byte[] Serialize<T>(T value) where T : class
         {
             if(value == null)
                 return Array.Empty<byte>();
 
-            using (var memoryStream = recyclableMemoryStreamManager.GetStream()){
+            using (var memoryStream = memoryStreamManager.GetStream()){
                 binaryFormatter.Serialize(memoryStream, value);
                 return memoryStream.ToArray();
             }
@@ -25,18 +25,16 @@ namespace Shared.Services
             if (value == null || value.Length == 0)
                 return default;
 
-            using (var memoryStream = recyclableMemoryStreamManager.GetStream()){
-                memoryStream.Write(value);
+            using (var memoryStream = memoryStreamManager.GetStream(value)){
                 return binaryFormatter.Deserialize(memoryStream) as T;
             }
         }
 
-        public BinarySerializer(RecyclableMemoryStreamManager recyclableMemoryStreamManager)
+        public BinarySerializer(IMemoryStreamManager memoryStreamManager)
         {
-            this.recyclableMemoryStreamManager = recyclableMemoryStreamManager;
+            
             binaryFormatter = new BinaryFormatter();
+            this.memoryStreamManager = memoryStreamManager;
         }
-
-        private readonly RecyclableMemoryStreamManager recyclableMemoryStreamManager;
     }
 }

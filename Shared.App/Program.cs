@@ -22,6 +22,7 @@ namespace Shared.App
                 services
                 .AddDbContext<TestDbContext>(options => options.UseSqlServer("Server=localhost;Database=PaymentsCalculator;Trusted_Connection=true;MultipleActiveResultSets=true"))
                 .AddSingleton<RecyclableMemoryStreamManager>()
+                .AddSingleton<IMemoryStreamManager, MemoryStreamManager>()
                     .AddSingleton<IRepositoryFactory, RepositoryFactory>()
                     .AddSingleton<IBinarySerializer, BinarySerializer>()
                     .AddSingleton<IMessagePackBinarySerializer, MessagePackBinarySerializer>()
