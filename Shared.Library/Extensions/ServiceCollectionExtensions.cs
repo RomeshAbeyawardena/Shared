@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Shared.Contracts;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -18,6 +20,15 @@ namespace Shared.Library.Extensions
 
             var resolvedService = Activator.CreateInstance(serviceType, constructorParameters.ToArray());
             return (TService)resolvedService;
+        }
+
+        public static IServiceCollection RegisterServiceBroker<TServiceBroker>(this IServiceCollection services)
+            where TServiceBroker : IServiceBroker
+        {
+            var serviceBroker = Activator.CreateInstance<TServiceBroker>();
+            serviceBroker.RegisterServiceAssemblies(serviceBroker.GetAssemblies);
+
+            return this;
         }
     }
 }
