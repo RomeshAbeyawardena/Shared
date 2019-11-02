@@ -30,6 +30,18 @@ namespace Shared.Services
             return await DbSet.FindAsync(key);
         }
 
+        public async Task<int> Remove(TEntity entity, bool saveChanges = true)
+        {
+            dbContext.Remove(entity);
+            return await dbContext.SaveChangesAsync();
+        }
+
+        public async Task<int> RemoveAsync(bool saveChanges = true, params object[] keys)
+        {
+            var entity = await FindAsync(keys);
+            return await Remove(entity);
+        }
+
         public async Task<TEntity> SaveChangesAsync(TEntity entity, bool saveChanges = true)
         {
             var model = dbContext.Model.GetEntityTypes().SingleOrDefault(entityType => entityType.ClrType == typeof(TEntity));
@@ -38,7 +50,9 @@ namespace Shared.Services
             {
                 var keyPropertyInfo = key.Properties.SingleOrDefault().PropertyInfo;
 
-                var nullObject = keyPropertyInfo.PropertyType.IsValueType ? Activator.CreateInstance(keyPropertyInfo.PropertyType) : null;
+                var nullObject = keyPropertyInfo.PropertyType.IsValueType 
+                    ? Activator.CreateInstance(keyPropertyInfo.PropertyType) 
+                    : null;
                 
                 var keyValue = keyPropertyInfo.GetValue(entity);
                 if(keyValue.Equals(nullObject))
@@ -47,9 +61,14 @@ namespace Shared.Services
                     DbSet.Update(entity);
             }
             if(saveChanges)
-                await dbContext.SaveChangesAsync();
+                await SaveChangesAsync();
 
             return entity;
+        }
+
+        public async Task<int> SaveChangesAsync()
+        {
+            return await dbContext.SaveChangesAsync();
         }
 
         public IQueryable<TEntity> Where(Expression<Func<TEntity, bool>> whereExpression = null, bool detachEntities = true)

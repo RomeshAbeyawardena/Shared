@@ -15,15 +15,17 @@ namespace Shared.App
         {
             var testRepository = repositoryFactory.GetRepository<TestDbContext, Account>();
 
-            await testRepository.SaveChangesAsync(new Account
-            {
+            //await testRepository.SaveChangesAsync(new Account
+            //{
                 
-                Reference = "SDC346787",
-                ShortName = "SDC",
-                Name = "Samuel Duncan",
-                Registered = DateTimeOffset.Now,
-                Created = DateTimeOffset.Now
-            });
+            //    Reference = "SDC346787",
+            //    ShortName = "SDC",
+            //    Name = "Samuel Duncan",
+            //    Registered = DateTimeOffset.Now,
+            //    Created = DateTimeOffset.Now
+            //});
+
+            await testRepository.RemoveAsync(true, 1);
         }
 
         public Startup(IRepositoryFactory repositoryFactory)
