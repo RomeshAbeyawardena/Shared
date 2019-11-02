@@ -1,8 +1,10 @@
 ﻿using Humanizer;
 using Microsoft.EntityFrameworkCore;
 using Shared.Contracts;
+using Shared.Services;
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace Shared.App
@@ -32,6 +34,11 @@ namespace Shared.App
         {
             this.repositoryFactory = repositoryFactory;
         }
+    }
+
+    public class MyServiceBroker : DefaultServiceBroker
+    {
+        public override Assembly[] GetAssemblies => new [] { Assembly.GetExecutingAssembly() };
     }
 
     public class TestDbContext : DbContext
