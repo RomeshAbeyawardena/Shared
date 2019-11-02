@@ -79,10 +79,11 @@ namespace Shared.Services
             var query = detachEntities 
                 ? DbSet.AsNoTracking() 
                 : DbSet;
-               
-            query.Where(whereExpression);
-
-            return query;
+            
+            if(whereExpression == null)
+                return query;
+            
+            return query.Where(whereExpression);
         }
     }
 }

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Shared.Services
 {
-    public class DistributedCacheService : ICacheService
+    public class DistributedMemoryCacheService : ICacheService
     {
         private readonly IDistributedCache distributedCache;
         private readonly IMessagePackBinarySerializer messagePackBinarySerializer;
@@ -32,7 +32,12 @@ namespace Shared.Services
             return value;
         }
 
-        public DistributedCacheService(IDistributedCache distributedCache, 
+        public async Task RemoveAsync(string key)
+        {
+            await distributedCache.RemoveAsync(key);
+        }
+
+        public DistributedMemoryCacheService(IDistributedCache distributedCache, 
             IMessagePackBinarySerializer messagePackBinarySerializer)
         {
             this.distributedCache = distributedCache;

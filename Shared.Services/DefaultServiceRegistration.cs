@@ -8,7 +8,7 @@ using System.Text;
 
 namespace Shared.Services
 {
-    public class ServiceRegistration : IServiceRegistration
+    public class DefaultServiceRegistration : IServiceRegistration
     {
         public void RegisterServices(IServiceCollection services)
         {
