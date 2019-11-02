@@ -32,6 +32,9 @@ namespace Shared.Services
 
         public async Task<int> Remove(TEntity entity, bool saveChanges = true)
         {
+            if(entity == null)
+                throw new ArgumentNullException(nameof(entity));
+
             dbContext.Remove(entity);
             return await dbContext.SaveChangesAsync();
         }

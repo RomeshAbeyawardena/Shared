@@ -38,7 +38,7 @@ namespace Shared.App
 
     public class MyServiceBroker : DefaultServiceBroker
     {
-        public override Assembly[] GetAssemblies => new [] { Assembly.GetExecutingAssembly() };
+        public override Assembly[] GetAssemblies => new [] { Assembly.GetAssembly(typeof(ServiceRegistration)) };
     }
 
     public class TestDbContext : DbContext
