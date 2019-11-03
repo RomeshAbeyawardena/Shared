@@ -19,6 +19,7 @@ namespace Shared.Services
 
             services
                 .AddSingleton<ISystemClock, SystemClock>()
+                .AddSingleton<IMapperProvider, MapperProvider>()
                 .AddSingleton<IClockProvider, DefaultSystemClockProvider>()
                 .AddSingleton<RecyclableMemoryStreamManager>()
                 .AddSingleton<IEncryptionService, EncryptionService>()

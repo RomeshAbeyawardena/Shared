@@ -13,6 +13,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="9.0.0" />
     <PackageReference Include="Humanizer.Core" Version="2.7.9" />
     <PackageReference Include="MessagePack" Version="1.8.74" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.0.0" />
