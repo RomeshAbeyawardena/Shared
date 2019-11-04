@@ -25,15 +25,15 @@ namespace Shared.Services
                 .AddSingleton<IEncryptionService, EncryptionService>()
                 .AddSingleton<ICacheFactory, DefaultCacheFactory>()
                 .AddSingleton<IMemoryStreamManager, MemoryStreamManager>()
-                    .AddSingleton<IRepositoryFactory, RepositoryFactory>()
-                    .AddSingleton<IBinarySerializer, BinarySerializer>()
-                    .AddSingleton<IMessagePackBinarySerializer, MessagePackBinarySerializer>()
-                    .AddSingleton<IOptions<DefaultCloneOptions>>(new Options<DefaultCloneOptions>(opt =>
-                    {
-                        opt.DefaultCloneType = Domains.CloneType.Deep;
-                        opt.UseMessagePack = true;
-                    }))
-                    .AddSingleton(typeof(ICloner<>), typeof(DefaultCloner<>));
+                .AddSingleton<IRepositoryFactory, RepositoryFactory>()
+                .AddSingleton<IBinarySerializer, BinarySerializer>()
+                .AddSingleton<IMessagePackBinarySerializer, MessagePackBinarySerializer>()
+                .AddSingleton<IOptions<DefaultCloneOptions>>(new Options<DefaultCloneOptions>(opt =>
+                {
+                    opt.DefaultCloneType = Domains.CloneType.Deep;
+                    opt.UseMessagePack = true;
+                }))
+                .AddSingleton(typeof(ICloner<>), typeof(DefaultCloner<>));
         }
     }
 }
