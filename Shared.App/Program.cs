@@ -21,8 +21,7 @@ namespace Shared.App
             .RegisterServices(services =>
             {
                 services
-                .RegisterServiceBroker<MyServiceBroker>()
-                .AddDbContext<TestDbContext>(options => options.UseSqlServer("Server=localhost;Database=PaymentsCalculator;Trusted_Connection=true;MultipleActiveResultSets=true"));
+                .RegisterServiceBroker<MyServiceBroker>();
             })
             .Build<Startup>();
     }

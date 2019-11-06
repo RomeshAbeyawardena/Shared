@@ -23,6 +23,7 @@ namespace Shared.Services
                 .AddSingleton<IClockProvider, DefaultSystemClockProvider>()
                 .AddSingleton<RecyclableMemoryStreamManager>()
                 .AddSingleton<IEncryptionService, EncryptionService>()
+                .AddSingleton<ICryptographicProvider, CryptographicProvider>()
                 .AddSingleton<ICacheFactory, DefaultCacheFactory>()
                 .AddSingleton<IMemoryStreamManager, MemoryStreamManager>()
                 .AddSingleton<IRepositoryFactory, RepositoryFactory>()
