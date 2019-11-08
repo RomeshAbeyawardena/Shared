@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace Shared.Contracts
+namespace Shared.Contracts.Factories
 {
     public interface IRepositoryFactory
     {

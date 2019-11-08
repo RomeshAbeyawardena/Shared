@@ -1,11 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Shared.Contracts;
+using Shared.Contracts.Factories;
 using Shared.Library.Extensions;
 using System;
 
 namespace Shared.Services
 {
-    public class RepositoryFactory : IRepositoryFactory
+    public class DefaultRepositoryFactory : IRepositoryFactory
     {
         private readonly IServiceProvider serviceProvider;
 
@@ -16,7 +17,7 @@ namespace Shared.Services
             return serviceProvider.Resolve<DefaultRepository<TDbContext, TEntity>>();
         }
 
-        public RepositoryFactory(IServiceProvider serviceProvider)
+        public DefaultRepositoryFactory(IServiceProvider serviceProvider)
         {
             this.serviceProvider = serviceProvider;
         }

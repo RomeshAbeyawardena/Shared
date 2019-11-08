@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Caching.Distributed;
 using Shared.Contracts;
-using System;
 using System.Threading.Tasks;
 
 namespace Shared.Services

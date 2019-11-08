@@ -1,9 +1,6 @@
 ﻿using Shared.Domains;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace Shared.Contracts
+namespace Shared.Contracts.Factories
 {
     public interface ICacheFactory
     {

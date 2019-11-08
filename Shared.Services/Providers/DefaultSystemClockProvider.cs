@@ -1,8 +1,6 @@
 ﻿using Microsoft.Extensions.Internal;
 using Shared.Contracts.Providers;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Shared.Services.Providers
 {

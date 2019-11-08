@@ -3,11 +3,10 @@ using Shared.Domains;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
-using System.Text;
 
 namespace Shared.Services
 {
-    public class ExpressionBuilder : IExpressionBuilder
+    public sealed class ExpressionBuilder : IExpressionBuilder
     {
         private readonly IDictionary<string, ExpressionParameter> expressionParameterDictionary;
 

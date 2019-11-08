@@ -1,9 +1,8 @@
 ﻿using Shared.Contracts;
+using Shared.Contracts.Factories;
 using Shared.Domains;
 using Shared.Library.Extensions;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Shared.Services
 {

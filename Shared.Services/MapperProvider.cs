@@ -1,12 +1,10 @@
 ﻿using AutoMapper;
 using Shared.Contracts;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Shared.Services
 {
-    public class MapperProvider : IMapperProvider
+    public sealed class MapperProvider : IMapperProvider
     {
         private readonly IMapper mapper;
 

@@ -2,7 +2,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Shared.Services
 {
@@ -14,7 +13,7 @@ namespace Shared.Services
         }
     }
 
-    internal class Switch<TKey, TValue> : ISwitch<TKey, TValue>
+    public sealed class Switch<TKey, TValue> : ISwitch<TKey, TValue>
     {
         private readonly IDictionary<TKey, TValue> _switchDictionary;
 

@@ -6,8 +6,9 @@ using Shared.Library;
 using Shared.Services.Providers;
 using System;
 using Microsoft.Extensions.Internal;
-using System.Collections.Generic;
-using System.Text;
+using Shared.Contracts.Factories;
+using Shared.Services.Factories;
+using Shared.Domains;
 
 namespace Shared.Services
 {
@@ -20,15 +21,19 @@ namespace Shared.Services
             services
                 .AddSingleton<ISystemClock, SystemClock>()
                 .AddSingleton<IMapperProvider, MapperProvider>()
+                .AddSingleton<ISerializerFactory, DefaultSerializerFactory>()
                 .AddSingleton<IClockProvider, DefaultSystemClockProvider>()
                 .AddSingleton<RecyclableMemoryStreamManager>()
                 .AddSingleton<IEncryptionService, EncryptionService>()
                 .AddSingleton<ICryptographicProvider, DefaultCryptographicProvider>()
                 .AddSingleton<ICacheFactory, DefaultCacheFactory>()
                 .AddSingleton<IMemoryStreamManager, MemoryStreamManager>()
-                .AddSingleton<IRepositoryFactory, RepositoryFactory>()
+                .AddSingleton<IRepositoryFactory, DefaultRepositoryFactory>()
                 .AddSingleton<IBinarySerializer, BinarySerializer>()
                 .AddSingleton<IMessagePackBinarySerializer, MessagePackBinarySerializer>()
+                .AddSingleton(DefaultSwitch.Create<SerializerType, Type>()
+                    .CaseWhen(SerializerType.Binary, typeof(IBinarySerializer))
+                    .CaseWhen(SerializerType.MessagePack, typeof(IMessagePackBinarySerializer)))
                 .AddSingleton<IOptions<DefaultCloneOptions>>(new Options<DefaultCloneOptions>(opt =>
                 {
                     opt.DefaultCloneType = Domains.CloneType.Deep;

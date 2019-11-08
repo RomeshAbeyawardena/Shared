@@ -1,8 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.IO;
-using Shared.Contracts;
-using Shared.Library;
+﻿using Shared.Contracts;
 using Shared.Library.Extensions;
 using Shared.Services;
 using System.Threading.Tasks;
@@ -21,7 +17,7 @@ namespace Shared.App
             .RegisterServices(services =>
             {
                 services
-                .RegisterServiceBroker<MyServiceBroker>();
+                    .RegisterServiceBroker<MyServiceBroker>();
             })
             .Build<Startup>();
     }

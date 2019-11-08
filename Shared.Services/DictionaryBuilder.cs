@@ -12,7 +12,7 @@ namespace Shared.Services
         }
     }
 
-    public class DictionaryBuilder<TKey, TValue> : IDictionaryBuilder<TKey, TValue>
+    public sealed class DictionaryBuilder<TKey, TValue> : IDictionaryBuilder<TKey, TValue>
     {
         public TValue this[TKey key] => _dictionary[key];
 
