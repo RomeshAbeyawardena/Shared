@@ -5,6 +5,6 @@ namespace Shared.Library
     public class DefaultCloneOptions
     {
         public CloneType DefaultCloneType { get; set; }
-        public bool UseMessagePack { get; set; }
+        public SerializerType SerializerType { get; set; }
     }
 }

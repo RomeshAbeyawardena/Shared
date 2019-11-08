@@ -14,10 +14,8 @@ namespace Shared.Services
 {
     public class DefaultServiceRegistration : IServiceRegistration
     {
-        public void RegisterServices(IServiceCollection services, Action<IServiceCollection> registerExternalServices = null)
+        public void RegisterServices(IServiceCollection services)
         {
-            registerExternalServices?.Invoke(services);
-
             services
                 .AddSingleton<ISystemClock, SystemClock>()
                 .AddSingleton<IMapperProvider, MapperProvider>()
@@ -34,11 +32,6 @@ namespace Shared.Services
                 .AddSingleton(DefaultSwitch.Create<SerializerType, Type>()
                     .CaseWhen(SerializerType.Binary, typeof(IBinarySerializer))
                     .CaseWhen(SerializerType.MessagePack, typeof(IMessagePackBinarySerializer)))
-                .AddSingleton<IOptions<DefaultCloneOptions>>(new Options<DefaultCloneOptions>(opt =>
-                {
-                    opt.DefaultCloneType = Domains.CloneType.Deep;
-                    opt.UseMessagePack = true;
-                }))
                 .AddSingleton(typeof(ICloner<>), typeof(DefaultCloner<>));
         }
     }
