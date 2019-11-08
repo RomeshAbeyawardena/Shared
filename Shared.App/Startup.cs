@@ -3,12 +3,14 @@ using Microsoft.EntityFrameworkCore;
 using Shared.Contracts;
 using Shared.Services;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Shared.Library.Extensions;
 using System.IO;
+using System.Linq;
 
 namespace Shared.App
 {
@@ -19,24 +21,72 @@ namespace Shared.App
 
         public async Task Start()
         {
-            var cryptoData = await GetCryptoDataFromUserInput();
-            Console.Write("OK\r\nMessage: ");
-            var encrypted = encryptionService.EncryptString(Console.ReadLine(), cryptoData.Key, cryptoData.Iv);
-            
-            Console.WriteLine(BitConverter.ToString(encrypted));
+            var customerList = new List<Customer>();
+            var initialList = new List<Initial>();
 
-            cryptoData = await GetCryptoDataFromUserInput();
+            initialList.Add(new Initial
+            {
+                Id = 1,
+                Created = new DateTimeOffset(2019, 11, 08, 10, 00, 00, TimeSpan.FromHours(0)),
+                Modified = new DateTimeOffset(2019, 11, 08, 10, 30, 00, TimeSpan.FromHours(0)),
+                Title = "MR",
+                LongTitle = string.Empty
+            });
 
-            var decrypted = encryptionService.DecryptBytes(encrypted, cryptoData.Key, cryptoData.Iv);
-            Console.WriteLine("Decrypted Message: {0}", decrypted);
-            Console.ReadKey();
+            initialList.Add(new Initial
+            {
+                Id = 2,
+                Created = new DateTimeOffset(2019, 11, 08, 10, 00, 00, TimeSpan.FromHours(0)),
+                Modified = new DateTimeOffset(2019, 11, 08, 10, 30, 00, TimeSpan.FromHours(0)),
+                Title = "Mrs",
+                LongTitle = string.Empty
+            });
+
+            var initialExpression = ExpressionBuilder.Create().And("Id", value: 1);
+            var initialExpression2 = ExpressionBuilder.Create().And("Id", value: 2);
+            customerList.Add(new Customer
+            {
+                Id = 1,
+                Initial = initialList.AsQueryable().SingleOrDefault(initialExpression.ToExpression<Initial>()),
+                InitialId = 1,
+                Created = new DateTimeOffset(2019, 11, 08, 10, 00, 00, TimeSpan.FromHours(0)),
+                Modified = new DateTimeOffset(2019, 11, 08, 10, 30, 00, TimeSpan.FromHours(0)),
+                FirstName = "John",
+                MiddleName = "Maccy",
+                LastName = "Doe"
+            });
+
+            customerList.Add(new Customer
+            {
+                Id = 2,
+                InitialId = 2,
+                Initial = initialList.AsQueryable().SingleOrDefault(initialExpression2.ToExpression<Initial>()),
+                Created = new DateTimeOffset(2019, 11, 08, 10, 00, 00, TimeSpan.FromHours(0)),
+                Modified = new DateTimeOffset(2019, 11, 08, 10, 30, 00, TimeSpan.FromHours(0)),
+                FirstName = "Jane",
+                MiddleName = "Lindsey",
+                LastName = "Doe",
+            });
+
+            initialExpression = ExpressionBuilder.Create()
+                .And("FirstName", value: "John")
+                .And("InitialId", value: 1)
+                .Or("LastName", value: "Doe");
+
+            initialExpression2 = ExpressionBuilder.Create()
+                .And("FirstName",  value: "Jane")
+                .And("InitialId",  value: 2)
+                .Or("LastName", value: "Doe");
+
+            var customer = customerList.AsQueryable().Where(initialExpression2.ToExpression<Customer>());
+            var customer2 = customerList.AsQueryable().Where(initialExpression2.ToExpression<Customer>());
         }
 
         public async Task<CryptoData> GetCryptoDataFromUserInput()
         {
             RequestPassword:
             Console.Write("Password: ");
-            var securePassword = await SecureRead('*');
+            var securePassword = await ConsoleExtensions.SecureRead('*');
             
             if(securePassword.Escaped || securePassword.Length < 7)
                 goto RequestPassword;
@@ -45,7 +95,7 @@ namespace Shared.App
 
             RequestMemorialWord:
             Console.Write("OK\r\nMemorable word: ");
-            var secureMemorialWord = await SecureRead('*');
+            var secureMemorialWord = await ConsoleExtensions.SecureRead('*');
 
             if(secureMemorialWord.Escaped || secureMemorialWord.Length < 6)
                 goto RequestMemorialWord;
@@ -58,34 +108,33 @@ namespace Shared.App
             return new CryptoData(generatedIV, generatedKey);
         }
 
-        public static async Task<SecureReadInfo> SecureRead(char secureChar)
-        {
-            var secureInfo = new SecureReadInfo();
-            using var memoryStream = new MemoryStream();
-            using var streamWriter = new StreamWriter(memoryStream);
-            var currentKeyInfo = Console.ReadKey(true);
-            secureInfo.Length = 0;
-            while(currentKeyInfo.Key != ConsoleKey.Enter)
-            {
-                if(currentKeyInfo.Key == ConsoleKey.Escape)
-                    break;
-                                                   
-                Console.Write(secureChar);
-                secureInfo.Length++;
-                await streamWriter.WriteAsync(currentKeyInfo.KeyChar);
-                currentKeyInfo = Console.ReadKey(true);
-            }
-            await streamWriter.FlushAsync();
-            Console.WriteLine();
-            secureInfo.Value = memoryStream.ToArray();
-            return secureInfo;
-        }
-
         public Startup(ICryptographicProvider cryptographicProvider, IEncryptionService encryptionService)
         {
             this.cryptographicProvider = cryptographicProvider;
             this.encryptionService = encryptionService;
         }
+    }
+
+    public class Customer
+    {
+        public int Id { get; set; }
+        public int InitialId { get; set; }
+        public string FirstName { get; set; }
+        public string MiddleName { get; set; }
+        public string LastName { get; set; }
+        public DateTimeOffset Created { get; set; }
+        public DateTimeOffset Modified { get; set; }
+
+        public virtual Initial Initial { get; set; }
+    }
+
+    public class Initial
+    {
+        public int Id { get; set; }
+        public string Title { get; set; }
+        public string LongTitle { get; set; }
+        public DateTimeOffset Created { get; set; }
+        public DateTimeOffset Modified { get; set; }
     }
 
     public class CryptoData
