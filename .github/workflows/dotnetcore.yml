@@ -16,4 +16,4 @@ jobs:
     - name: Build with dotnet
       run: dotnet build --configuration Release
     - name: package .net core
-    - run: dotnet pack
+      run: dotnet pack
