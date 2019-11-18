@@ -9,6 +9,7 @@ using Microsoft.Extensions.Internal;
 using Shared.Contracts.Factories;
 using Shared.Services.Factories;
 using Shared.Domains;
+using System.Security.Cryptography;
 
 namespace Shared.Services
 {
@@ -28,7 +29,11 @@ namespace Shared.Services
                 .AddSingleton<IMemoryStreamManager, MemoryStreamManager>()
                 .AddSingleton<IRepositoryFactory, DefaultRepositoryFactory>()
                 .AddSingleton<IBinarySerializer, BinarySerializer>()
+                .AddSingleton<ISymmetricAlgorithmFactory, DefaultSymmetricAlgorithmFactory>()
                 .AddSingleton<IMessagePackBinarySerializer, MessagePackBinarySerializer>()
+                .AddSingleton<AesCryptoServiceProvider>()
+                .AddSingleton(DefaultSwitch.Create<SymmetricAlgorithmType, Type>()
+                    .CaseWhen(SymmetricAlgorithmType.Aes, typeof(AesCryptoServiceProvider)))
                 .AddSingleton(DefaultSwitch.Create<SerializerType, Type>()
                     .CaseWhen(SerializerType.Binary, typeof(IBinarySerializer))
                     .CaseWhen(SerializerType.MessagePack, typeof(IMessagePackBinarySerializer)))

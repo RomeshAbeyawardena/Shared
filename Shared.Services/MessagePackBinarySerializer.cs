@@ -14,7 +14,6 @@ namespace Shared.Services
 
             using (var memoryStream = memoryStreamManager.GetStream())
             {
-
                 MessagePack.MessagePackSerializer.Serialize(memoryStream, value);
                 return memoryStream.ToArray();
             }

@@ -19,9 +19,10 @@ namespace Shared.App
 
         public async Task Start()
         {
+            var symmetricAlgorithmType = SymmetricAlgorithmType.Aes;
             var emailAddress = Console.ReadLine();
             var gData = await GetCryptoDataFromUserInput();
-            var encrypted = encryptionService.EncryptString(emailAddress, gData.Key, gData.Iv);
+            var encrypted = encryptionService.EncryptString(symmetricAlgorithmType, emailAddress, gData.Key, gData.Iv);
             var binarySerializer = serializerFactory.GetSerializer(SerializerType.MessagePack);
             var serialized = binarySerializer.Serialize(new Customer {
                     Id = 1,
@@ -33,7 +34,7 @@ namespace Shared.App
                     Modified = DateTimeOffset.Now
                 });
 
-            var decryptedEmail = encryptionService.DecryptBytes(encrypted, gData.Key, gData.Iv);
+            var decryptedEmail = encryptionService.DecryptBytes(symmetricAlgorithmType, encrypted, gData.Key, gData.Iv);
 
             Console.WriteLine(decryptedEmail);
 

@@ -1,4 +1,6 @@
 ﻿using Shared.Contracts;
+using Shared.Contracts.Factories;
+using Shared.Domains;
 using System;
 using System.IO;
 using System.Security.Cryptography;
@@ -9,6 +11,7 @@ namespace Shared.Services
     public class EncryptionService : IEncryptionService
     {
         private readonly IMemoryStreamManager memoryStreamManager;
+        private readonly ISymmetricAlgorithmFactory symmetricAlgorithmFactory;
 
         public byte[] GenerateBytes(string key, Encoding encoding = null)
         {
@@ -18,7 +21,7 @@ namespace Shared.Services
             return encoding.GetBytes(key);
         }
 
-        public byte[] EncryptString(string plainText, byte[] key, byte[] iV)
+        public byte[] EncryptString(SymmetricAlgorithmType symmetricAlgorithmType, string plainText, byte[] key, byte[] iV)
         {
             if (plainText == null || plainText.Length <= 0)
                 throw new ArgumentNullException(nameof(plainText));
@@ -29,7 +32,7 @@ namespace Shared.Services
 
             byte[] encrypted;
 
-            using (var aesAlg = new AesCryptoServiceProvider())
+            using (var aesAlg = GetSymmetricAlgorithm(symmetricAlgorithmType))
             {
                 aesAlg.Key = key;
                 aesAlg.IV = iV;
@@ -51,7 +54,7 @@ namespace Shared.Services
             return encrypted;
         }
 
-        public string DecryptBytes(byte[] bytes, byte[] key, byte[] iV)
+        public string DecryptBytes(SymmetricAlgorithmType symmetricAlgorithmType, byte[] bytes, byte[] key, byte[] iV)
         {
             if (bytes == null || bytes.Length <= 0)
                 throw new ArgumentNullException(nameof(bytes));
@@ -64,7 +67,7 @@ namespace Shared.Services
 
             // Create an AesCryptoServiceProvider object
             // with the specified key and IV.
-            using (var aesAlg = new AesCryptoServiceProvider())
+            using (var aesAlg = GetSymmetricAlgorithm(symmetricAlgorithmType))
             {
                 aesAlg.Key = key;
                 aesAlg.IV = iV;
@@ -91,9 +94,15 @@ namespace Shared.Services
             return plaintext;
         }
 
-        public EncryptionService(IMemoryStreamManager memoryStreamManager)
+        private SymmetricAlgorithm GetSymmetricAlgorithm(SymmetricAlgorithmType symmetricAlgorithmType)
+        {
+            return symmetricAlgorithmFactory.GetSymmetricAlgorithm(symmetricAlgorithmType);
+        }
+
+        public EncryptionService(IMemoryStreamManager memoryStreamManager, ISymmetricAlgorithmFactory symmetricAlgorithmFactory)
         {
             this.memoryStreamManager = memoryStreamManager;
+            this.symmetricAlgorithmFactory = symmetricAlgorithmFactory;
         }
     }
 }
