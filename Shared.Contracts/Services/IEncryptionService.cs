@@ -1,12 +1,14 @@
 ﻿using Shared.Domains;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Shared.Contracts
 {
     public interface IEncryptionService
     {
+        byte[] GenerateIv();
         byte[] GenerateBytes(string key, Encoding encoding = null);
-        byte[] EncryptString(SymmetricAlgorithmType symmetricAlgorithmType, string plainText, byte[] key, byte[] iV);
-        string DecryptBytes(SymmetricAlgorithmType symmetricAlgorithmType,byte[] bytes, byte[] key, byte[] iV);
+        Task<byte[]> EncryptString(SymmetricAlgorithmType symmetricAlgorithmType, string plainText, byte[] key, byte[] iV);
+        Task<string> DecryptBytes(SymmetricAlgorithmType symmetricAlgorithmType,byte[] bytes, byte[] key, byte[] iV);
     }
 }

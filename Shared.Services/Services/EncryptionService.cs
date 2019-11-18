@@ -5,6 +5,7 @@ using System;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Shared.Services
 {
@@ -21,7 +22,7 @@ namespace Shared.Services
             return encoding.GetBytes(key);
         }
 
-        public byte[] EncryptString(SymmetricAlgorithmType symmetricAlgorithmType, string plainText, byte[] key, byte[] iV)
+        public async Task<byte[]> EncryptString(SymmetricAlgorithmType symmetricAlgorithmType, string plainText, byte[] key, byte[] iV)
         {
             if (plainText == null || plainText.Length <= 0)
                 throw new ArgumentNullException(nameof(plainText));
@@ -30,31 +31,31 @@ namespace Shared.Services
             if (iV == null || iV.Length == 0)
                 throw new ArgumentNullException(nameof(iV));
 
-            byte[] encrypted;
+            byte[] encrypted = Array.Empty<byte>();
 
-            using (var aesAlg = GetSymmetricAlgorithm(symmetricAlgorithmType))
+            await InvokeSymmetricAlgorithm(symmetricAlgorithmType, async (symmetricAlgorithm) =>
             {
-                aesAlg.Key = key;
-                aesAlg.IV = iV;
+                symmetricAlgorithm.Key = key;
+                symmetricAlgorithm.IV = iV;
 
                 // Create an encryptor to perform the stream transform.
-                using var encryptor = aesAlg.CreateEncryptor(aesAlg.Key, aesAlg.IV);
+                using var encryptor = symmetricAlgorithm.CreateEncryptor(symmetricAlgorithm.Key, symmetricAlgorithm.IV);
                 using (var msEncrypt = memoryStreamManager.GetStream(false))
                 {
                     using var csEncrypt = new CryptoStream(msEncrypt, encryptor, CryptoStreamMode.Write);
                     using (var swEncrypt = new StreamWriter(csEncrypt))
                     {
                         //Write all data to the stream.
-                        swEncrypt.Write(plainText);
+                        await swEncrypt.WriteAsync(plainText);
                     }
                     encrypted = msEncrypt.ToArray();
                 }
-            }
+            });
 
             return encrypted;
         }
 
-        public string DecryptBytes(SymmetricAlgorithmType symmetricAlgorithmType, byte[] bytes, byte[] key, byte[] iV)
+        public async Task<string> DecryptBytes(SymmetricAlgorithmType symmetricAlgorithmType, byte[] bytes, byte[] key, byte[] iV)
         {
             if (bytes == null || bytes.Length <= 0)
                 throw new ArgumentNullException(nameof(bytes));
@@ -67,13 +68,14 @@ namespace Shared.Services
 
             // Create an AesCryptoServiceProvider object
             // with the specified key and IV.
-            using (var aesAlg = GetSymmetricAlgorithm(symmetricAlgorithmType))
+
+            await InvokeSymmetricAlgorithm(symmetricAlgorithmType, async (symmetricAlgorithm) =>
             {
-                aesAlg.Key = key;
-                aesAlg.IV = iV;
+                symmetricAlgorithm.Key = key;
+                symmetricAlgorithm.IV = iV;
 
                 // Create a decryptor to perform the stream transform.
-                using (var decryptor = aesAlg.CreateDecryptor(aesAlg.Key, aesAlg.IV))
+                using (var decryptor = symmetricAlgorithm.CreateDecryptor(symmetricAlgorithm.Key, symmetricAlgorithm.IV))
                 // Create the streams used for decryption.
                 using (var msDecrypt = memoryStreamManager.GetStream(bytes, false))
                 {
@@ -84,12 +86,11 @@ namespace Shared.Services
 
                             // Read the decrypted bytes from the decrypting stream
                             // and place them in a string.
-                            plaintext = srDecrypt.ReadToEnd();
+                            plaintext = await srDecrypt.ReadToEndAsync();
                         }
                     }
                 }
-
-            }
+            });
 
             return plaintext;
         }
@@ -97,6 +98,19 @@ namespace Shared.Services
         private SymmetricAlgorithm GetSymmetricAlgorithm(SymmetricAlgorithmType symmetricAlgorithmType)
         {
             return symmetricAlgorithmFactory.GetSymmetricAlgorithm(symmetricAlgorithmType);
+        }
+
+        private async Task InvokeSymmetricAlgorithm(SymmetricAlgorithmType symmetricAlgorithmType, Func<SymmetricAlgorithm, Task> invoke)
+        {
+            using (var symmetricAlgorithm = GetSymmetricAlgorithm(symmetricAlgorithmType))
+            {
+                await invoke(symmetricAlgorithm);
+            }
+        }
+
+        public byte[] GenerateIv()
+        {
+            throw new NotImplementedException();
         }
 
         public EncryptionService(IMemoryStreamManager memoryStreamManager, ISymmetricAlgorithmFactory symmetricAlgorithmFactory)
