@@ -34,6 +34,7 @@ namespace Shared.Services
                 .AddSingleton<AesCryptoServiceProvider>()
                 .AddSingleton<RSACryptoServiceProvider>()
                 .AddSingleton<TripleDESCryptoServiceProvider>()
+                .AddSingleton<RNGCryptoServiceProvider>()
                 .AddSingleton(DefaultSwitch.Create<SymmetricAlgorithmType, Type>()
                     .CaseWhen(SymmetricAlgorithmType.Aes, typeof(AesCryptoServiceProvider))
                     .CaseWhen(SymmetricAlgorithmType.Rsa, typeof(RSACryptoServiceProvider))
