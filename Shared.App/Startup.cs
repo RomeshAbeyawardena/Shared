@@ -21,7 +21,7 @@ namespace Shared.App
         {
             var symmetricAlgorithmType = SymmetricAlgorithmType.Aes;
             var emailAddress = Console.ReadLine();
-            var gData = await GetCryptoDataFromUserInput();
+            var gData = await GetCryptoDataFromUserInput(symmetricAlgorithmType);
             var encrypted = await encryptionService.EncryptString(symmetricAlgorithmType, emailAddress, gData.Key, gData.Iv);
             var binarySerializer = serializerFactory.GetSerializer(SerializerType.MessagePack);
             var serialized = binarySerializer.Serialize(new Customer {
@@ -41,7 +41,7 @@ namespace Shared.App
             var deserialized = binarySerializer.Deserialize<Customer>(serialized);
         }
 
-        public async Task<CryptoData> GetCryptoDataFromUserInput()
+        public async Task<CryptoData> GetCryptoDataFromUserInput(SymmetricAlgorithmType symmetricAlgorithmType)
         {
             RequestPassword:
             Console.Write("Password: ");
@@ -63,7 +63,7 @@ namespace Shared.App
 
             var generatedKey = cryptographicProvider.GenerateKey(password, memorialWord, 100000, 32);
 
-            var generatedIV = cryptographicProvider.GenerateKey(password, memorialWord, 100000, 16);
+            var generatedIV = encryptionService.GenerateIv(symmetricAlgorithmType);
 
             return new CryptoData(generatedIV, generatedKey);
         }

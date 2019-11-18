@@ -33,7 +33,7 @@ namespace Shared.Services
 
             byte[] encrypted = Array.Empty<byte>();
 
-            await InvokeSymmetricAlgorithm(symmetricAlgorithmType, async (symmetricAlgorithm) =>
+            await InvokeSymmetricAlgorithmAsync(symmetricAlgorithmType, async (symmetricAlgorithm) =>
             {
                 symmetricAlgorithm.Key = key;
                 symmetricAlgorithm.IV = iV;
@@ -69,7 +69,7 @@ namespace Shared.Services
             // Create an AesCryptoServiceProvider object
             // with the specified key and IV.
 
-            await InvokeSymmetricAlgorithm(symmetricAlgorithmType, async (symmetricAlgorithm) =>
+            await InvokeSymmetricAlgorithmAsync(symmetricAlgorithmType, async (symmetricAlgorithm) =>
             {
                 symmetricAlgorithm.Key = key;
                 symmetricAlgorithm.IV = iV;
@@ -100,17 +100,44 @@ namespace Shared.Services
             return symmetricAlgorithmFactory.GetSymmetricAlgorithm(symmetricAlgorithmType);
         }
 
-        private async Task InvokeSymmetricAlgorithm(SymmetricAlgorithmType symmetricAlgorithmType, Func<SymmetricAlgorithm, Task> invoke)
+        private async Task InvokeSymmetricAlgorithmAsync(SymmetricAlgorithmType symmetricAlgorithmType, Func<SymmetricAlgorithm, Task> invokeAsync)
         {
             using (var symmetricAlgorithm = GetSymmetricAlgorithm(symmetricAlgorithmType))
             {
-                await invoke(symmetricAlgorithm);
+                await invokeAsync(symmetricAlgorithm);
             }
         }
 
-        public byte[] GenerateIv()
+        private void InvokeSymmetricAlgorithm(SymmetricAlgorithmType symmetricAlgorithmType, Action<SymmetricAlgorithm> invoke)
         {
-            throw new NotImplementedException();
+            using (var symmetricAlgorithm = GetSymmetricAlgorithm(symmetricAlgorithmType))
+            {
+                invoke(symmetricAlgorithm);
+            }
+        }
+
+        public byte[] GenerateIv(SymmetricAlgorithmType symmetricAlgorithmType)
+        {
+            var iv = Array.Empty<byte>();
+            InvokeSymmetricAlgorithm(symmetricAlgorithmType, invoke: symmetricAlgorithm =>
+            {
+                symmetricAlgorithm.GenerateIV();
+                iv = symmetricAlgorithm.IV;
+            });
+
+            return iv;
+        }
+
+        public byte[] GenerateKey(SymmetricAlgorithmType symmetricAlgorithmType)
+        {
+            var key = Array.Empty<byte>();
+            InvokeSymmetricAlgorithm(symmetricAlgorithmType, invoke: symmetricAlgorithm =>
+            {
+                symmetricAlgorithm.GenerateKey();
+                key = symmetricAlgorithm.Key;
+            });
+
+            return key;
         }
 
         public EncryptionService(IMemoryStreamManager memoryStreamManager, ISymmetricAlgorithmFactory symmetricAlgorithmFactory)
