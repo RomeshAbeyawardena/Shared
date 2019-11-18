@@ -8,6 +8,7 @@ namespace Shared.Domains
     {
         Aes = 1,
         Rsa = 2,
-        TripleDES = 3
+        Rng = 3,
+        TripleDES = 4
     }
 }
