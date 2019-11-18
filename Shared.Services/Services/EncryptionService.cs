@@ -1,5 +1,6 @@
 ﻿using Shared.Contracts;
 using Shared.Contracts.Factories;
+using Shared.Contracts.Services;
 using Shared.Domains;
 using System;
 using System.IO;

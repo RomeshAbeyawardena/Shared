@@ -1,4 +1,5 @@
-﻿using Shared.Domains;
+﻿using Shared.Contracts.Services;
+using Shared.Domains;
 
 namespace Shared.Contracts.Factories
 {

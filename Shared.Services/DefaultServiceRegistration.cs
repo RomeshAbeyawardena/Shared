@@ -10,6 +10,7 @@ using Shared.Contracts.Factories;
 using Shared.Services.Factories;
 using Shared.Domains;
 using System.Security.Cryptography;
+using Shared.Contracts.Services;
 
 namespace Shared.Services
 {

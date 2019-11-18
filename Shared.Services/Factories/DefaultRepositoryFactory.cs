@@ -4,7 +4,7 @@ using Shared.Contracts.Factories;
 using Shared.Library.Extensions;
 using System;
 
-namespace Shared.Services
+namespace Shared.Services.Factories
 {
     public class DefaultRepositoryFactory : IRepositoryFactory
     {

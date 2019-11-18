@@ -2,7 +2,7 @@
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Shared.Contracts
+namespace Shared.Contracts.Services
 {
     public interface IEncryptionService
     {

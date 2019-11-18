@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Shared.Contracts
+namespace Shared.Contracts.Services
 {
     public interface ICacheService
     {
