@@ -4,7 +4,7 @@ namespace Shared.Contracts
 {
     public interface IMemoryStreamManager
     {
-        MemoryStream GetStream();
-        MemoryStream GetStream(byte[] buffer);
+        MemoryStream GetStream(bool useRecyclableMemoryStreamManager = true, byte[] buffer = null);
+        MemoryStream GetStream(byte[] buffer, bool useRecyclableMemoryStreamManager = true);
     }
 }

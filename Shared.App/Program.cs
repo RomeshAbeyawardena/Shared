@@ -20,5 +20,5 @@ namespace Shared.App
                     .RegisterServiceBroker<MyServiceBroker>();
             })
             .Build<Startup>();
-    }
+        }
 }

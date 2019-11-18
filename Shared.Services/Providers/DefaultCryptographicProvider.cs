@@ -8,7 +8,11 @@ namespace Shared.Services
 {
     public class DefaultCryptographicProvider : ICryptographicProvider
     {
-        public byte[] GenerateKey(IEnumerable<byte> salt, IEnumerable<byte> password, int iterations, int cb, HashAlgorithmName? hashAlgorithmName = null)
+        public byte[] GenerateKey(IEnumerable<byte> salt, 
+            IEnumerable<byte> password, 
+            int iterations, 
+            int cb, 
+            HashAlgorithmName? hashAlgorithmName = null)
         {
             using (var pdb = new Rfc2898DeriveBytes (password.ToArray(), salt.ToArray(), iterations, hashAlgorithmName ?? HashAlgorithmName.SHA512))
             {

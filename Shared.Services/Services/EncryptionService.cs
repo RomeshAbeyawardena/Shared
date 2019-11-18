@@ -36,7 +36,7 @@ namespace Shared.Services
 
                 // Create an encryptor to perform the stream transform.
                 using var encryptor = aesAlg.CreateEncryptor(aesAlg.Key, aesAlg.IV);
-                using (var msEncrypt = new MemoryStream())
+                using (var msEncrypt = memoryStreamManager.GetStream(false))
                 {
                     using var csEncrypt = new CryptoStream(msEncrypt, encryptor, CryptoStreamMode.Write);
                     using (var swEncrypt = new StreamWriter(csEncrypt))
@@ -47,7 +47,6 @@ namespace Shared.Services
                     encrypted = msEncrypt.ToArray();
                 }
             }
-
 
             return encrypted;
         }
@@ -73,7 +72,7 @@ namespace Shared.Services
                 // Create a decryptor to perform the stream transform.
                 using (var decryptor = aesAlg.CreateDecryptor(aesAlg.Key, aesAlg.IV))
                 // Create the streams used for decryption.
-                using (var msDecrypt = new MemoryStream(bytes))
+                using (var msDecrypt = memoryStreamManager.GetStream(bytes, false))
                 {
                     using (var csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read))
                     {

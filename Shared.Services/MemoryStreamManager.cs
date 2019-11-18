@@ -8,15 +8,26 @@ namespace Shared.Services
     {
         private readonly RecyclableMemoryStreamManager recyclableMemoryStreamManager;
 
-        public MemoryStream GetStream()
+        public MemoryStream GetStream(bool useRecyclableMemoryStreamManager = true, byte[] buffer = null)
         {
-            return recyclableMemoryStreamManager.GetStream();
+            MemoryStream ms = null;
+
+            if (useRecyclableMemoryStreamManager)
+                ms = recyclableMemoryStreamManager.GetStream();
+            else
+                ms = new MemoryStream();
+
+            if(buffer != null && buffer.Length > 0)
+                ms.Write(buffer);
+
+            ms.Position = 0;
+
+            return ms;
         }
 
-        public MemoryStream GetStream(byte[] buffer)
+        public MemoryStream GetStream(byte[] buffer, bool useRecyclableMemoryStreamManager = true)
         {
-            var memoryStream = GetStream();
-            memoryStream.Write(buffer);
+            var memoryStream = GetStream(useRecyclableMemoryStreamManager, buffer);
             return memoryStream;
         }
 
