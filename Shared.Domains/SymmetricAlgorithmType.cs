@@ -6,6 +6,8 @@ namespace Shared.Domains
 {
     public enum SymmetricAlgorithmType
     {
-        Aes = 1
+        Aes = 1,
+        Rsa = 2,
+        TripleDES = 3
     }
 }
