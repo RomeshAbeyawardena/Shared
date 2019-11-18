@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Shared.Contracts;
+using Shared.Contracts.Providers;
 using System;
 
 namespace Shared.Services

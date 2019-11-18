@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System;
 
-namespace Shared.Contracts
+namespace Shared.Contracts.Builders
 {
     public interface IAppHostBuilder
     {

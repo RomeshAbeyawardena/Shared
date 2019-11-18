@@ -8,6 +8,7 @@ using Shared.Library.Extensions;
 using Shared.Contracts.Factories;
 using Shared.Domains;
 using MessagePack;
+using Shared.Contracts.Providers;
 
 namespace Shared.App
 {

@@ -1,8 +1,9 @@
 ﻿using Shared.Contracts;
+using Shared.Contracts.Builders;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Shared.Services
+namespace Shared.Services.Builders
 {
     public static class DictionaryBuilder
     {

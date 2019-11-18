@@ -1,4 +1,6 @@
 ﻿using Shared.Contracts;
+using Shared.Contracts.Builders;
+using Shared.Services.Builders;
 
 namespace Shared.Services
 {

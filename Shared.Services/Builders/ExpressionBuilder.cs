@@ -1,10 +1,11 @@
 ﻿using Shared.Contracts;
+using Shared.Contracts.Builders;
 using Shared.Domains;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 
-namespace Shared.Services
+namespace Shared.Services.Builders
 {
     public sealed class ExpressionBuilder : IExpressionBuilder
     {

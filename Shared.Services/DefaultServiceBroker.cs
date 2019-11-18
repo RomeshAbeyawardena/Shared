@@ -3,6 +3,7 @@ using System;
 using System.Reflection;
 using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
+using Shared.Library.Extensions;
 
 namespace Shared.Services
 {
@@ -10,6 +11,7 @@ namespace Shared.Services
     {
         public abstract Assembly[] GetAssemblies {get;}
         public static Assembly DefaultAssembly => Assembly.GetAssembly(typeof(DefaultAppHost));
+        
         public void RegisterServiceAssemblies(IServiceCollection services, params Assembly[] assemblies)
         {
             foreach(var assembly in assemblies)
@@ -20,7 +22,7 @@ namespace Shared.Services
 
                 foreach (var item in serviceRegistrationTypes)
                 {
-                    var serviceRegistration = Activator.CreateInstance(item) as IServiceRegistration;
+                   var serviceRegistration = Activator.CreateInstance(item) as IServiceRegistration;
                     serviceRegistration.RegisterServices(services);
                 }
             }

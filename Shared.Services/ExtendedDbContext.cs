@@ -4,6 +4,7 @@ using Shared.Contracts;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
+using Shared.Contracts.Providers;
 
 namespace Shared.Services
 {

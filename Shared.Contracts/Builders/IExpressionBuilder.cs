@@ -2,7 +2,7 @@
 using System.Linq.Expressions;
 using Shared.Domains;
 
-namespace Shared.Contracts
+namespace Shared.Contracts.Builders
 {
     public interface IExpressionBuilder
     {

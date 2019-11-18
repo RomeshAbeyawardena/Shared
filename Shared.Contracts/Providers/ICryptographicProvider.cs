@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Security.Cryptography;
 
-namespace Shared.Contracts
+namespace Shared.Contracts.Providers
 {
     public interface ICryptographicProvider
     {

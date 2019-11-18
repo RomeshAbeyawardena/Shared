@@ -1,8 +1,9 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Shared.Contracts;
+using Shared.Contracts.Builders;
 using System;
 
-namespace Shared.Services
+namespace Shared.Services.Builders
 {
     internal class DefaultAppHostBuilder : IAppHostBuilder
     {
