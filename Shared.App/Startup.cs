@@ -2,7 +2,6 @@
 using Shared.Services;
 using System;
 using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
 using Shared.Library.Extensions;
 using Shared.Contracts.Factories;
@@ -10,6 +9,7 @@ using Shared.Domains;
 using MessagePack;
 using Shared.Contracts.Providers;
 using Shared.Contracts.Services;
+using Shared.Services.Builders;
 
 namespace Shared.App
 {
@@ -18,29 +18,41 @@ namespace Shared.App
         private readonly ISerializerFactory serializerFactory;
         private readonly ICryptographicProvider cryptographicProvider;
         private readonly IEncryptionService encryptionService;
+        private readonly IEventHandlerFactory eventHandlerFactory;
+
+
+        private class CustomerEventHandler : DefaultEventHandler<IEvent<Customer>>
+        {
+            public override async Task<IEvent<Customer>> Push(IEvent<Customer> @event)
+            {
+                await Task.Delay(10);
+                Console.WriteLine("Pushing customer {0}", @event.Result.FirstName);
+
+                return DefaultEvent.Create(true, result: @event.Result);
+            }
+
+            public override async Task<IEvent<Customer>> Send<TCommand>(TCommand command)
+            {
+                await Task.Delay(10);
+                var customer = new Customer {
+                FirstName = "John",
+                LastName = "Doe"
+                };
+
+                Console.WriteLine("Command {0} requested", command.Name);
+                return DefaultEvent.Create(customer);
+            }
+        }
 
         public async Task Start()
         {
-            var symmetricAlgorithmType = SymmetricAlgorithmType.Aes;
-            var emailAddress = Console.ReadLine();
-            var gData = await GetCryptoDataFromUserInput(symmetricAlgorithmType);
-            var encrypted = await encryptionService.EncryptString(symmetricAlgorithmType, emailAddress, gData.Key, gData.Iv);
-            var binarySerializer = serializerFactory.GetSerializer(SerializerType.MessagePack);
-            var serialized = binarySerializer.Serialize(new Customer {
-                    Id = 1,
-                    InitialId = 1,
-                    FirstName = "Krishna",
-                    MiddleName = "Julia",
-                    LastName = "Ellis",
-                    Created = DateTimeOffset.Now,
-                    Modified = DateTimeOffset.Now
-                });
+            await eventHandlerFactory.Push(DefaultEvent.Create(new Customer {
+                FirstName = "John",
+                LastName = "Doe"
+            }));
 
-            var decryptedEmail = await encryptionService.DecryptBytes(symmetricAlgorithmType, encrypted, gData.Key, gData.Iv);
-
-            Console.WriteLine(decryptedEmail);
-
-            var deserialized = binarySerializer.Deserialize<Customer>(serialized);
+            await eventHandlerFactory.Send<IEvent<Customer>, ICommand>(DefaultCommand
+                .Create<Customer>("Fetch",  DictionaryBuilder.Create<string, object>().ToDictionary()));
         }
 
         public async Task<CryptoData> GetCryptoDataFromUserInput(SymmetricAlgorithmType symmetricAlgorithmType)
@@ -70,11 +82,13 @@ namespace Shared.App
             return new CryptoData(generatedIV, generatedKey);
         }
 
-        public Startup(ISerializerFactory serializerFactory, ICryptographicProvider cryptographicProvider, IEncryptionService encryptionService)
+        public Startup(ISerializerFactory serializerFactory, ICryptographicProvider cryptographicProvider, 
+            IEncryptionService encryptionService, IEventHandlerFactory eventHandlerFactory)
         {
             this.serializerFactory = serializerFactory;
             this.cryptographicProvider = cryptographicProvider;
             this.encryptionService = encryptionService;
+            this.eventHandlerFactory = eventHandlerFactory;
         }
     }
     [MessagePackObject(true)]
@@ -114,6 +128,6 @@ namespace Shared.App
 
     public class MyServiceBroker : DefaultServiceBroker
     {
-        public override Assembly[] GetAssemblies => new [] { Assembly.GetAssembly(typeof(DefaultServiceRegistration)) };
+        public override Assembly[] GetAssemblies => new [] { DefaultAssembly, Assembly.GetAssembly(typeof(CryptoData)) };
     }
 }

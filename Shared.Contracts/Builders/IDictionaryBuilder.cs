@@ -7,5 +7,6 @@ namespace Shared.Contracts.Builders
         IDictionaryBuilder<TKey, TValue> Add(KeyValuePair<TKey, TValue> keyValuePair);
         IDictionaryBuilder<TKey, TValue> Add(TKey key, TValue value);
         IDictionaryBuilder<TKey, TValue> Remove(TKey key);
+        IDictionary<TKey, TValue> ToDictionary();
     }
 }

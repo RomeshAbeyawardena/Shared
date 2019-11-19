@@ -2,7 +2,6 @@
 using Microsoft.IO;
 using Shared.Contracts;
 using Shared.Contracts.Providers;
-using Shared.Library;
 using Shared.Services.Providers;
 using System;
 using Microsoft.Extensions.Internal;
@@ -19,6 +18,7 @@ namespace Shared.Services
         public void RegisterServices(IServiceCollection services)
         {
             services
+                .AddSingleton<IEventHandlerFactory, DefaultEventHandlerFactory>()
                 .AddSingleton<ISystemClock, SystemClock>()
                 .AddSingleton<IMapperProvider, MapperProvider>()
                 .AddSingleton<ISerializerFactory, DefaultSerializerFactory>()

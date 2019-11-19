@@ -1,5 +1,4 @@
-﻿using Shared.Contracts;
-using Shared.Contracts.Builders;
+﻿using Shared.Contracts.Builders;
 using Shared.Domains;
 using System;
 using System.Collections.Generic;

@@ -1,5 +1,4 @@
-﻿using Shared.Contracts;
-using Shared.Contracts.Providers;
+﻿using Shared.Contracts.Providers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
