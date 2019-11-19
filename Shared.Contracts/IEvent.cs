@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Shared.Contracts
 {
     public interface IEvent
     {
         object Result { get;  }
+        public IEnumerable<object> Results { get; }
         bool IsSuccessful { get; }
         Exception Exception { get; }
     }
@@ -13,5 +15,6 @@ namespace Shared.Contracts
         where TResult : class
     {
         new TResult Result { get; }
+        new IEnumerable<TResult> Results { get; }
     }
 }
