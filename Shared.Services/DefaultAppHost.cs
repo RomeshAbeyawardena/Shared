@@ -28,6 +28,12 @@ namespace Shared.Services
             var runMethod = Run(methodName) as Task;
             await runMethod;
         }
+
+        public async Task<T> RunAsync<T>(string methodName)
+        {
+            var runMethod = Run(methodName) as Task<T>;
+            return await runMethod;
+        }
     }
 
     internal class DefaultAppHost<TStartup> : DefaultAppHost, IAppHost<TStartup>

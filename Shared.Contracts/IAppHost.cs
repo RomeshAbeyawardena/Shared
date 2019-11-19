@@ -7,6 +7,7 @@ namespace Shared.Contracts
     {
         object Run(string methodName);
         Task RunAsync(string methodName);
+        Task<T> RunAsync<T>(string methodName);
     }
 
     public interface IAppHost<TStartup> : IAppHost
