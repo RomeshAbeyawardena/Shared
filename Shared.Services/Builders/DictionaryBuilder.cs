@@ -1,7 +1,7 @@
-﻿using Shared.Contracts;
-using Shared.Contracts.Builders;
+﻿using Shared.Contracts.Builders;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Shared.Services.Builders
 {
@@ -59,6 +59,11 @@ namespace Shared.Services.Builders
         IEnumerator IEnumerable.GetEnumerator()
         {
             return _dictionary.GetEnumerator();
+        }
+
+        public IDictionary<TKey, TValue> ToDictionary()
+        {
+            return _dictionary;
         }
 
         public DictionaryBuilder()

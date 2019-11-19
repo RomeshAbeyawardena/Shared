@@ -2,9 +2,7 @@
 using Shared.Contracts.Factories;
 using Shared.Domains;
 using System;
-using System.Collections.Generic;
 using System.Security.Cryptography;
-using System.Text;
 
 namespace Shared.Services.Factories
 {

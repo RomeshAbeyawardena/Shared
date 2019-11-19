@@ -1,9 +1,7 @@
-﻿using Shared.Contracts;
-using Shared.Contracts.Providers;
+﻿using Shared.Contracts.Providers;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Shared.Services.Builders
 {

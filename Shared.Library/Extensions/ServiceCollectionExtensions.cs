@@ -11,6 +11,7 @@ namespace Shared.Library.Extensions
         public static object Resolve(this IServiceProvider serviceProvider, Type serviceType)
         {
             var constructorParameters = new List<object>();
+
             var publicConstructor = serviceType.GetConstructors().FirstOrDefault(c => c.IsPublic);
             foreach (var t in publicConstructor.GetParameters())
             {
