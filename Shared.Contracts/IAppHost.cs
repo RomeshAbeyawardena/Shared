@@ -13,5 +13,6 @@ namespace Shared.Contracts
     {
         object Run(Func<TStartup, object> getMember);
         Task RunAsync(Func<TStartup, Task> getMemberTask);
+        Task<T> RunAsync<T>(Func<TStartup, Task<T>> getMemberTask);
     }
 }

@@ -49,5 +49,10 @@ namespace Shared.Services
         {
             await getMemberTask(StartupService);
         }
+
+        public async Task<T> RunAsync<T>(Func<TStartup, Task<T>> getMemberTask)
+        {
+            return await getMemberTask(StartupService);
+        }
     }
 }
