@@ -16,6 +16,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionFiles", "SolutionFiles", "{D4DA01BD-AEA1-4676-A4A4-69133062DB56}"
 	ProjectSection(SolutionItems) = preProject
 		Directory.Build.props = Directory.Build.props
+		DotNet-Pack.ps1 = DotNet-Pack.ps1
+		Install.ps1 = Install.ps1
 		UpdateVersion-Powershell.ps1 = UpdateVersion-Powershell.ps1
 	EndProjectSection
 EndProject

@@ -14,7 +14,7 @@ $properties.AssemblyVersion = $version
 $properties.FileVersion = $version
 
 $currentVersion = $properties.Version
-Write-Output "$currentVersion"
+Write-Output "Updating version to $currentVersion"
 
 $val.Save("$fileName")
 Write-Output "Updating $fileName to $version successful!"
