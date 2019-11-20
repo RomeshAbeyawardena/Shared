@@ -43,5 +43,18 @@ namespace Shared.Library.Extensions
         {
             return DateTimeOffset.TryParse(value, out result);
         }
+
+        public static bool TryParse<T>(this object value, out T result)
+            where T : class
+        {
+            result = null;
+            
+            if(!(value is T tResult))
+                return false;
+            
+            result = tResult;
+            
+            return true;
+        }
     }
 }

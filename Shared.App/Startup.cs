@@ -10,6 +10,7 @@ using MessagePack;
 using Shared.Contracts.Providers;
 using Shared.Contracts.Services;
 using Shared.Services.Builders;
+using Shared.Library;
 
 namespace Shared.App
 {
@@ -27,7 +28,7 @@ namespace Shared.App
             {
                 await Task.Delay(10);
                 Console.WriteLine("Pushing customer {0}", @event.Result.FirstName);
-
+                
                 return DefaultEvent.Create(true, result: @event.Result);
             }
 

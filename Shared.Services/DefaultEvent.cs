@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Shared.Contracts;
 
 namespace Shared.Domains
@@ -33,11 +35,13 @@ namespace Shared.Domains
             IsSuccessful = isSuccessful;
             Exception = exception;
         }
-
+        public IEnumerable<T> Results { get; }
         public T Result { get; }
         public bool IsSuccessful { get; }
         public Exception Exception { get; }
 
         object IEvent.Result { get => Result; }
+
+        IEnumerable<object> IEvent.Results => Results.Select(result => (object)result);
     }
 }
