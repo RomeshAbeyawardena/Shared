@@ -7,9 +7,12 @@ namespace Shared.Services
 {
     public class DefaultNotificationHandlerFactory : INotificationHandlerFactory
     {
-        public void Notify<TEvent>(INotificationHandler<TEvent> @event)
+        public void Notify<TEvent>(TEvent @event)
         {
-            throw new NotImplementedException();
+            foreach(var notificationSubscriber in _notificationSubscribersList)
+            {
+                notificationSubscriber.OnChange(@event);
+            }
         }
 
         public INotificationUnsubscriber<TEvent> Subscribe<TEvent>(INotificationSubscriber<TEvent> notificationSubscriber)

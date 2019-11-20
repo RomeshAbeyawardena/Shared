@@ -10,6 +10,7 @@ using Shared.Services.Factories;
 using Shared.Domains;
 using System.Security.Cryptography;
 using Shared.Contracts.Services;
+using System.Collections.Generic;
 
 namespace Shared.Services
 {
@@ -18,7 +19,9 @@ namespace Shared.Services
         public void RegisterServices(IServiceCollection services)
         {
             services
+                .AddSingleton<IList<INotificationSubscriber>, List<INotificationSubscriber>>()
                 .AddSingleton<IEventHandlerFactory, DefaultEventHandlerFactory>()
+                .AddSingleton<INotificationHandlerFactory, DefaultNotificationHandlerFactory>()
                 .AddSingleton<ISystemClock, SystemClock>()
                 .AddSingleton<IMapperProvider, MapperProvider>()
                 .AddSingleton<ISerializerFactory, DefaultSerializerFactory>()
