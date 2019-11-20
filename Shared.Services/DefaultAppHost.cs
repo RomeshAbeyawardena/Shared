@@ -7,7 +7,7 @@ namespace Shared.Services
     internal class DefaultAppHost : IAppHost
     {
         private readonly Type startupType;
-        private IServiceProvider serviceProvider;
+        private readonly IServiceProvider serviceProvider;
 
         protected object StartupService => serviceProvider.GetService(startupType);
 

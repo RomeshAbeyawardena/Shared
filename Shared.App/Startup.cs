@@ -65,7 +65,7 @@ namespace Shared.App
             await eventHandlerFactory.Send<IEvent<Customer>, ICommand>(DefaultCommand
                 .Create<Customer>("Fetch",  DictionaryBuilder.Create<string, object>().ToDictionary()));
 
-            notificationHandlerFactory.Subscribe(new CustomerNotificationSubscriber());
+            //notificationHandlerFactory.Subscribe(new CustomerNotificationSubscriber());
             notificationHandlerFactory.Notify(@event);
         }
 

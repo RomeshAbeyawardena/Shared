@@ -22,9 +22,42 @@ namespace Shared.Library.Extensions
             return resolvedService;
         }
 
+        public static IServiceProvider SubscribeToAllNotifications(this IServiceProvider serviceProvider)
+        {
+            var subscriberEventTypeList = serviceProvider.GetRequiredService<IList<Type>>();
+            var subscriberNotificationHandlerFactory = serviceProvider.GetRequiredService<INotificationHandlerFactory>();
+            foreach (var subscriberEventType in subscriberEventTypeList)
+            {
+                var subscriberEvent = serviceProvider.GetRequiredService(subscriberEventType);
+                var genericArgs = subscriberEventType.GetGenericArguments();
+
+                var factoryType = subscriberNotificationHandlerFactory.GetType();
+
+                factoryType.GetMethod("Subscribe").MakeGenericMethod(genericArgs).Invoke(subscriberNotificationHandlerFactory, new object [] {
+                    subscriberEvent
+                });
+            }
+
+            return serviceProvider;
+        }
+
         public static TService Resolve<TService>(this IServiceProvider serviceProvider)
         {
             return (TService)serviceProvider.Resolve(typeof(TService));
+        }
+
+        public static object ResolveService(this IServiceCollection services, Type serviceType)
+        {
+            return services
+                .BuildServiceProvider()
+                .Resolve(serviceType);
+        }
+
+        public static object GetRequiredService(this IServiceCollection services, Type serviceType)
+        {
+            return services
+                .BuildServiceProvider()
+                .GetRequiredService(serviceType);
         }
 
         public static TService GetRequiredService<TService>(this IServiceCollection services)

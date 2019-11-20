@@ -19,6 +19,6 @@ namespace Shared.App
                 services
                     .RegisterServiceBroker<MyServiceBroker>();
             })
-            .Build<Startup>();
+            .Build<Startup>(serviceProvider: serviceProvider => serviceProvider.SubscribeToAllNotifications());
         }
 }

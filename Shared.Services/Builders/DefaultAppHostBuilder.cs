@@ -27,11 +27,14 @@ namespace Shared.Services.Builders
             return this;
         }
 
-        public IAppHost<TStartup> Build<TStartup>(IServiceCollection services = null) where TStartup : class
+        public IAppHost<TStartup> Build<TStartup>(IServiceCollection services = null, 
+            Action<IServiceProvider> serviceProviderAction = null) where TStartup : class
         {
             UseStartup<TStartup>();
             AppendServices(services);
-            return new DefaultAppHost<TStartup>(this.services.BuildServiceProvider());
+            var serviceProvider = this.services.BuildServiceProvider();
+            serviceProviderAction(serviceProvider);
+            return new DefaultAppHost<TStartup>(serviceProvider);
         }
 
         private void AppendServices(IServiceCollection services)

@@ -33,9 +33,9 @@ namespace Shared.Services
             return new DefaultNotificationUnsubscriber(_notificationSubscribersList, notificationSubscriber);
         }
 
-        public DefaultNotificationHandler(IList<INotificationSubscriber> notificationSubscribersList)
+        public DefaultNotificationHandler()
         {
-            _notificationSubscribersList = notificationSubscribersList;
+            _notificationSubscribersList = new List<INotificationSubscriber>();
         }
 
         private readonly IList<INotificationSubscriber> _notificationSubscribersList;
