@@ -20,7 +20,7 @@ namespace Shared.App
         private readonly ICryptographicProvider cryptographicProvider;
         private readonly IEncryptionService encryptionService;
         private readonly IEventHandlerFactory eventHandlerFactory;
-
+        private readonly INotificationHandlerFactory notificationHandlerFactory;
 
         private class CustomerEventHandler : DefaultEventHandler<IEvent<Customer>>
         {
@@ -45,36 +45,28 @@ namespace Shared.App
             }
         }
 
-        private class CustomerNotificationEventHandler : INotificationHandler<IEvent<Customer>>
-        {
-            public void Notify(IEvent<Customer> @event)
-            {
-                throw new NotImplementedException();
-            }
-        }
 
-        private class CustomerNotificationSubscriber : INotificationSubscriber<IEvent<Customer>>
+        private class CustomerNotificationSubscriber : DefaultNotificationSubscriber<IEvent<Customer>>
         {
-            public void OnChange(IEvent<Customer> @event)
+            public override void OnChange(IEvent<Customer> @event)
             {
-                throw new NotImplementedException();
-            }
-
-            public void OnChange(object @event)
-            {
-                throw new NotImplementedException();
+                Console.WriteLine("Customer updated");
             }
         }
 
         public async Task Start()
         {
-            await eventHandlerFactory.Push(DefaultEvent.Create(new Customer {
+            var @event = DefaultEvent.Create(new Customer {
                 FirstName = "John",
                 LastName = "Doe"
-            }));
+            });
+            await eventHandlerFactory.Push(@event);
 
             await eventHandlerFactory.Send<IEvent<Customer>, ICommand>(DefaultCommand
                 .Create<Customer>("Fetch",  DictionaryBuilder.Create<string, object>().ToDictionary()));
+
+            notificationHandlerFactory.Subscribe(new CustomerNotificationSubscriber());
+            notificationHandlerFactory.Notify(@event);
         }
 
         public async Task<CryptoData> GetCryptoDataFromUserInput(SymmetricAlgorithmType symmetricAlgorithmType)
@@ -105,12 +97,13 @@ namespace Shared.App
         }
 
         public Startup(ISerializerFactory serializerFactory, ICryptographicProvider cryptographicProvider, 
-            IEncryptionService encryptionService, IEventHandlerFactory eventHandlerFactory)
+            IEncryptionService encryptionService, IEventHandlerFactory eventHandlerFactory, INotificationHandlerFactory notificationHandlerFactory)
         {
             this.serializerFactory = serializerFactory;
             this.cryptographicProvider = cryptographicProvider;
             this.encryptionService = encryptionService;
             this.eventHandlerFactory = eventHandlerFactory;
+            this.notificationHandlerFactory = notificationHandlerFactory;
         }
     }
     [MessagePackObject(true)]

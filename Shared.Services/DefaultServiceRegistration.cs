@@ -22,6 +22,7 @@ namespace Shared.Services
                 .AddSingleton<IList<INotificationSubscriber>, List<INotificationSubscriber>>()
                 .AddSingleton<IEventHandlerFactory, DefaultEventHandlerFactory>()
                 .AddSingleton<INotificationHandlerFactory, DefaultNotificationHandlerFactory>()
+                .AddSingleton(typeof(INotificationHandler<>), typeof(DefaultNotificationHandler<>))
                 .AddSingleton<ISystemClock, SystemClock>()
                 .AddSingleton<IMapperProvider, MapperProvider>()
                 .AddSingleton<ISerializerFactory, DefaultSerializerFactory>()

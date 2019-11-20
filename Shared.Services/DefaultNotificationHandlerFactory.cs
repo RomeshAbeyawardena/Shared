@@ -9,25 +9,27 @@ namespace Shared.Services
     {
         public void Notify<TEvent>(TEvent @event)
         {
-            foreach(var notificationSubscriber in _notificationSubscribersList)
-            {
-                notificationSubscriber.OnChange(@event);
-            }
+            GetNotificationHandler<TEvent>().Notify(@event);
         }
 
-        public INotificationUnsubscriber<TEvent> Subscribe<TEvent>(INotificationSubscriber<TEvent> notificationSubscriber)
+        public INotificationUnsubscriber Subscribe<TEvent>(INotificationSubscriber<TEvent> notificationSubscriber)
         {
-            if(!_notificationSubscribersList.Contains(notificationSubscriber))
-                _notificationSubscribersList.Add(notificationSubscriber);
-
-            return new DefaultNotificationUnsubscriber<TEvent>(_notificationSubscribersList, notificationSubscriber);
+            return GetNotificationHandler<TEvent>().Subscribe(notificationSubscriber);
         }
 
-        public DefaultNotificationHandlerFactory(IList<INotificationSubscriber> notificationSubscribersList)
+        private INotificationHandler<TEvent> GetNotificationHandler<TEvent>()
         {
-            _notificationSubscribersList = notificationSubscribersList;
+            var notificationHandlerType = typeof(INotificationHandler<>)
+                .MakeGenericType(typeof(TEvent));
+
+            return _serviceProvider.GetService(notificationHandlerType) as INotificationHandler<TEvent>;
         }
 
-        private readonly IList<INotificationSubscriber> _notificationSubscribersList;
+        public DefaultNotificationHandlerFactory(IServiceProvider serviceProvider)
+        {
+            _serviceProvider = serviceProvider;
+        }
+
+        private readonly IServiceProvider _serviceProvider;
     }
 }

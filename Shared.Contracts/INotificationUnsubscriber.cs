@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Shared.Contracts
 {
-    public interface INotificationUnsubscriber<TEvent> : IDisposable
+    public interface INotificationUnsubscriber : IDisposable
     {
         void Unsubscribe();
     }

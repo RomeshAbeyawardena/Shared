@@ -21,7 +21,7 @@ namespace Shared.Services
                     .Where(type => type.GetInterface(nameof(IServiceRegistration)) != null);
 
                 var eventHandlerTypes = assemblyTypes.Where(type => type.GetInterfaces().Any(a => a.IsAssignableFrom(typeof(IEventHandler))));
-
+                var notificationHandlerTypes = assemblyTypes.Where(type => type.GetInterfaces().Any(a => a.IsAssignableFrom(typeof(INotificationHandler))));
                 RegisterEventHandlerTypes(services, eventHandlerTypes);
 
                 foreach (var item in serviceRegistrationTypes)

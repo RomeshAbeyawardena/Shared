@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Shared.Services
 {
-    public class DefaultNotificationUnsubscriber<TEvent> : INotificationUnsubscriber<TEvent>
+    public sealed class DefaultNotificationUnsubscriber : INotificationUnsubscriber
     {
         private readonly IList<INotificationSubscriber> _notificationSubscribers;
         private readonly INotificationSubscriber _notificationSubscriber;

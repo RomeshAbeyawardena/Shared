@@ -6,7 +6,7 @@ namespace Shared.Contracts
 {
     public interface INotificationHandlerFactory
     {
-        INotificationUnsubscriber<TEvent> Subscribe<TEvent>(INotificationSubscriber<TEvent> notificationSubscriber);
+        INotificationUnsubscriber Subscribe<TEvent>(INotificationSubscriber<TEvent> notificationSubscriber);
         void Notify<TEvent>(TEvent @event);
     }
 }
