@@ -45,6 +45,27 @@ namespace Shared.App
             }
         }
 
+        private class CustomerNotificationEventHandler : INotificationHandler<IEvent<Customer>>
+        {
+            public void Notify(IEvent<Customer> @event)
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        private class CustomerNotificationSubscriber : INotificationSubscriber<IEvent<Customer>>
+        {
+            public void OnChange(IEvent<Customer> @event)
+            {
+                throw new NotImplementedException();
+            }
+
+            public void OnChange(object @event)
+            {
+                throw new NotImplementedException();
+            }
+        }
+
         public async Task Start()
         {
             await eventHandlerFactory.Push(DefaultEvent.Create(new Customer {
