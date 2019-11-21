@@ -19,7 +19,7 @@ namespace Shared.Services
         public void RegisterServices(IServiceCollection services)
         {
             services
-                .AddSingleton<IList<INotificationSubscriber>, List<INotificationSubscriber>>()
+                .AddSingleton<IMediator, DefaultMediator>()
                 .AddSingleton<IEventHandlerFactory, DefaultEventHandlerFactory>()
                 .AddSingleton<INotificationHandlerFactory, DefaultNotificationHandlerFactory>()
                 .AddSingleton(typeof(INotificationHandler<>), typeof(DefaultNotificationHandler<>))

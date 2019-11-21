@@ -19,8 +19,7 @@ namespace Shared.App
         private readonly ISerializerFactory serializerFactory;
         private readonly ICryptographicProvider cryptographicProvider;
         private readonly IEncryptionService encryptionService;
-        private readonly IEventHandlerFactory eventHandlerFactory;
-        private readonly INotificationHandlerFactory notificationHandlerFactory;
+        private readonly IMediator mediator;
 
         private class CustomerEventHandler : DefaultEventHandler<IEvent<Customer>>
         {
@@ -66,13 +65,13 @@ namespace Shared.App
                 FirstName = "John",
                 LastName = "Doe"
             });
-            await eventHandlerFactory.Push(@event);
+            await mediator.Push(@event);
 
-            await eventHandlerFactory.Send<IEvent<Customer>, ICommand>(DefaultCommand
+            await mediator.Send<IEvent<Customer>, ICommand>(DefaultCommand
                 .Create<Customer>("Fetch",  DictionaryBuilder.Create<string, object>().ToDictionary()));
 
             //notificationHandlerFactory.Subscribe(new CustomerNotificationSubscriber());
-            await notificationHandlerFactory.NotifyAsync(@event);
+            await mediator.NotifyAsync(@event);
         }
 
         public async Task<CryptoData> GetCryptoDataFromUserInput(SymmetricAlgorithmType symmetricAlgorithmType)
@@ -103,13 +102,12 @@ namespace Shared.App
         }
 
         public Startup(ISerializerFactory serializerFactory, ICryptographicProvider cryptographicProvider, 
-            IEncryptionService encryptionService, IEventHandlerFactory eventHandlerFactory, INotificationHandlerFactory notificationHandlerFactory)
+            IEncryptionService encryptionService, IMediator mediator)
         {
             this.serializerFactory = serializerFactory;
             this.cryptographicProvider = cryptographicProvider;
             this.encryptionService = encryptionService;
-            this.eventHandlerFactory = eventHandlerFactory;
-            this.notificationHandlerFactory = notificationHandlerFactory;
+            this.mediator = mediator;
         }
     }
     [MessagePackObject(true)]

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Shared.Services
 {
-    public class Mediator : IMediator
+    public class DefaultMediator : IMediator
     {
         private readonly IEventHandlerFactory _eventHandlerFactory;
         private readonly INotificationHandlerFactory _notificationHandlerFactory;
@@ -35,7 +35,7 @@ namespace Shared.Services
             return await _eventHandlerFactory.Send<TEvent,TCommand>(command);
         }
 
-        public Mediator(IEventHandlerFactory eventHandlerFactory, INotificationHandlerFactory notificationHandlerFactory)
+        public DefaultMediator(IEventHandlerFactory eventHandlerFactory, INotificationHandlerFactory notificationHandlerFactory)
         {
             _eventHandlerFactory = eventHandlerFactory;
             _notificationHandlerFactory = notificationHandlerFactory;
