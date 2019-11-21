@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Shared.Contracts;
+using Shared.Contracts.Factories;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -8,6 +8,7 @@ namespace Shared.Contracts
         Task<IEvent> Send<TCommand>(TCommand command)
             where TCommand : ICommand;
     }
+
     public interface IEventHandler<TEvent> : IEventHandler
         where TEvent : IEvent
     {

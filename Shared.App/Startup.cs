@@ -50,7 +50,13 @@ namespace Shared.App
         {
             public override void OnChange(IEvent<Customer> @event)
             {
-                Console.WriteLine("Customer updated");
+                Console.WriteLine("Customer {0} {1} notified", @event.Result.FirstName, @event.Result.LastName);
+            }
+
+            public override async Task OnChangeAsync(IEvent<Customer> @event)
+            {
+                await Task.Delay(100);
+                Console.WriteLine("Customer {0} {1} notified", @event.Result.FirstName, @event.Result.LastName);
             }
         }
 
@@ -66,7 +72,7 @@ namespace Shared.App
                 .Create<Customer>("Fetch",  DictionaryBuilder.Create<string, object>().ToDictionary()));
 
             //notificationHandlerFactory.Subscribe(new CustomerNotificationSubscriber());
-            notificationHandlerFactory.Notify(@event);
+            await notificationHandlerFactory.NotifyAsync(@event);
         }
 
         public async Task<CryptoData> GetCryptoDataFromUserInput(SymmetricAlgorithmType symmetricAlgorithmType)

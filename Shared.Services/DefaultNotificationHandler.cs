@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Shared.Services
 {
@@ -31,6 +32,19 @@ namespace Shared.Services
                 _notificationSubscribersList.Add(notificationSubscriber);
 
             return new DefaultNotificationUnsubscriber(_notificationSubscribersList, notificationSubscriber);
+        }
+
+        public async Task NotifyAsync(TEvent @event)
+        {
+            foreach(var notificationSubscriber in _notificationSubscribersList)
+            {
+                await notificationSubscriber.OnChangeAsync(@event);
+            }
+        }
+
+        public async Task NotifyAsync(object @event)
+        {
+            await NotifyAsync((TEvent)@event);
         }
 
         public DefaultNotificationHandler()

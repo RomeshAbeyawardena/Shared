@@ -1,7 +1,9 @@
 ﻿using Shared.Contracts;
+using Shared.Contracts.Factories;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Shared.Services
 {
@@ -23,6 +25,11 @@ namespace Shared.Services
                 .MakeGenericType(typeof(TEvent));
 
             return _serviceProvider.GetService(notificationHandlerType) as INotificationHandler<TEvent>;
+        }
+
+        public async Task NotifyAsync<TEvent>(TEvent @event)
+        {
+            await GetNotificationHandler<TEvent>().NotifyAsync(@event);
         }
 
         public DefaultNotificationHandlerFactory(IServiceProvider serviceProvider)

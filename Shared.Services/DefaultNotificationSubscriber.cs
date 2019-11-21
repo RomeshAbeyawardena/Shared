@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Shared.Services
 {
@@ -12,6 +13,13 @@ namespace Shared.Services
         public void OnChange(object @event)
         {
             OnChange((TEvent)@event);
+        }
+
+        public abstract Task OnChangeAsync(TEvent @event);
+
+        public async Task OnChangeAsync(object @event)
+        {
+            await OnChangeAsync((TEvent)@event);
         }
     }
 }
