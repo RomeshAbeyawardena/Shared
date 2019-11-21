@@ -16,11 +16,11 @@ namespace Shared.Services
             return (IEventHandler<TEvent>) serviceProvider.GetService(typeof(IEventHandler<TEvent>));
         }
 
-        public async Task Push<TEvent>(TEvent @event)
+        public async Task<TEvent> Push<TEvent>(TEvent @event)
             where TEvent : IEvent
         {
             var eventHandler = GetEventHandler<TEvent>();
-            await eventHandler.Push(@event);
+            return await eventHandler.Push(@event);
         }
 
         public async Task<TEvent> Send<TEvent, TCommand>(TCommand command)

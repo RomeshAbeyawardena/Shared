@@ -19,8 +19,7 @@ namespace Shared.App
         private readonly ISerializerFactory serializerFactory;
         private readonly ICryptographicProvider cryptographicProvider;
         private readonly IEncryptionService encryptionService;
-        private readonly IEventHandlerFactory eventHandlerFactory;
-
+        private readonly IMediator mediator;
 
         private class CustomerEventHandler : DefaultEventHandler<IEvent<Customer>>
         {
@@ -45,15 +44,34 @@ namespace Shared.App
             }
         }
 
+
+        private class CustomerNotificationSubscriber : DefaultNotificationSubscriber<IEvent<Customer>>
+        {
+            public override void OnChange(IEvent<Customer> @event)
+            {
+                Console.WriteLine("Customer {0} {1} notified", @event.Result.FirstName, @event.Result.LastName);
+            }
+
+            public override async Task OnChangeAsync(IEvent<Customer> @event)
+            {
+                await Task.Delay(100);
+                Console.WriteLine("Customer {0} {1} notified", @event.Result.FirstName, @event.Result.LastName);
+            }
+        }
+
         public async Task Start()
         {
-            await eventHandlerFactory.Push(DefaultEvent.Create(new Customer {
+            var @event = DefaultEvent.Create(new Customer {
                 FirstName = "John",
                 LastName = "Doe"
-            }));
+            });
+            await mediator.Push(@event);
 
-            await eventHandlerFactory.Send<IEvent<Customer>, ICommand>(DefaultCommand
+            await mediator.Send<IEvent<Customer>, ICommand>(DefaultCommand
                 .Create<Customer>("Fetch",  DictionaryBuilder.Create<string, object>().ToDictionary()));
+
+            //notificationHandlerFactory.Subscribe(new CustomerNotificationSubscriber());
+            await mediator.NotifyAsync(@event);
         }
 
         public async Task<CryptoData> GetCryptoDataFromUserInput(SymmetricAlgorithmType symmetricAlgorithmType)
@@ -84,12 +102,12 @@ namespace Shared.App
         }
 
         public Startup(ISerializerFactory serializerFactory, ICryptographicProvider cryptographicProvider, 
-            IEncryptionService encryptionService, IEventHandlerFactory eventHandlerFactory)
+            IEncryptionService encryptionService, IMediator mediator)
         {
             this.serializerFactory = serializerFactory;
             this.cryptographicProvider = cryptographicProvider;
             this.encryptionService = encryptionService;
-            this.eventHandlerFactory = eventHandlerFactory;
+            this.mediator = mediator;
         }
     }
     [MessagePackObject(true)]
