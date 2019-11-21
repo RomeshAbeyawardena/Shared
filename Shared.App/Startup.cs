@@ -70,6 +70,8 @@ namespace Shared.App
             await mediator.Send<IEvent<Customer>, ICommand>(DefaultCommand
                 .Create<Customer>("Fetch",  DictionaryBuilder.Create<string, object>().ToDictionary()));
 
+            Func<Task> a = async() => throw new ArgumentException();
+            await a.TryAsync(exception => Console.WriteLine(exception.Message), exceptionTypes: typeof(ArgumentException));
             //notificationHandlerFactory.Subscribe(new CustomerNotificationSubscriber());
             await mediator.NotifyAsync(@event);
         }
