@@ -4,8 +4,6 @@ using System.Reflection;
 using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Generic;
-using Shared.Library.Extensions;
-using Shared.Contracts.Factories;
 
 namespace Shared.Services
 {

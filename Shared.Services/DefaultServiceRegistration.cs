@@ -10,7 +10,6 @@ using Shared.Services.Factories;
 using Shared.Domains;
 using System.Security.Cryptography;
 using Shared.Contracts.Services;
-using System.Collections.Generic;
 using System.Text;
 
 namespace Shared.Services
@@ -24,8 +23,8 @@ namespace Shared.Services
                     .CaseWhen("ASCII", Encoding.ASCII)
                     .CaseWhen("Unicode", Encoding.Unicode)
                     .CaseWhen("UTF7", Encoding.UTF7, "UTF-7")
-                    .CaseWhen("UTF32", Encoding.UTF32, "UTF-32")
                     .CaseWhen("UTF8", Encoding.UTF8, "UTF-8")
+                    .CaseWhen("UTF32", Encoding.UTF32, "UTF-32")
                     .CaseWhen("BigEndianUnicode", Encoding.BigEndianUnicode, "BE-Unicode"))
                 .AddSingleton<IEncodingProvider, DefaultEncodingProvider>()
                 .AddSingleton<IMediator, DefaultMediator>()
