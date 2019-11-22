@@ -1,4 +1,5 @@
 ﻿using Shared.Contracts;
+using Shared.Contracts.Builders;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -10,6 +11,11 @@ namespace Shared.Services
         public static ICommand Create<T>(string name, IDictionary<string, object> parameters)
         {
             return new DefaultCommand<T>(name, parameters);
+        }
+
+        public static ICommand Create<T>(string name, IDictionaryBuilder<string, object> parameters)
+        {
+            return new DefaultCommand<T>(name, parameters.ToDictionary());
         }
     }
     public class DefaultCommand<T> : ICommand
