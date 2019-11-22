@@ -16,10 +16,11 @@ namespace Shared.Services
     public sealed class Switch<TKey, TValue> : ISwitch<TKey, TValue>
     {
         private readonly IDictionary<TKey, TValue> _switchDictionary;
-
+        private readonly IDictionary<TKey, TKey> _aliasDictionary;
         public Switch()
         {
             _switchDictionary = new Dictionary<TKey, TValue>();
+            _aliasDictionary = new Dictionary<TKey, TKey>();
         }
 
         public TValue this[TKey key] => _switchDictionary[key];
@@ -35,13 +36,22 @@ namespace Shared.Services
             if(_switchDictionary.TryGetValue(key, out var value))
                 return value;
 
+            if(_aliasDictionary.ContainsKey(key))
+                return Case(_aliasDictionary[key]);
+
             throw new NullReferenceException($"Unable to find value for {key}");
         }
 
-        public ISwitch<TKey, TValue> CaseWhen(TKey key, TValue value)
+        public ISwitch<TKey, TValue> CaseWhen(TKey key, TValue value, params TKey[] aliases)
         {
             if(ContainsKey(key))
                 throw new NullReferenceException("A value for {key} already exists");
+
+            foreach(var alias in aliases)
+            {
+                if(!_aliasDictionary.ContainsKey(alias))
+                    _aliasDictionary.Add(alias, key);
+            }
 
             _switchDictionary.Add(key, value);
             return this;
