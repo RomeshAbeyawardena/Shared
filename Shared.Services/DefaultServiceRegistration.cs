@@ -11,6 +11,7 @@ using Shared.Domains;
 using System.Security.Cryptography;
 using Shared.Contracts.Services;
 using System.Collections.Generic;
+using System.Text;
 
 namespace Shared.Services
 {
@@ -19,6 +20,14 @@ namespace Shared.Services
         public void RegisterServices(IServiceCollection services)
         {
             services
+                .AddSingleton(DefaultSwitch.Create<string, Encoding>()
+                    .CaseWhen("ASCII", Encoding.ASCII)
+                    .CaseWhen("Unicode", Encoding.Unicode)
+                    .CaseWhen("UTF7", Encoding.UTF7, "UTF-7")
+                    .CaseWhen("UTF32", Encoding.UTF32, "UTF-32")
+                    .CaseWhen("UTF8", Encoding.UTF8, "UTF-8")
+                    .CaseWhen("BigEndianUnicode", Encoding.BigEndianUnicode, "BE-Unicode"))
+                .AddSingleton<IEncodingProvider, DefaultEncodingProvider>()
                 .AddSingleton<IMediator, DefaultMediator>()
                 .AddSingleton<IEventHandlerFactory, DefaultEventHandlerFactory>()
                 .AddSingleton<INotificationHandlerFactory, DefaultNotificationHandlerFactory>()
@@ -40,6 +49,7 @@ namespace Shared.Services
                 .AddSingleton<RSACryptoServiceProvider>()
                 .AddSingleton<TripleDESCryptoServiceProvider>()
                 .AddSingleton<RNGCryptoServiceProvider>()
+                
                 .AddSingleton(DefaultSwitch.Create<SymmetricAlgorithmType, Type>()
                     .CaseWhen(SymmetricAlgorithmType.Aes, typeof(AesCryptoServiceProvider))
                     .CaseWhen(SymmetricAlgorithmType.Rsa, typeof(RSACryptoServiceProvider))

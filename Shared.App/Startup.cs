@@ -20,6 +20,7 @@ namespace Shared.App
         private readonly ICryptographicProvider cryptographicProvider;
         private readonly IEncryptionService encryptionService;
         private readonly IMediator mediator;
+        private readonly IEncodingProvider encodingProvider;
 
         private class CustomerEventHandler : DefaultEventHandler<IEvent<Customer>>
         {
@@ -69,8 +70,12 @@ namespace Shared.App
 
             await mediator.Send<IEvent<Customer>, ICommand>(DefaultCommand
                 .Create<Customer>("Fetch",  DictionaryBuilder.Create<string, object>().ToDictionary()));
+            
+            Func<Task> a = async() => throw new ArgumentException();
+            await a.TryAsync(exception => Console.WriteLine(exception.Message), exceptionTypes: typeof(ArgumentException));
+            
+            var ascii = encodingProvider.GetEncoding(encodingProvider.Encodings, "Your-Mum");
 
-            //notificationHandlerFactory.Subscribe(new CustomerNotificationSubscriber());
             await mediator.NotifyAsync(@event);
         }
 
@@ -97,17 +102,18 @@ namespace Shared.App
             var generatedKey = cryptographicProvider.GenerateKey(password, memorialWord, 100000, 32);
 
             var generatedIV = encryptionService.GenerateIv(symmetricAlgorithmType);
-
+            
             return new CryptoData(generatedIV, generatedKey);
         }
 
         public Startup(ISerializerFactory serializerFactory, ICryptographicProvider cryptographicProvider, 
-            IEncryptionService encryptionService, IMediator mediator)
+            IEncryptionService encryptionService, IMediator mediator, IEncodingProvider encodingProvider)
         {
             this.serializerFactory = serializerFactory;
             this.cryptographicProvider = cryptographicProvider;
             this.encryptionService = encryptionService;
             this.mediator = mediator;
+            this.encodingProvider = encodingProvider;
         }
     }
     [MessagePackObject(true)]
