@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Text;
 using Shared.Contracts;
 
-namespace Shared.Services
+namespace Shared.Services.Providers
 {
     public class DefaultEncodingProvider : IEncodingProvider
     {
