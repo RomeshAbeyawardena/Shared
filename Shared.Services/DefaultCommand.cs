@@ -1,8 +1,6 @@
 ﻿using Shared.Contracts;
 using Shared.Contracts.Builders;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Shared.Services
 {
