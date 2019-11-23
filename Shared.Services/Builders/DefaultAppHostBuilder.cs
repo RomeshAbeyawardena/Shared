@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Shared.Contracts;
 using Shared.Contracts.Builders;
 using System;
@@ -10,6 +12,8 @@ namespace Shared.Services.Builders
         public DefaultAppHostBuilder()
         {
             services = new ServiceCollection();
+            configurationBuilder = new ConfigurationBuilder();
+            loggingBuilder = new AppHostLoggerBuilder(services);
         }
 
         public IAppHost Build(IServiceCollection services = null)
@@ -18,7 +22,9 @@ namespace Shared.Services.Builders
                 throw new NullReferenceException("Expected UseStartup<TStartup> method first, use Build<TStartup> instead");
             
             AppendServices(services);
-            return new DefaultAppHost(StartupType, this.services.BuildServiceProvider());
+            return new DefaultAppHost(StartupType, this.services
+                .AddSingleton<IConfiguration>(configurationBuilder.Build())
+                .BuildServiceProvider());
         }
 
         public IAppHostBuilder UseStartup<TStartup>()
@@ -32,8 +38,11 @@ namespace Shared.Services.Builders
         {
             UseStartup<TStartup>();
             AppendServices(services);
-            var serviceProvider = this.services.BuildServiceProvider();
-            serviceProviderAction(serviceProvider);
+            var serviceProvider = this.services
+                .AddSingleton<IConfiguration>(configurationBuilder.Build())
+                .BuildServiceProvider();
+
+            serviceProviderAction?.Invoke(serviceProvider);
             return new DefaultAppHost<TStartup>(serviceProvider);
         }
 
@@ -57,7 +66,19 @@ namespace Shared.Services.Builders
             return this;
         }
 
+        public IAppHostBuilder ConfigureAppConfiguration(Action<IConfigurationBuilder> configuration)
+        {
+            configuration(configurationBuilder);
+            return this;
+        }
 
+        public IAppHostBuilder ConfigureLogging(Action<ILoggingBuilder> buildLogger)
+        {
+            buildLogger(loggingBuilder);
+            return this;
+        }
+        private readonly ILoggingBuilder loggingBuilder;
+        private readonly ConfigurationBuilder configurationBuilder;
         private Type StartupType;
         private readonly IServiceCollection services;
     }

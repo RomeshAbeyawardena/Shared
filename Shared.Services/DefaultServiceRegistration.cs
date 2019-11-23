@@ -11,6 +11,7 @@ using Shared.Domains;
 using System.Security.Cryptography;
 using Shared.Contracts.Services;
 using System.Text;
+using Microsoft.Extensions.Logging;
 
 namespace Shared.Services
 {
@@ -19,6 +20,11 @@ namespace Shared.Services
         public void RegisterServices(IServiceCollection services)
         {
             services
+                .AddOptions()
+                .AddSingleton<IQueryBuilderFactory, DefaultQueryBuilderFactory>()
+                .AddSingleton(typeof(ILogger), typeof(Logger<DefaultAppHost>))
+                .AddSingleton(typeof(ILogger<>), typeof(Logger<>))
+                .AddSingleton(typeof(ILoggerFactory), typeof(LoggerFactory))
                 .AddSingleton(DefaultSwitch.Create<string, Encoding>()
                     .CaseWhen("ASCII", Encoding.ASCII)
                     .CaseWhen("Unicode", Encoding.Unicode)

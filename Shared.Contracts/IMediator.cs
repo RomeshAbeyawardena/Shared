@@ -11,5 +11,8 @@ namespace Shared.Contracts
         Task<TEvent> Send<TEvent, TCommand>(TCommand command)
             where TEvent : IEvent
             where TCommand : ICommand;
+
+        Task<TEvent> Send<TEvent>(ICommand command)
+            where TEvent : IEvent;
     }
 }

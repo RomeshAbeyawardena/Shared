@@ -3,8 +3,17 @@ using Shared.Contracts;
 using Shared.Contracts.Providers;
 using System;
 
-namespace Shared.Services
+namespace Shared.Services.Providers
 {
+    public static class DefaultEntityProvider
+    {
+        public static IDefaultEntityProvider<TEntity> Create<TEntity>()
+            where TEntity : class
+        {
+            return DefaultEntityProvider<TEntity>.Create();
+        }
+    }
+
     public class DefaultEntityProvider<TEntity> : IDefaultEntityProvider<TEntity>
         where TEntity : class
     {
@@ -21,7 +30,7 @@ namespace Shared.Services
             return new DefaultEntityProvider<TEntity>();
         }
 
-        private DefaultEntityProvider()        
+        private DefaultEntityProvider()
         {
             defaultEntitySwitch = DefaultSwitch.Create<EntityState, Action<TEntity>>();
         }
