@@ -78,7 +78,7 @@ namespace Shared.Services
         {
             var entityState = GetEntityState(entity);
 
-            var defaultEntityProvider = serviceProvider.GetRequiredService<IDefaultEntityProvider<TEntity>>();
+            var defaultEntityProvider = serviceProvider.GetRequiredService<IDefaultEntityValueProvider<TEntity>>();
 
             defaultEntityProvider.GetDefaultAssignAction(entityState)?.Invoke(serviceProvider, entity);
 

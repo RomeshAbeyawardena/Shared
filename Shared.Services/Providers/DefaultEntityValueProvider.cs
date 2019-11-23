@@ -5,16 +5,16 @@ using System;
 
 namespace Shared.Services.Providers
 {
-    public static class DefaultEntityProvider
+    public static class DefaultEntityValueProvider
     {
-        public static IDefaultEntityProvider<TEntity> Create<TEntity>()
+        public static IDefaultEntityValueProvider<TEntity> Create<TEntity>()
             where TEntity : class
         {
             return DefaultEntityProvider<TEntity>.Create();
         }
     }
 
-    public class DefaultEntityProvider<TEntity> : IDefaultEntityProvider<TEntity>
+    public class DefaultEntityProvider<TEntity> : IDefaultEntityValueProvider<TEntity>
         where TEntity : class
     {
         public Action<IServiceProvider, TEntity> GetDefaultAssignAction(EntityState entityState)
@@ -25,7 +25,7 @@ namespace Shared.Services.Providers
             return (serviceProvider, entity) => {};
         }
 
-        public static IDefaultEntityProvider<TEntity> Create()
+        public static IDefaultEntityValueProvider<TEntity> Create()
         {
             return new DefaultEntityProvider<TEntity>();
         }
@@ -35,7 +35,7 @@ namespace Shared.Services.Providers
             defaultEntitySwitch = DefaultSwitch.Create<EntityState, Action<IServiceProvider, TEntity>>();
         }
 
-        public IDefaultEntityProvider<TEntity> AddDefaults(EntityState entityState, Action<IServiceProvider, TEntity> action)
+        public IDefaultEntityValueProvider<TEntity> AddDefaults(EntityState entityState, Action<IServiceProvider, TEntity> action)
         {
             defaultEntitySwitch.CaseWhen(entityState, action);
             return this; 
