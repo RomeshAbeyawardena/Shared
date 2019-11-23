@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 using Shared.Contracts.Providers;
+using System;
 
 namespace Shared.Services
 {
@@ -15,6 +16,9 @@ namespace Shared.Services
         {
             return this.GetService<IDefaultEntityProvider<TEntity>>();
         }
+
+        private IServiceProvider ServiceProvider => this.GetService<IServiceProvider>();
+
         public ExtendedDbContext(bool useSingularTableNames = true)
         {
             this.useSingularTableNames = useSingularTableNames;
@@ -36,7 +40,7 @@ namespace Shared.Services
             var entry = base.Add(entity);
             defaultEntityService?
                 .GetDefaultAssignAction(entry.State)?
-                .Invoke(entity);
+                .Invoke(ServiceProvider, entity);
 
             return entry;
         }
@@ -51,7 +55,7 @@ namespace Shared.Services
             var entry = base.Update(entity);
             defaultEntityService?
                 .GetDefaultAssignAction(entry.State)?
-                .Invoke(entity);
+                .Invoke(ServiceProvider, entity);
 
             return entry;
         }

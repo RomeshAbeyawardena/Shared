@@ -17,12 +17,12 @@ namespace Shared.Services.Providers
     public class DefaultEntityProvider<TEntity> : IDefaultEntityProvider<TEntity>
         where TEntity : class
     {
-        public Action<TEntity> GetDefaultAssignAction(EntityState entityState)
+        public Action<IServiceProvider, TEntity> GetDefaultAssignAction(EntityState entityState)
         {
             if(defaultEntitySwitch.ContainsKey(entityState))
                 return defaultEntitySwitch.Case(entityState);
 
-            return entity => {};
+            return (serviceProvider, entity) => {};
         }
 
         public static IDefaultEntityProvider<TEntity> Create()
@@ -32,15 +32,15 @@ namespace Shared.Services.Providers
 
         private DefaultEntityProvider()
         {
-            defaultEntitySwitch = DefaultSwitch.Create<EntityState, Action<TEntity>>();
+            defaultEntitySwitch = DefaultSwitch.Create<EntityState, Action<IServiceProvider, TEntity>>();
         }
 
-        public IDefaultEntityProvider<TEntity> AddDefaults(EntityState entityState, Action<TEntity> action)
+        public IDefaultEntityProvider<TEntity> AddDefaults(EntityState entityState, Action<IServiceProvider, TEntity> action)
         {
             defaultEntitySwitch.CaseWhen(entityState, action);
             return this; 
         }
 
-        private readonly ISwitch<EntityState, Action<TEntity>> defaultEntitySwitch;
+        private readonly ISwitch<EntityState, Action<IServiceProvider, TEntity>> defaultEntitySwitch;
     }
 }
