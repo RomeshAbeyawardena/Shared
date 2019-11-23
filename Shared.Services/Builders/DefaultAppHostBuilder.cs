@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Shared.Contracts;
 using Shared.Contracts.Builders;
 using System;
@@ -10,6 +11,7 @@ namespace Shared.Services.Builders
         public DefaultAppHostBuilder()
         {
             services = new ServiceCollection();
+            configurationBuilder = new ConfigurationBuilder();
         }
 
         public IAppHost Build(IServiceCollection services = null)
@@ -32,7 +34,9 @@ namespace Shared.Services.Builders
         {
             UseStartup<TStartup>();
             AppendServices(services);
-            var serviceProvider = this.services.BuildServiceProvider();
+            var serviceProvider = this.services
+                .AddSingleton<IConfiguration>(configurationBuilder.Build())
+                .BuildServiceProvider();
             serviceProviderAction?.Invoke(serviceProvider);
             return new DefaultAppHost<TStartup>(serviceProvider);
         }
@@ -57,7 +61,13 @@ namespace Shared.Services.Builders
             return this;
         }
 
+        public IAppHostBuilder ConfigureAppConfiguration(Action<IConfigurationBuilder> configuration)
+        {
+            configuration(configurationBuilder);
+            return this;
+        }
 
+        private readonly ConfigurationBuilder configurationBuilder;
         private Type StartupType;
         private readonly IServiceCollection services;
     }

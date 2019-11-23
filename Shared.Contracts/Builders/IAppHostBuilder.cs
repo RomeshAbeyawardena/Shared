@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 
 namespace Shared.Contracts.Builders
@@ -9,5 +10,6 @@ namespace Shared.Contracts.Builders
         IAppHostBuilder RegisterServices(Action<IServiceCollection> services);
         IAppHost Build(IServiceCollection services = null);
         IAppHostBuilder UseStartup<TStartup>();
+        IAppHostBuilder ConfigureAppConfiguration(Action<IConfigurationBuilder> configuration);
     }
 }

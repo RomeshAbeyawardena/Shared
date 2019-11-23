@@ -11,6 +11,7 @@ using Shared.Contracts.Providers;
 using Shared.Contracts.Services;
 using Shared.Services.Builders;
 using Shared.Library;
+using Microsoft.Extensions.Configuration;
 
 namespace Shared.App
 {
@@ -21,6 +22,7 @@ namespace Shared.App
         private readonly IEncryptionService encryptionService;
         private readonly IMediator mediator;
         private readonly IEncodingProvider encodingProvider;
+        private readonly IConfiguration configuraton;
 
         private class CustomerEventHandler : DefaultEventHandler<IEvent<Customer>>
         {
@@ -74,7 +76,7 @@ namespace Shared.App
             Func<Task> a = async() => throw new ArgumentException();
             await a.TryAsync(exception => Console.WriteLine(exception.Message), exceptionTypes: typeof(ArgumentException));
             
-            var ascii = encodingProvider.GetEncoding(encodingProvider.Encodings, "Your-Mum");
+            var ascii = encodingProvider.GetEncoding(encodingProvider.Encodings, "ASCII");
 
             await mediator.NotifyAsync(@event);
         }
@@ -107,13 +109,15 @@ namespace Shared.App
         }
 
         public Startup(ISerializerFactory serializerFactory, ICryptographicProvider cryptographicProvider, 
-            IEncryptionService encryptionService, IMediator mediator, IEncodingProvider encodingProvider)
+            IEncryptionService encryptionService, IMediator mediator, IEncodingProvider encodingProvider,
+            IConfiguration configuraton)
         {
             this.serializerFactory = serializerFactory;
             this.cryptographicProvider = cryptographicProvider;
             this.encryptionService = encryptionService;
             this.mediator = mediator;
             this.encodingProvider = encodingProvider;
+            this.configuraton = configuraton;
         }
     }
     [MessagePackObject(true)]
