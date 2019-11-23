@@ -47,27 +47,6 @@ namespace Shared.Library.Extensions
             return (TService)serviceProvider.Resolve(typeof(TService));
         }
 
-        public static object ResolveService(this IServiceCollection services, Type serviceType)
-        {
-            return services
-                .BuildServiceProvider()
-                .Resolve(serviceType);
-        }
-
-        public static object GetRequiredService(this IServiceCollection services, Type serviceType)
-        {
-            return services
-                .BuildServiceProvider()
-                .GetRequiredService(serviceType);
-        }
-
-        public static TService GetRequiredService<TService>(this IServiceCollection services)
-        {
-            return services
-                .BuildServiceProvider()
-                .GetRequiredService<TService>();
-        }
-
         public static IServiceCollection RegisterServiceBroker<TServiceBroker>(this IServiceCollection services)
             where TServiceBroker : IServiceBroker
         {
