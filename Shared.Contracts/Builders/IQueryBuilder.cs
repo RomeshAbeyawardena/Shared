@@ -9,6 +9,6 @@ namespace Shared.Contracts.Builders
         where TEntity : class
         where TEnum : struct
     {
-        Expression<Func<TEntity, bool>> GetExpression(TEnum enumeration);
+        Expression<Func<TEntity, bool>> GetExpression(TEnum? enumeration);
     }
 }

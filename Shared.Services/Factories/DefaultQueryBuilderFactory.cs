@@ -12,7 +12,7 @@ namespace Shared.Services.Factories
     {
         private readonly IServiceProvider serviceProvider;
 
-        public Expression<Func<TEntity, bool>> GetExpression<TEntity, TEnum>(TEnum enumeration)
+        public Expression<Func<TEntity, bool>> GetExpression<TEntity, TEnum>(TEnum? enumeration)
             where TEntity : class
             where TEnum : struct
         {
