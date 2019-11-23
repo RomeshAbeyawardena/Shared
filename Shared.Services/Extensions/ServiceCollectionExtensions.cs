@@ -9,7 +9,7 @@ namespace Shared.Services.Extensions
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection RegisterDefaultEntityProvider<TEntity>(this IServiceCollection services, 
+        public static IServiceCollection RegisterDefaultEntityValueProvider<TEntity>(this IServiceCollection services, 
             Action<IDefaultEntityValueProvider<TEntity>> defaultEntityProviderRegistration = null)
             where TEntity: class
         {
