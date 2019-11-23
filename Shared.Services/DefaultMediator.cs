@@ -32,6 +32,11 @@ namespace Shared.Services
             return await _eventHandlerFactory.Send<TEvent,TCommand>(command);
         }
 
+        public Task<TEvent> Send<TEvent>(ICommand command) where TEvent : IEvent
+        {
+            return Send<TEvent, ICommand>(command);
+        }
+
         public DefaultMediator(IEventHandlerFactory eventHandlerFactory, INotificationHandlerFactory notificationHandlerFactory)
         {
             _eventHandlerFactory = eventHandlerFactory;
