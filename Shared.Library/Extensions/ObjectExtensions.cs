@@ -44,10 +44,23 @@ namespace Shared.Library.Extensions
             return DateTimeOffset.TryParse(value, out result);
         }
 
-        public static bool TryParse<T>(this object value, out T result)
-            where T : class
+        public static bool TryParse<T>(this object value, out T? result)
+            where T: struct
         {
-            result = null;
+            result = default;
+            
+            if(!(value is T tResult))
+                return false;
+            
+            result = tResult;
+            
+            return true;
+        }
+
+        public static bool TryParse<T>(this object value, out T result)
+            where T: class
+        {
+            result = default;
             
             if(!(value is T tResult))
                 return false;

@@ -7,30 +7,32 @@ namespace Shared.Domains
 {
     public static class DefaultEvent
     {
-        public static IEvent<T> Create<T>(T result)
+        public static IEvent<T> Create<T>(T result = null, IEnumerable<T> results = null)
             where T : class
         {
-            return new DefaultEvent<T>(result);
+            return new DefaultEvent<T>(result, results);
         }
 
-        public static IEvent<T> Create<T>(bool isSuccessful, Exception exception = null, T result = null)
+        public static IEvent<T> Create<T>(bool isSuccessful, Exception exception = null, T result = null, IEnumerable<T> results = null)
             where T : class
         {
-            return new DefaultEvent<T>(isSuccessful, exception, result);
+            return new DefaultEvent<T>(isSuccessful, exception, result, results);
         }
     }
 
     public class DefaultEvent<T> : IEvent<T>
         where T : class
     {
-        public DefaultEvent(T result)
+        public DefaultEvent(T result = null, IEnumerable<T> results = null)
         {
             Result = result;
+            Results = results;
             IsSuccessful = true;
         }
 
-        public DefaultEvent(bool isSuccessful, Exception exception = null, T result = null)
+        public DefaultEvent(bool isSuccessful, Exception exception = null, T result = null, IEnumerable<T> results = null)
         {
+            Results = results;
             Result = result;
             IsSuccessful = isSuccessful;
             Exception = exception;
