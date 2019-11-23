@@ -74,10 +74,9 @@ namespace Shared.App
                 .Create<Customer>("Fetch",  DictionaryBuilder.Create<string, object>().ToDictionary()));
             
             Func<Task> a = async() => throw new ArgumentException();
-            await a.TryAsync(exception => Console.WriteLine(exception.Message), exceptionTypes: typeof(ArgumentException));
+            await a.TryAsync(exception => Console.WriteLine(exception.Message), handledExceptions: typeof(ArgumentException));
             
             var ascii = encodingProvider.GetEncoding(encodingProvider.Encodings, "ASCII");
-
             await mediator.NotifyAsync(@event);
         }
 

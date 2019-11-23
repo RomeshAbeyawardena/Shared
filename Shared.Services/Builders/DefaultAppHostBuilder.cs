@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Shared.Contracts;
 using Shared.Contracts.Builders;
 using System;
@@ -12,6 +13,7 @@ namespace Shared.Services.Builders
         {
             services = new ServiceCollection();
             configurationBuilder = new ConfigurationBuilder();
+            loggingBuilder = new AppHostLoggerBuilder(services);
         }
 
         public IAppHost Build(IServiceCollection services = null)
@@ -39,6 +41,7 @@ namespace Shared.Services.Builders
             var serviceProvider = this.services
                 .AddSingleton<IConfiguration>(configurationBuilder.Build())
                 .BuildServiceProvider();
+
             serviceProviderAction?.Invoke(serviceProvider);
             return new DefaultAppHost<TStartup>(serviceProvider);
         }
@@ -69,6 +72,12 @@ namespace Shared.Services.Builders
             return this;
         }
 
+        public IAppHostBuilder ConfigureLogging(Action<ILoggingBuilder> buildLogger)
+        {
+            buildLogger(loggingBuilder);
+            return this;
+        }
+        private readonly ILoggingBuilder loggingBuilder;
         private readonly ConfigurationBuilder configurationBuilder;
         private Type StartupType;
         private readonly IServiceCollection services;
