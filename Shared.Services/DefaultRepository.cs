@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Shared.Contracts;
+using Shared.Contracts.Providers;
 using System;
 using System.Linq;
 using System.Linq.Expressions;
@@ -11,10 +13,12 @@ namespace Shared.Services
         where TDbContext : DbContext
             where TEntity : class
     {
+        private readonly IServiceProvider serviceProvider;
         private readonly TDbContext dbContext;
 
-        public DefaultRepository(TDbContext dbContext)
+        public DefaultRepository(IServiceProvider serviceProvider, TDbContext dbContext)
         {
+            this.serviceProvider = serviceProvider;
             this.dbContext = dbContext;
         }
 
@@ -45,10 +49,10 @@ namespace Shared.Services
             return await Remove(entity);
         }
 
-        public async Task<TEntity> SaveChangesAsync(TEntity entity, bool saveChanges = true)
+        private EntityState GetEntityState(TEntity entity)
         {
             var model = dbContext.Model.GetEntityTypes().SingleOrDefault(entityType => entityType.ClrType == typeof(TEntity));
-            
+
             if (model == null)
                 throw new ArgumentNullException(nameof(model));
 
@@ -62,10 +66,26 @@ namespace Shared.Services
                 
                 var keyValue = keyPropertyInfo.GetValue(entity);
                 if(keyValue.Equals(nullObject))
-                    DbSet.Add(entity);
+                    return EntityState.Added;
                 else
-                    DbSet.Update(entity);
+                    return EntityState.Modified;
             }
+
+            return EntityState.Unchanged;
+        }
+
+        public async Task<TEntity> SaveChangesAsync(TEntity entity, bool saveChanges = true)
+        {
+            var entityState = GetEntityState(entity);
+
+            var defaultEntityProvider = serviceProvider.GetRequiredService<IDefaultEntityProvider<TEntity>>();
+
+            defaultEntityProvider.GetDefaultAssignAction(entityState)?.Invoke(serviceProvider, entity);
+
+            if(entityState == EntityState.Added)
+                DbSet.Add(entity);
+            else if(entityState == EntityState.Modified)
+                DbSet.Update(entity);
 
             if(saveChanges)
                 await SaveChangesAsync();

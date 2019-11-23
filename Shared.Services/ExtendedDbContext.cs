@@ -12,13 +12,6 @@ namespace Shared.Services
     {
         private readonly bool useSingularTableNames;
 
-        private IDefaultEntityProvider<TEntity> GetDefaultEntityProvider<TEntity>() where TEntity : class
-        {
-            return this.GetService<IDefaultEntityProvider<TEntity>>();
-        }
-
-        private IServiceProvider ServiceProvider => this.GetService<IServiceProvider>();
-
         public ExtendedDbContext(bool useSingularTableNames = true)
         {
             this.useSingularTableNames = useSingularTableNames;
@@ -28,41 +21,6 @@ namespace Shared.Services
             : base(dbContextOptions)
         {
             this.useSingularTableNames = useSingularTableNames;
-        }
-
-        public override EntityEntry<TEntity> Add<TEntity>(TEntity entity)
-        {
-            var defaultEntityService = GetDefaultEntityProvider<TEntity>();
-
-            if (defaultEntityService == null)
-                return base.Add(entity);
-
-            var entry = base.Add(entity);
-            defaultEntityService?
-                .GetDefaultAssignAction(entry.State)?
-                .Invoke(ServiceProvider, entity);
-
-            return entry;
-        }
-
-        public override EntityEntry<TEntity> Update<TEntity>(TEntity entity)
-        {
-            var defaultEntityService = GetDefaultEntityProvider<TEntity>();
-
-            if (defaultEntityService == null)
-                return base.Update(entity);
-
-            var entry = base.Update(entity);
-            defaultEntityService?
-                .GetDefaultAssignAction(entry.State)?
-                .Invoke(ServiceProvider, entity);
-
-            return entry;
-        }
-
-        public override EntityEntry Update(object entity)
-        {
-            return base.Update(entity);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
