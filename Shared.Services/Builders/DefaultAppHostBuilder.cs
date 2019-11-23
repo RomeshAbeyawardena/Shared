@@ -20,7 +20,9 @@ namespace Shared.Services.Builders
                 throw new NullReferenceException("Expected UseStartup<TStartup> method first, use Build<TStartup> instead");
             
             AppendServices(services);
-            return new DefaultAppHost(StartupType, this.services.BuildServiceProvider());
+            return new DefaultAppHost(StartupType, this.services
+                .AddSingleton<IConfiguration>(configurationBuilder.Build())
+                .BuildServiceProvider());
         }
 
         public IAppHostBuilder UseStartup<TStartup>()

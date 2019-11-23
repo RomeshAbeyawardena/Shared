@@ -49,6 +49,9 @@ namespace Shared.Services
         {
             var model = dbContext.Model.GetEntityTypes().SingleOrDefault(entityType => entityType.ClrType == typeof(TEntity));
             
+            if (model == null)
+                throw new ArgumentNullException(nameof(model));
+
             foreach (var key in model.GetKeys())
             {
                 var keyPropertyInfo = key.Properties.SingleOrDefault().PropertyInfo;
