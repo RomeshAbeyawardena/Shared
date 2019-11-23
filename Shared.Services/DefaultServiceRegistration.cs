@@ -21,6 +21,7 @@ namespace Shared.Services
         {
             services
                 .AddOptions()
+                .AddSingleton<IQueryBuilderFactory, DefaultQueryBuilderFactory>()
                 .AddSingleton(typeof(ILogger), typeof(Logger<DefaultAppHost>))
                 .AddSingleton(typeof(ILogger<>), typeof(Logger<>))
                 .AddSingleton(typeof(ILoggerFactory), typeof(LoggerFactory))
