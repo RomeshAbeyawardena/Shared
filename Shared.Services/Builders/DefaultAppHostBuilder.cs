@@ -33,7 +33,7 @@ namespace Shared.Services.Builders
             UseStartup<TStartup>();
             AppendServices(services);
             var serviceProvider = this.services.BuildServiceProvider();
-            serviceProviderAction(serviceProvider);
+            serviceProviderAction?.Invoke(serviceProvider);
             return new DefaultAppHost<TStartup>(serviceProvider);
         }
 
