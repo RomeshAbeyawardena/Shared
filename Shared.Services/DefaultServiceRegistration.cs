@@ -21,6 +21,7 @@ namespace Shared.Services
         {
             services
                 .AddOptions()
+                .AddSingleton<ISystemClock, SystemClock>()
                 .AddSingleton<IQueryBuilderFactory, DefaultQueryBuilderFactory>()
                 .AddSingleton(typeof(ILogger), typeof(Logger<DefaultAppHost>))
                 .AddSingleton(typeof(ILogger<>), typeof(Logger<>))
