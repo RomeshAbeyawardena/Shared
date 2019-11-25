@@ -1,5 +1,7 @@
 ﻿using Shared.Contracts;
 using Shared.Contracts.Builders;
+using Shared.Services.Builders;
+using System;
 using System.Collections.Generic;
 
 namespace Shared.Services
@@ -11,8 +13,10 @@ namespace Shared.Services
             return new DefaultCommand<T>(name, parameters);
         }
 
-        public static ICommand Create<T>(string name, IDictionaryBuilder<string, object> parameters)
+        public static ICommand Create<T>(string name, Action<IDictionaryBuilder<string, object>> commandParameters)
         {
+            var parameters = DictionaryBuilder.Create<string, object>();
+            commandParameters(parameters);
             return new DefaultCommand<T>(name, parameters.ToDictionary());
         }
     }

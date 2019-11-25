@@ -12,6 +12,7 @@ using Shared.Contracts.Services;
 using Shared.Services.Builders;
 using Shared.Library;
 using Microsoft.Extensions.Configuration;
+using System.Linq;
 
 namespace Shared.App
 {
@@ -64,20 +65,17 @@ namespace Shared.App
 
         public async Task Start()
         {
-            var @event = DefaultEvent.Create(new Customer {
-                FirstName = "John",
-                LastName = "Doe"
-            });
-            await mediator.Push(@event);
+            var customers = new [] { new Customer
+            {
+                Id = 1,
+                RegistrationDate = DateTimeOffset.Now
+            } };
 
-            await mediator.Send<IEvent<Customer>, ICommand>(DefaultCommand
-                .Create<Customer>("Fetch",  DictionaryBuilder.Create<string, object>().ToDictionary()));
-            
-            Func<Task> a = async() => throw new ArgumentException();
-            await a.TryAsync(exception => Console.WriteLine(exception.Message), handledExceptions: typeof(ArgumentException));
-            
-            var ascii = encodingProvider.GetEncoding(encodingProvider.Encodings, "ASCII");
-            await mediator.NotifyAsync(@event);
+            var customerExpressionBuilder = ExpressionBuilder.Create();
+            customerExpressionBuilder.Not(nameof(Customer.RegistrationDate), ExpressionComparer.IsNull);
+            var expression = customerExpressionBuilder.ToExpression<Customer>();
+            var customer = customers.Where(expression.Compile());
+
         }
 
         public async Task<CryptoData> GetCryptoDataFromUserInput(SymmetricAlgorithmType symmetricAlgorithmType)
@@ -129,7 +127,7 @@ namespace Shared.App
         public string LastName { get; set; }
         public DateTimeOffset Created { get; set; }
         public DateTimeOffset Modified { get; set; }
-
+        public DateTimeOffset? RegistrationDate { get;set; }
         public virtual Initial Initial { get; set; }
     }
     [MessagePackObject(true)]

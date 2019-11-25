@@ -86,8 +86,15 @@ namespace Shared.Services.Builders
                         break;
                 }
                 
-                if (combinedExpression == null)
-                    combinedExpression = equalExpression;
+                if (combinedExpression == null) {
+
+                    if(value.Condition == ExpressionCondition.Not)
+                        combinedExpression = Expression.Not(equalExpression);
+                    else
+                        combinedExpression = equalExpression;
+
+                    continue;
+                }
 
                 if (value.Condition == ExpressionCondition.And)
                     combinedExpression = Expression.And(combinedExpression, equalExpression);
