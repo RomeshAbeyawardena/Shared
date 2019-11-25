@@ -70,7 +70,7 @@ namespace Shared.Services
                 else
                     return EntityState.Modified;
             }
-
+            
             return EntityState.Unchanged;
         }
 
