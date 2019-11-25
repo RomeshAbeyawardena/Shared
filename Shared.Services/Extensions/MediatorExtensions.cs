@@ -10,6 +10,11 @@ namespace Shared.Services.Extensions
 {
     public static class MediatorExtensions
     {
+        public static async Task NotifyAsync<TEntity>(this IMediator mediator, TEntity @event)
+            where TEntity: class
+        {
+            await mediator.NotifyAsync(DefaultEvent.Create(@event));
+        }
         public static async Task<IEvent<TEntity>> Push<TEntity>(this IMediator mediator, TEntity entity)
             where TEntity: class
         {
