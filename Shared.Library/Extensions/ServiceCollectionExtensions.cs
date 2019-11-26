@@ -28,6 +28,7 @@ namespace Shared.Library.Extensions
         {
             var subscriberEventTypeList = serviceProvider.GetRequiredService<IList<Type>>();
             var subscriberNotificationHandlerFactory = serviceProvider.GetRequiredService<INotificationHandlerFactory>();
+            var notificationUnsubscribers = serviceProvider.GetRequiredService<IList<INotificationUnsubscriber>>();
             foreach (var subscriberEventType in subscriberEventTypeList)
             {
                 var subscriberEvent = serviceProvider.GetRequiredService(subscriberEventType);
@@ -35,9 +36,13 @@ namespace Shared.Library.Extensions
 
                 var factoryType = subscriberNotificationHandlerFactory.GetType();
 
-                factoryType.GetMethod("Subscribe").MakeGenericMethod(genericArgs).Invoke(subscriberNotificationHandlerFactory, new object [] {
-                    subscriberEvent
+                var unsubscriber = factoryType.GetMethod("Subscribe")
+                    .MakeGenericMethod(genericArgs)
+                    .Invoke(subscriberNotificationHandlerFactory, new object [] {
+                        subscriberEvent
                 });
+
+                notificationUnsubscribers.Add((INotificationUnsubscriber)unsubscriber);
             }
 
             return serviceProvider;

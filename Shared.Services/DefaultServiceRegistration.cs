@@ -12,6 +12,7 @@ using System.Security.Cryptography;
 using Shared.Contracts.Services;
 using System.Text;
 using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
 
 namespace Shared.Services
 {
@@ -21,6 +22,7 @@ namespace Shared.Services
         {
             services
                 .AddOptions()
+                .AddSingleton<IList<INotificationUnsubscriber>>(new List<INotificationUnsubscriber>())
                 .AddSingleton<ISystemClock, SystemClock>()
                 .AddSingleton<IQueryBuilderFactory, DefaultQueryBuilderFactory>()
                 .AddSingleton(typeof(ILogger), typeof(Logger<DefaultAppHost>))
