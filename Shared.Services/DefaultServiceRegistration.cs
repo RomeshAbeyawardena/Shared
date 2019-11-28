@@ -51,7 +51,7 @@ namespace Shared.Services
                 .AddSingleton<ICryptographicProvider, DefaultCryptographicProvider>()
                 .AddSingleton<ICacheFactory, DefaultCacheFactory>()
                 .AddSingleton<IMemoryStreamManager, MemoryStreamManager>()
-                .AddSingleton<IRepositoryFactory, DefaultRepositoryFactory>()
+                .AddScoped<IRepositoryFactory, DefaultRepositoryFactory>()
                 .AddSingleton<IBinarySerializer, BinarySerializer>()
                 .AddSingleton<ISymmetricAlgorithmFactory, DefaultSymmetricAlgorithmFactory>()
                 .AddSingleton<IMessagePackBinarySerializer, MessagePackBinarySerializer>()
