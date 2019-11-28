@@ -16,7 +16,7 @@ namespace Shared.Services.Factories
 
         ICacheService ICacheFactory.GetCacheService(CacheType cacheServiceType)
         {
-            throw new NotImplementedException();
+            return GetCacheService(cacheServiceType);
         }
 
         public DefaultCacheFactory(IServiceProvider serviceProvider, ISwitch<CacheType, Type> cacheServiceSwitch)

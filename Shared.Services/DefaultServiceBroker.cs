@@ -12,7 +12,7 @@ namespace Shared.Services
         public abstract Assembly[] GetAssemblies {get;}
         public static Assembly DefaultAssembly => Assembly.GetAssembly(typeof(DefaultAppHost));
         
-        public void RegisterServiceAssemblies(IServiceCollection services, params Assembly[] assemblies)
+        public void RegisterServiceAssemblies(IServiceCollection services, ServiceLifetime serviceLifetime = ServiceLifetime.Singleton, params Assembly[] assemblies)
         {
             foreach(var assembly in assemblies)
             {
@@ -21,9 +21,10 @@ namespace Shared.Services
                     .Where(type => type.GetInterface(nameof(IServiceRegistration)) != null);
 
                 var eventHandlerTypes = assemblyTypes.Where(type => type.GetInterfaces().Any(a => a.IsAssignableFrom(typeof(IEventHandler))));
-                var notificationSubscriberTypes = assemblyTypes.Where(type => type.GetInterfaces().Any(a => a.IsAssignableFrom(typeof(INotificationSubscriber))));
-                RegisterEventHandlerTypes(services, eventHandlerTypes);
-                RegisterSubscriberTypes(services, notificationSubscriberTypes);
+                var notificationSubscriberTypes = assemblyTypes.Where(type => type.GetInterfaces()
+                    .Any(a => a.IsAssignableFrom(typeof(INotificationSubscriber))));
+                RegisterEventHandlerTypes(services, eventHandlerTypes, serviceLifetime);
+                RegisterSubscriberTypes(services, notificationSubscriberTypes, serviceLifetime);
 
                 foreach (var item in serviceRegistrationTypes)
                 {
@@ -33,7 +34,7 @@ namespace Shared.Services
             }
         }
 
-        private void RegisterEventHandlerTypes(IServiceCollection services, IEnumerable<Type> eventHandlerTypes)
+        private void RegisterEventHandlerTypes(IServiceCollection services, IEnumerable<Type> eventHandlerTypes, ServiceLifetime serviceLifetime)
         {
             foreach(var eventHandlerType in eventHandlerTypes)
             {
@@ -43,12 +44,20 @@ namespace Shared.Services
                 var genericServiceType = typeof(IEventHandler<>);
                 
                 var genericArguments = eventHandlerType.GetInterfaces().FirstOrDefault().GetGenericArguments();
+                var serviceType = genericServiceType.MakeGenericType(genericArguments);
+                Console.WriteLine(serviceType.FullName);
+                Console.WriteLine(eventHandlerType.FullName);
 
-                services.AddSingleton(genericServiceType.MakeGenericType(genericArguments), eventHandlerType);
+                var newDescriptor =new ServiceDescriptor(serviceType, eventHandlerType, serviceLifetime);
+
+                services.Add(newDescriptor);
+
+                if(!services.Contains(newDescriptor))
+                    throw new Exception();
             }
         }
 
-        private void RegisterSubscriberTypes(IServiceCollection services, IEnumerable<Type> subscriberTypes)
+        private void RegisterSubscriberTypes(IServiceCollection services, IEnumerable<Type> subscriberTypes, ServiceLifetime serviceLifetime)
         {
             var eventHandlerTypeListTypes = new List<Type>();
             foreach(var eventHandlerType in subscriberTypes)
@@ -60,7 +69,7 @@ namespace Shared.Services
                 var genericArguments = eventHandlerType.GetInterfaces().FirstOrDefault().GetGenericArguments();
                 var gServiceType = genericServiceType.MakeGenericType(genericArguments);
                 eventHandlerTypeListTypes.Add(gServiceType);
-                services.AddSingleton(gServiceType, eventHandlerType);
+                services.Add(new ServiceDescriptor(gServiceType, eventHandlerType, serviceLifetime));
             }
 
             services.AddSingleton<IList<Type>>(eventHandlerTypeListTypes);

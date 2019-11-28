@@ -1,4 +1,5 @@
-﻿using Shared.Contracts;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Shared.Contracts;
 using Shared.Contracts.Factories;
 using System;
 using System.Threading.Tasks;
@@ -7,12 +8,13 @@ namespace Shared.Services
 {
     public class DefaultEventHandlerFactory : IEventHandlerFactory
     {
-        private readonly IServiceProvider serviceProvider;
+        private readonly IServiceProvider _serviceProvider;
 
         public IEventHandler<TEvent> GetEventHandler<TEvent>()
             where TEvent : IEvent
         {
-            return (IEventHandler<TEvent>) serviceProvider.GetService(typeof(IEventHandler<TEvent>));
+            return (IEventHandler<TEvent>) _serviceProvider
+                .GetRequiredService(typeof(IEventHandler<TEvent>));
         }
 
         public async Task<TEvent> Push<TEvent>(TEvent @event)
@@ -32,7 +34,7 @@ namespace Shared.Services
 
         public DefaultEventHandlerFactory(IServiceProvider serviceProvider)
         {
-            this.serviceProvider = serviceProvider;
+            _serviceProvider = serviceProvider;
         }
     }
 }
