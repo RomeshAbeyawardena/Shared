@@ -3,16 +3,13 @@ using Shared.Services;
 using System;
 using System.Reflection;
 using System.Threading.Tasks;
-using Shared.Library.Extensions;
 using Shared.Contracts.Factories;
 using Shared.Domains;
 using MessagePack;
 using Shared.Contracts.Providers;
 using Shared.Contracts.Services;
 using Shared.Services.Builders;
-using Shared.Library;
 using Microsoft.Extensions.Configuration;
-using System.Linq;
 using Shared.Services.Extensions;
 
 namespace Shared.App

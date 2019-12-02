@@ -1,8 +1,8 @@
 ﻿using Shared.Contracts.Builders;
-using Shared.Domains;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using Shared.Domains.Enumerations;
 
 namespace Shared.Services.Builders
 {

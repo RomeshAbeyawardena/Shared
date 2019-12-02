@@ -1,4 +1,4 @@
-﻿using Shared.Domains;
+﻿using Shared.Domains.Enumerations;
 using System.Security.Cryptography;
 
 namespace Shared.Contracts.Factories

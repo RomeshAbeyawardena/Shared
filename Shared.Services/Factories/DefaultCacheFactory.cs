@@ -1,9 +1,9 @@
 ﻿using Shared.Contracts;
 using Shared.Contracts.Factories;
 using Shared.Contracts.Services;
-using Shared.Domains;
 using Shared.Library.Extensions;
 using System;
+using Shared.Domains.Enumerations;
 
 namespace Shared.Services.Factories
 {

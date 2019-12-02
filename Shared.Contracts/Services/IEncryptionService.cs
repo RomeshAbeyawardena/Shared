@@ -1,4 +1,4 @@
-﻿using Shared.Domains;
+﻿using Shared.Domains.Enumerations;
 using System.Text;
 using System.Threading.Tasks;
 

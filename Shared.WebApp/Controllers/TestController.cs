@@ -1,10 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Shared.Contracts;
-using Shared.Domains;
 using Shared.Services;
 using Shared.Services.Extensions;
 using Shared.WebApp.Handlers;
 using System.Threading.Tasks;
+using Shared.Domains.Enumerations;
 
 namespace Shared.WebApp.Controllers
 {

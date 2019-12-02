@@ -1,8 +1,7 @@
 ﻿using Shared.Contracts;
 using Shared.Domains;
-using System;
 using System.Collections.Generic;
-using System.Text;
+using Shared.Domains.Enumerations;
 
 namespace Shared.Services
 {

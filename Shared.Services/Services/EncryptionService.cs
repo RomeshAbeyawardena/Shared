@@ -1,12 +1,12 @@
 ﻿using Shared.Contracts;
 using Shared.Contracts.Factories;
 using Shared.Contracts.Services;
-using Shared.Domains;
 using System;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using Shared.Domains.Enumerations;
 
 namespace Shared.Services
 {

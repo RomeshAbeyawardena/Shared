@@ -7,12 +7,12 @@ using System;
 using Microsoft.Extensions.Internal;
 using Shared.Contracts.Factories;
 using Shared.Services.Factories;
-using Shared.Domains;
 using System.Security.Cryptography;
 using Shared.Contracts.Services;
 using System.Text;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
+using Shared.Domains.Enumerations;
 
 namespace Shared.Services
 {

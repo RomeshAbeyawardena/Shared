@@ -1,6 +1,5 @@
 using System.Threading.Tasks;
 using Shared.Contracts;
-using Shared.Domains;
 using Shared.Services;
 
 namespace Shared.WebApp.Handlers

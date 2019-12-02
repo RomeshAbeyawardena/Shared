@@ -2,7 +2,6 @@
 using Shared.Contracts;
 using Shared.Contracts.Factories;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Shared.Services

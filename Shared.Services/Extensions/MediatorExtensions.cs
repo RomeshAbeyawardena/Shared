@@ -2,8 +2,6 @@
 using Shared.Contracts.Builders;
 using Shared.Domains;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Shared.Services.Extensions

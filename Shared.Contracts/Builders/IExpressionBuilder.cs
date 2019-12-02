@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq.Expressions;
-using Shared.Domains;
+using Shared.Domains.Enumerations;
 
 namespace Shared.Contracts.Builders
 {

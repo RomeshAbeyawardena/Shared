@@ -1,11 +1,9 @@
 ﻿using Shared.Contracts.Factories;
 using Shared.Contracts.Providers;
 using Shared.Contracts.Services;
-using Shared.Domains;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.Linq;
+using Shared.Domains.Enumerations;
 
 namespace Shared.Services.Providers
 {
@@ -16,7 +14,7 @@ namespace Shared.Services.Providers
         public T GetOrDefault<T>(string cacheName, Func<T> value, CacheType cacheType = CacheType.DistributedCache)
             where T: class
         {
-            return GetOrDefaultAsync<T>(cacheName, async() => value(), cacheType).Result;
+            return GetOrDefaultAsync<T>(cacheName, async() => await Task.FromResult(value()), cacheType).Result;
         }
 
         public async Task<T> GetOrDefaultAsync<T>(string cacheName, Func<Task<T>> value, CacheType cacheType = CacheType.DistributedCache)

@@ -1,9 +1,7 @@
 ﻿using Shared.Contracts.Services;
-using Shared.Domains;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
+using Shared.Domains.Enumerations;
 
 namespace Shared.Contracts.Providers
 {
