@@ -14,7 +14,7 @@ namespace Shared.Services.Providers
         public T GetOrDefault<T>(string cacheName, Func<T> value, CacheType cacheType = CacheType.DistributedCache)
             where T: class
         {
-            return GetOrDefaultAsync<T>(cacheName, async() => await Task.FromResult(value()), cacheType).Result;
+            return GetOrDefaultAsync(cacheName, async() => await Task.FromResult(value()), cacheType).Result;
         }
 
         public async Task<T> GetOrDefaultAsync<T>(string cacheName, Func<Task<T>> value, CacheType cacheType = CacheType.DistributedCache)
