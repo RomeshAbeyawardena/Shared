@@ -81,6 +81,8 @@ namespace Shared.Services
                 Console.WriteLine("{0} Unsubscribed", notificationUnsubscriber);
                 notificationUnsubscriber.Dispose();
             }
+
+            _notificationUnsubscribers.Clear();
             GC.SuppressFinalize(this);
         }
 
