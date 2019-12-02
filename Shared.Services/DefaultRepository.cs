@@ -111,10 +111,16 @@ namespace Shared.Services
             return query.Where(whereExpression);
         }
 
-        public async Task BeginTransaction(Func<TransactionScope,Task> transactionScope)
+        public async Task BeginTransaction(TransactionScopeOption transactionScopeOption, Func<TransactionScope,Task> transactionScope)
         {
-            using (var scope = new TransactionScope())
+            using (var scope = new TransactionScope(transactionScopeOption))
                 await transactionScope(scope);
+        }
+
+        public async Task<T> BeginTransaction<T>(TransactionScopeOption transactionScopeOption, Func<TransactionScope, Task<T>> transactionScope)
+        {
+            using (var scope = new TransactionScope(transactionScopeOption))
+                return await transactionScope(scope);
         }
     }
 }
