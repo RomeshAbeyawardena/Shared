@@ -16,7 +16,7 @@ namespace Shared.Services
             int cb, 
             HashAlgorithmName? hashAlgorithmName = null)
         {
-            using (var pdb = new Rfc2898DeriveBytes (password.ToArray(), salt.ToArray(), iterations, hashAlgorithmName ?? HashAlgorithmName.SHA512))
+            using (var pdb = new Rfc2898DeriveBytes (password.ToArray(), salt.ToArray(), iterations))
             {
                 return pdb.GetBytes(cb);
             }
@@ -24,8 +24,8 @@ namespace Shared.Services
 
         public byte[] ComputeHash(byte[] raw, string algName)
         {
-           using var hMac = HashAlgorithm.Create(algName);
-           return hMac.ComputeHash(raw);
+           using (var hMac = HashAlgorithm.Create(algName))
+            return hMac.ComputeHash(raw);
         }
 
         public bool IsHashValid(byte[] hash, byte[] compareHash)

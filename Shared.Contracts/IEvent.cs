@@ -6,7 +6,7 @@ namespace Shared.Contracts
     public interface IEvent
     {
         object Result { get;  }
-        public IEnumerable<object> Results { get; }
+        IEnumerable<object> Results { get; }
         bool IsSuccessful { get; }
         Exception Exception { get; }
     }

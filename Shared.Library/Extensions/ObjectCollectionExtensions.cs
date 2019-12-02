@@ -6,6 +6,15 @@ namespace Shared.Library.Extensions
 {
     public static class ObjectCollectionExtensions
     {
+        public static IEnumerable<T> Append<T>(this IEnumerable<T> items, T entry)
+        {
+            var itemList = new List<T>(items)
+            {
+                entry
+            };
+
+            return itemList.ToArray();
+        }
         public static void ForEach<T>(this IEnumerable<T> collection, Action<T> iterator)
         {
             foreach (var item in collection)

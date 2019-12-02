@@ -18,7 +18,7 @@ namespace Shared.Services
                 ms = new MemoryStream();
 
             if(buffer != null && buffer.Length > 0)
-                ms.Write(buffer);
+                ms.Write(buffer, 0, buffer.Length);
 
             ms.Position = 0;
 

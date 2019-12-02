@@ -26,11 +26,13 @@ namespace Shared.Library.Extensions
 
         public static IServiceProvider SubscribeToAllNotifications(this IServiceProvider serviceProvider)
         {
+            
             var subscriberEventTypeList = serviceProvider.GetRequiredService<IList<Type>>();
             var subscriberNotificationHandlerFactory = serviceProvider.GetRequiredService<INotificationHandlerFactory>();
             var notificationUnsubscribers = serviceProvider.GetRequiredService<IList<INotificationUnsubscriber>>();
             foreach (var subscriberEventType in subscriberEventTypeList)
             {
+                
                 var subscriberEvent = serviceProvider.GetRequiredService(subscriberEventType);
                 var genericArgs = subscriberEventType.GetGenericArguments();
 

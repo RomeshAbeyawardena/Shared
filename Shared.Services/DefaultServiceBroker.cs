@@ -48,7 +48,7 @@ namespace Shared.Services
                 Console.WriteLine(serviceType.FullName);
                 Console.WriteLine(eventHandlerType.FullName);
 
-                var newDescriptor =new ServiceDescriptor(serviceType, eventHandlerType, serviceLifetime);
+                var newDescriptor = new ServiceDescriptor(serviceType, eventHandlerType, serviceLifetime);
 
                 services.Add(newDescriptor);
 

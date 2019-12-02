@@ -22,7 +22,7 @@ namespace Shared.Services
         {
             services
                 .AddOptions()
-                .AddSingleton<IList<INotificationUnsubscriber>>(new List<INotificationUnsubscriber>())
+                .AddScoped<IList<INotificationUnsubscriber>>((a) => new List<INotificationUnsubscriber>())
                 .AddSingleton<ISystemClock, SystemClock>()
                 .AddSingleton<IQueryBuilderFactory, DefaultQueryBuilderFactory>()
                 .AddSingleton(typeof(ILogger), typeof(Logger<DefaultAppHost>))
@@ -40,8 +40,8 @@ namespace Shared.Services
                 .AddSingleton<IEncodingProvider, DefaultEncodingProvider>()
                 .AddScoped<IMediator, DefaultMediator>()
                 .AddScoped<IEventHandlerFactory, DefaultEventHandlerFactory>()
-                .AddSingleton<INotificationHandlerFactory, DefaultNotificationHandlerFactory>()
-                .AddSingleton(typeof(INotificationHandler<>), typeof(DefaultNotificationHandler<>))
+                .AddScoped<INotificationHandlerFactory, DefaultNotificationHandlerFactory>()
+                .AddScoped(typeof(INotificationHandler<>), typeof(DefaultNotificationHandler<>))
                 .AddSingleton<ISystemClock, SystemClock>()
                 .AddSingleton<IMapperProvider, MapperProvider>()
                 .AddSingleton<ISerializerFactory, DefaultSerializerFactory>()
@@ -50,6 +50,7 @@ namespace Shared.Services
                 .AddSingleton<IEncryptionService, EncryptionService>()
                 .AddSingleton<ICryptographicProvider, DefaultCryptographicProvider>()
                 .AddSingleton<ICacheFactory, DefaultCacheFactory>()
+                .AddSingleton<ICacheProvider, DefaultCacheProvider>()
                 .AddSingleton<IMemoryStreamManager, MemoryStreamManager>()
                 .AddScoped<IRepositoryFactory, DefaultRepositoryFactory>()
                 .AddSingleton<IBinarySerializer, BinarySerializer>()

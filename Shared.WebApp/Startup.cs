@@ -40,9 +40,6 @@ namespace Shared.WebApp
                 app.UseDeveloperExceptionPage();
             }
 
-            app.ApplicationServices
-                .SubscribeToAllNotifications();
-
             app.UseRouting();
 
             app.UseEndpoints(endpoints =>

@@ -1,6 +1,8 @@
-﻿using Shared.Contracts;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Shared.Contracts;
 using Shared.Contracts.Factories;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Shared.Services
@@ -17,24 +19,73 @@ namespace Shared.Services
             return GetNotificationHandler<TEvent>().Subscribe(notificationSubscriber);
         }
 
-        private INotificationHandler<TEvent> GetNotificationHandler<TEvent>()
+        private INotificationHandler<IEvent> GetNotificationHandler<TEvent>()
         {
-            var notificationHandlerType = typeof(INotificationHandler<>)
-                .MakeGenericType(typeof(TEvent));
+            var eventType = typeof(TEvent);
 
-            return _serviceProvider.GetService(notificationHandlerType) as INotificationHandler<TEvent>;
+            var genericEventType = typeof(IEvent);
+
+            var notificationHandlerType = typeof(INotificationHandler<>)
+                .MakeGenericType(genericEventType);
+
+            return _serviceProvider.GetService(notificationHandlerType) as INotificationHandler<IEvent>;
         }
 
         public async Task NotifyAsync<TEvent>(TEvent @event)
         {
-            await GetNotificationHandler<TEvent>().NotifyAsync(@event);
+            var notificationHandler = GetNotificationHandler<TEvent>();
+            await notificationHandler.NotifyAsync(@event);
         }
 
-        public DefaultNotificationHandlerFactory(IServiceProvider serviceProvider)
+        public DefaultNotificationHandlerFactory(IServiceProvider serviceProvider, 
+            IList<Type> registeredNotificationTypes, IList<INotificationUnsubscriber> notificationUnsubscribers)
         {
             _serviceProvider = serviceProvider;
+            _registeredNotificationTypes = registeredNotificationTypes;
+            _notificationUnsubscribers = notificationUnsubscribers;
+
+            SubscribeToAllNotificationEvents();
         }
 
+        private void SubscribeToAllNotificationEvents()
+        {
+            foreach (var subscriberEventType in _registeredNotificationTypes)
+            {
+                
+                var subscriberEvent = _serviceProvider.GetRequiredService(subscriberEventType);
+                var genericArgs = subscriberEventType.GetGenericArguments();
+
+                var factoryType = GetType();
+                
+                var unsubscriber = factoryType.GetMethod("Subscribe")
+                    .MakeGenericMethod(genericArgs)
+                    .Invoke(this, new object [] {
+                        subscriberEvent
+                });
+
+                Console.WriteLine("{0} Subscribed", subscriberEventType.FullName);
+
+                _notificationUnsubscribers.Add((INotificationUnsubscriber)unsubscriber);
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+        }
+
+        protected virtual void Dispose(bool a)
+        {
+            foreach (var notificationUnsubscriber in _notificationUnsubscribers)
+            {
+                Console.WriteLine("{0} Unsubscribed", notificationUnsubscriber);
+                notificationUnsubscriber.Dispose();
+            }
+            GC.SuppressFinalize(this);
+        }
+
+        private readonly IList<INotificationUnsubscriber> _notificationUnsubscribers;
+        private readonly IList<Type> _registeredNotificationTypes;
         private readonly IServiceProvider _serviceProvider;
     }
 }
