@@ -13,6 +13,7 @@ using System.Text;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using Shared.Domains.Enumerations;
+using System.Threading;
 
 namespace Shared.Services
 {
@@ -22,6 +23,7 @@ namespace Shared.Services
         {
             services
                 .AddOptions()
+                .AddSingleton(s => new SemaphoreSlim(1,1))
                 .AddScoped<IList<INotificationUnsubscriber>>((a) => new List<INotificationUnsubscriber>())
                 .AddSingleton<ISystemClock, SystemClock>()
                 .AddSingleton<IQueryBuilderFactory, DefaultQueryBuilderFactory>()
