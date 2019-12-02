@@ -18,5 +18,17 @@ namespace Shared.Library.Extensions
 
             return await cacheService.Set(cacheKeyName, cachedValue);
         }
+
+        public static async Task<IEnumerable<T>> Remove<T>(this ICacheService cacheService, string cacheKeyName, T value)
+        {
+            var cachedValue = await cacheService.Get<IEnumerable<T>>(cacheKeyName);
+            
+            if(cachedValue == null)
+                return Array.Empty<T>();
+
+            cachedValue = cachedValue.Remove(value);
+
+            return await cacheService.Set(cacheKeyName, cachedValue);
+        }
     }
 }

@@ -6,6 +6,7 @@ using System;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using System.Transactions;
 
 namespace Shared.Services
 {
@@ -108,6 +109,12 @@ namespace Shared.Services
                 return query;
             
             return query.Where(whereExpression);
+        }
+
+        public async Task BeginTransaction(Func<TransactionScope,Task> transactionScope)
+        {
+            using (var scope = new TransactionScope())
+                await transactionScope(scope);
         }
     }
 }
