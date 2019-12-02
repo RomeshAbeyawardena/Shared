@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Shared.Library.Extensions
 {
@@ -79,6 +81,50 @@ namespace Shared.Library.Extensions
             result = tResult;
             
             return true;
+        }
+
+        public static void AsLock(this object value, Action onLock)
+        {
+            lock (value)
+            {
+                onLock();
+            }
+        }
+
+        public static T AsLock<T>(this object value, Func<T> onLock)
+        {
+            lock (value)
+            {
+                return onLock();
+            }
+        }
+
+        public static SemaphoreSlim semaphoreSlim = new SemaphoreSlim(1,1);
+
+        public static async Task AsLockAsync(this object value, Func<Task> onLock)
+        {
+            await semaphoreSlim.WaitAsync();
+            try
+            {
+                await onLock();
+            }
+            finally
+            {
+                semaphoreSlim.Release();
+            }
+            
+        }
+
+        public static async Task<T> AsLockAsync<T>(this object value, Func<Task<T>> onLock)
+        {
+            await semaphoreSlim.WaitAsync();
+            try{
+                return await onLock();
+            }
+            finally
+            {
+                semaphoreSlim.Release();
+            }
         }
     }
 }
