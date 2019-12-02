@@ -7,13 +7,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Shared.Services;
-using Shared.Library;
-using Shared.Library.Extensions;
-using System.Reflection;
-using AutoMapper;
 
-namespace Shared.WebApp
+namespace Shared
 {
     public class Startup
     {
@@ -21,15 +16,6 @@ namespace Shared.WebApp
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services
-                .RegisterServiceBroker<AppQueueServiceBroker>(ServiceLifetime.Scoped)
-                .AddAutoMapper(Assembly.GetExecutingAssembly())
-                .AddMvc();
-
-            foreach (var service in services.Where(a => a.ServiceType.FullName.Contains("IEventHandler")))
-            {
-                Console.WriteLine("{2}|{0}:{1}", service.ServiceType.FullName, service.ImplementationType.FullName, service.Lifetime);
-            }
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -44,16 +30,11 @@ namespace Shared.WebApp
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints
-                    .MapControllers();
+                endpoints.MapGet("/", async context =>
+                {
+                    await context.Response.WriteAsync("Hello World!");
+                });
             });
         }
-    }
-
-    public class AppQueueServiceBroker : DefaultServiceBroker
-    {
-        public override Assembly[] GetAssemblies => new [] { 
-            DefaultAssembly, 
-            Assembly.GetAssembly(typeof(AppQueueServiceBroker)) };
     }
 }

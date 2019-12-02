@@ -4,4 +4,20 @@
     <TargetFramework>netcoreapp3.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Shared.Contracts\Shared.Contracts.csproj" />
+    <ProjectReference Include="..\Shared.Domains\Shared.Domains.csproj" />
+    <ProjectReference Include="..\Shared.Library\Shared.Library.csproj" />
+    <ProjectReference Include="..\Shared.Services\Shared.Services.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Handlers\" />
+    <Folder Include="Controllers\" />
+  </ItemGroup>
+
 </Project>

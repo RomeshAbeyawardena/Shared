@@ -13,6 +13,7 @@ using Shared.Services.Builders;
 using Shared.Library;
 using Microsoft.Extensions.Configuration;
 using System.Linq;
+using Shared.Services.Extensions;
 
 namespace Shared.App
 {
@@ -65,46 +66,10 @@ namespace Shared.App
 
         public async Task Start()
         {
-            var customers = new [] { new Customer
-            {
-                Id = 1,
-                RegistrationDate = DateTimeOffset.Now
-            } };
-
-            var customerExpressionBuilder = ExpressionBuilder.Create();
-            customerExpressionBuilder.Not(nameof(Customer.RegistrationDate), ExpressionComparer.IsNull);
-            var expression = customerExpressionBuilder.ToExpression<Customer>();
-            var customer = customers.Where(expression.Compile());
-
+            var a = DictionaryBuilder.Create<string, object>().Add("Test", true).ToObject();
         }
 
-        public async Task<CryptoData> GetCryptoDataFromUserInput(SymmetricAlgorithmType symmetricAlgorithmType)
-        {
-            RequestPassword:
-            Console.Write("Password: ");
-            var securePassword = await ConsoleExtensions.SecureRead('*');
-            
-            if(securePassword.Escaped || securePassword.Length < 7)
-                goto RequestPassword;
-
-            var password = securePassword.Value.ToArray();
-
-            RequestMemorialWord:
-            Console.Write("OK\r\nMemorable word: ");
-            var secureMemorialWord = await ConsoleExtensions.SecureRead('*');
-
-            if(secureMemorialWord.Escaped || secureMemorialWord.Length < 6)
-                goto RequestMemorialWord;
-
-            var memorialWord = secureMemorialWord.Value.ToArray();
-
-            var generatedKey = cryptographicProvider.GenerateKey(password, memorialWord, 100000, 32);
-
-            var generatedIV = encryptionService.GenerateIv(symmetricAlgorithmType);
-            
-            return new CryptoData(generatedIV, generatedKey);
-        }
-
+        
         public Startup(ISerializerFactory serializerFactory, ICryptographicProvider cryptographicProvider, 
             IEncryptionService encryptionService, IMediator mediator, IEncodingProvider encodingProvider,
             IConfiguration configuraton)

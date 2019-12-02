@@ -4,6 +4,17 @@ namespace Shared.Library.Extensions
 {
     public static class ObjectExtensions
     {
+        public static T AssignOrDefault<T>(this T value, T defaultValue)
+        {
+            return (T)AssignOrDefault((object)value, (object)defaultValue);
+        }
+        public static object AssignOrDefault(this object value, object defaultValue)
+        {
+            if(value == null || value == default)
+                return defaultValue;
+
+            return value;
+        }
         public static bool TryParse(this string value, out int result)
         {
             return int.TryParse(value, out result);

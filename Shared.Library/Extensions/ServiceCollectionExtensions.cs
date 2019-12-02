@@ -17,7 +17,7 @@ namespace Shared.Library.Extensions
             var publicConstructor = serviceType.GetConstructors().FirstOrDefault(c => c.IsPublic);
             foreach (var t in publicConstructor.GetParameters())
             {
-                constructorParameters.Add(serviceProvider.GetService(t.ParameterType));
+                constructorParameters.Add(serviceProvider.GetRequiredService(t.ParameterType));
             }
 
             var resolvedService = Activator.CreateInstance(serviceType, constructorParameters.ToArray());
@@ -26,11 +26,13 @@ namespace Shared.Library.Extensions
 
         public static IServiceProvider SubscribeToAllNotifications(this IServiceProvider serviceProvider)
         {
+            
             var subscriberEventTypeList = serviceProvider.GetRequiredService<IList<Type>>();
             var subscriberNotificationHandlerFactory = serviceProvider.GetRequiredService<INotificationHandlerFactory>();
             var notificationUnsubscribers = serviceProvider.GetRequiredService<IList<INotificationUnsubscriber>>();
             foreach (var subscriberEventType in subscriberEventTypeList)
             {
+                
                 var subscriberEvent = serviceProvider.GetRequiredService(subscriberEventType);
                 var genericArgs = subscriberEventType.GetGenericArguments();
 
@@ -53,11 +55,11 @@ namespace Shared.Library.Extensions
             return (TService)serviceProvider.Resolve(typeof(TService));
         }
 
-        public static IServiceCollection RegisterServiceBroker<TServiceBroker>(this IServiceCollection services)
+        public static IServiceCollection RegisterServiceBroker<TServiceBroker>(this IServiceCollection services, ServiceLifetime serviceLifetime = ServiceLifetime.Singleton)
             where TServiceBroker : IServiceBroker
         {
             var serviceBroker = Activator.CreateInstance<TServiceBroker>();
-            serviceBroker.RegisterServiceAssemblies(services, serviceBroker.GetAssemblies);
+            serviceBroker.RegisterServiceAssemblies(services, serviceLifetime, serviceBroker.GetAssemblies);
 
             return services;
         }

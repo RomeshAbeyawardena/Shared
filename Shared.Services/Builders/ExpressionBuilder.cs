@@ -56,14 +56,14 @@ namespace Shared.Services.Builders
             var variableExpression = Expression.Variable(entityType);
             var nullConstantExpression = Expression.Constant(null);
 
-            foreach (var (key, value) in expressionParameterDictionary)
+            foreach (var keyValue in expressionParameterDictionary)
             {
-                var constantExpression = Expression.Constant(value.Value);
+                var constantExpression = Expression.Constant(keyValue.Value);
 
-                var memberAccess = Expression.PropertyOrField(parameterExpression, key);
+                var memberAccess = Expression.PropertyOrField(parameterExpression, keyValue.Key);
 
                 BinaryExpression equalExpression = null;
-                switch (value.ExpressionComparer)
+                switch (keyValue.Value.ExpressionComparer)
                 {
                     case ExpressionComparer.IsNull:
                         equalExpression = Expression.Equal(memberAccess, nullConstantExpression);
@@ -88,7 +88,7 @@ namespace Shared.Services.Builders
                 
                 if (combinedExpression == null) {
 
-                    if(value.Condition == ExpressionCondition.Not)
+                    if(keyValue.Value.Condition == ExpressionCondition.Not)
                         combinedExpression = Expression.Not(equalExpression);
                     else
                         combinedExpression = equalExpression;
@@ -96,13 +96,13 @@ namespace Shared.Services.Builders
                     continue;
                 }
 
-                if (value.Condition == ExpressionCondition.And)
+                if (keyValue.Value.Condition == ExpressionCondition.And)
                     combinedExpression = Expression.And(combinedExpression, equalExpression);
 
-                if (value.Condition == ExpressionCondition.Or)
+                if (keyValue.Value.Condition == ExpressionCondition.Or)
                     combinedExpression = Expression.Or(combinedExpression, equalExpression);
 
-                if (value.Condition == ExpressionCondition.Not)
+                if (keyValue.Value.Condition == ExpressionCondition.Not)
                     combinedExpression = Expression.And(combinedExpression, Expression.Not(equalExpression));
             }
 

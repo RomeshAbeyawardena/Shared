@@ -40,10 +40,10 @@ namespace Shared.Services
                 symmetricAlgorithm.IV = iV;
 
                 // Create an encryptor to perform the stream transform.
-                using var encryptor = symmetricAlgorithm.CreateEncryptor(symmetricAlgorithm.Key, symmetricAlgorithm.IV);
+                using (var encryptor = symmetricAlgorithm.CreateEncryptor(symmetricAlgorithm.Key, symmetricAlgorithm.IV))
                 using (var msEncrypt = memoryStreamManager.GetStream(false))
                 {
-                    using var csEncrypt = new CryptoStream(msEncrypt, encryptor, CryptoStreamMode.Write);
+                    using (var csEncrypt = new CryptoStream(msEncrypt, encryptor, CryptoStreamMode.Write))
                     using (var swEncrypt = new StreamWriter(csEncrypt))
                     {
                         //Write all data to the stream.
