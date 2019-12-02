@@ -99,9 +99,7 @@ namespace Shared.Library.Extensions
             }
         }
 
-        public static SemaphoreSlim semaphoreSlim = new SemaphoreSlim(1,1);
-
-        public static async Task AsLockAsync(this object value, Func<Task> onLock)
+        public static async Task AsLockAsync(this SemaphoreSlim semaphoreSlim , Func<Task> onLock)
         {
             await semaphoreSlim.WaitAsync();
             try
@@ -115,7 +113,7 @@ namespace Shared.Library.Extensions
             
         }
 
-        public static async Task<T> AsLockAsync<T>(this object value, Func<Task<T>> onLock)
+        public static async Task<T> AsLockAsync<T>(this SemaphoreSlim semaphoreSlim , Func<Task<T>> onLock)
         {
             await semaphoreSlim.WaitAsync();
             try{
