@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Shared.Library.Extensions;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -25,8 +26,8 @@ namespace Shared.Services.Attributes
 
                 var valuePropertyValue = valueProperty
                     .GetValue(validationContext.ObjectInstance);
-
-                if(valuePropertyValue == default)
+                
+                if(valuePropertyValue.IsDefault())
                     nullMembersList.Add(optionalMember);
             }
 

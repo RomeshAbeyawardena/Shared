@@ -6,6 +6,22 @@ namespace Shared.Library.Extensions
 {
     public static class ObjectExtensions
     {
+        public static bool IsDefault(this object o)
+        {
+            return (o == null
+                    || (o is uint oUInt && oUInt == default)
+                    || (o is int oInt && oInt == default)
+                    || (o is float oFloat && oFloat == default)
+                    || (o is double oDouble && oDouble == default)
+                    || (o is decimal odecimal && odecimal == default)
+                    || (o is short oShort && oShort == default)
+                    || (o is long oLong && oLong == default)
+                    || (o is DateTime oDateTime && oDateTime == default)
+                    || (o is DateTimeOffset oDateTimeOffset && oDateTimeOffset == default)
+                    || (o is string oString && string.IsNullOrEmpty(oString))
+                   );
+        }
+
         public static T AssignOrDefault<T>(this T value, T defaultValue)
         {
             return (T)AssignOrDefault((object)value, (object)defaultValue);

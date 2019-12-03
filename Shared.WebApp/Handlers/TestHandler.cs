@@ -13,10 +13,12 @@ namespace Shared.WebApp.Handlers
         }
     }
 
-    [OptionalRequired(nameof(Samuel), nameof(Tom))]
-    [OptionalRequired(nameof(Harry))]
+    [OptionalRequired(nameof(PetTypeId), nameof(PetType))]
     public class Test
     {
+        public int Id { get; set; }
+        public int PetTypeId { get; set; }
+        public string PetType { get; set; }
         public string Samuel { get; set; }
         public string Tom { get; set; }
         public string Harry { get; set; }
