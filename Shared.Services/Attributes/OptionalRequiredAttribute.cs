@@ -28,7 +28,7 @@ namespace Shared.Services.Attributes
                 var valuePropertyValue = valueProperty
                     .GetValue(validationContext.ObjectInstance);
                 
-                if(valuePropertyValue.IsDefault())
+                if(valuePropertyValue.IsNullOrDefault())
                     nullMembersList.Add(optionalMember);
             }
 

@@ -14,7 +14,10 @@ if ($output -eq [System.String]::Empty){
 
 &"$directory\UpdateVersion-Powershell.ps1" -FileName $directory\Directory.Build.Props -Version $version  
 
-$child_directories = Get-ChildItem $directory -Directory
+$child_directories = Get-ChildItem $directory -Directory 
+
+dotnet test
+
 Foreach ($dir in $child_directories)
 {
     "--------------- Processing $dir ---------------" 

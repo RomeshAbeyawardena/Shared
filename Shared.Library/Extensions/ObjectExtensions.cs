@@ -6,7 +6,7 @@ namespace Shared.Library.Extensions
 {
     public static class ObjectExtensions
     {
-        public static bool IsDefault(this object o)
+        public static bool IsNullOrDefault(this object o)
         {
             return (o == null
                     || (o is uint oUInt && oUInt == default)
@@ -22,17 +22,14 @@ namespace Shared.Library.Extensions
                    );
         }
 
-        public static T AssignOrDefault<T>(this T value, T defaultValue)
+        public static object ValueOrDefault(object value, object @default)
         {
-            return (T)AssignOrDefault((object)value, (object)defaultValue);
-        }
-        public static object AssignOrDefault(this object value, object defaultValue)
-        {
-            if(value == null || value == default)
-                return defaultValue;
-
+            if (IsNullOrDefault(value)) 
+                return @default;
+            
             return value;
         }
+
         public static bool TryParse(this string value, out int result)
         {
             return int.TryParse(value, out result);
