@@ -13,7 +13,7 @@ namespace Shared.WebApp.Handlers
         }
     }
 
-    [OptionalRequired(nameof(PetTypeId), nameof(PetType))]
+    [OptionalRequired(1, nameof(PetTypeId), nameof(PetType))]
     public class Test
     {
         public int Id { get; set; }

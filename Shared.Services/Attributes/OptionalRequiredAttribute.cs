@@ -10,10 +10,11 @@ namespace Shared.Services.Attributes
     public class OptionalRequiredAttribute : ValidationAttribute
     {
         private readonly string[] _optionalMembers;
+        private readonly int _minimumNumber;
 
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
-            var valueType = validationContext.ObjectType;
+            var valueType = validationContext.ObjectType ?? value?.GetType();
 
             var nullMembersList = new List<string>();
             
@@ -31,14 +32,17 @@ namespace Shared.Services.Attributes
                     nullMembersList.Add(optionalMember);
             }
 
-            if(nullMembersList.Count == _optionalMembers.Length)
+            var totalInvalid = nullMembersList.Count;
+
+            if(totalInvalid > _minimumNumber)
                 return new ValidationResult("Parameter must not be null", nullMembersList.ToArray());
 
             return ValidationResult.Success;
         }
 
-        public OptionalRequiredAttribute(params string[] optionalMembers)
+        public OptionalRequiredAttribute(int minumumNumberOfRequiredMembers = 1, params string[] optionalMembers)
         {
+            _minimumNumber = minumumNumberOfRequiredMembers;
             _optionalMembers = optionalMembers;
         }
     }
