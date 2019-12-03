@@ -9,6 +9,7 @@ namespace Shared.Services
     {
         private readonly IDistributedCache distributedCache;
         private readonly IMessagePackBinarySerializer messagePackBinarySerializer;
+        private readonly DistributedCacheEntryOptions distributedCacheEntryOptions;
 
         public async Task<T> Get<T>(string cacheKeyName) where T : class
         {
@@ -26,6 +27,7 @@ namespace Shared.Services
                 return value;
 
             var data = messagePackBinarySerializer.Serialize(value);
+            
             await distributedCache.SetAsync(cacheKeyName, data);
 
             return value;
@@ -41,6 +43,9 @@ namespace Shared.Services
         {
             this.distributedCache = distributedCache;
             this.messagePackBinarySerializer = messagePackBinarySerializer;
+            distributedCacheEntryOptions = new DistributedCacheEntryOptions();
+            
+            
         }
     }
 }

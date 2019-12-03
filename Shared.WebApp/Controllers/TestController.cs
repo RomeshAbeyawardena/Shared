@@ -16,11 +16,14 @@ namespace Shared.WebApp.Controllers
             _mediator = mediator;
         }
 
-        public async Task<ActionResult> Test()
+        public async Task<ActionResult> Test([FromQuery]Test test)
         {
+            if(!ModelState.IsValid)
+                return BadRequest(ModelState);
+
             await _mediator.Push(new Test());
 
-            await _mediator.NotifyAsync(DefaultEntityChangedEvent.Create(new Test(), entityEventType: EntityEventType.Added));
+            await _mediator.NotifyAsync(DefaultEntityChangedEvent.Create(test, entityEventType: EntityEventType.Added));
             return Ok();
         }
 

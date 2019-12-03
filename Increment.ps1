@@ -12,4 +12,4 @@ $currentVersion = & $getVersionScriptPath -fileName $solutionProperties
 
 $newVersion = & $incrementVersionScriptPath -versionString $currentVersion -versionPartIndex 3
 
-& $dotnetPackScript -version $newVersion
+& $dotnetPackScript -version $newVersion -output "C:\Source\packages\nuget"
