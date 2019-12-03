@@ -22,7 +22,7 @@ namespace Shared.Library.Extensions
                    );
         }
 
-        public static object ValueOrDefault(object value, object @default)
+        public static object ValueOrDefault(this object value, object @default)
         {
             if (IsNullOrDefault(value)) 
                 return @default;

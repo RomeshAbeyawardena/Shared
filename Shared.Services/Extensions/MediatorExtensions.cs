@@ -1,13 +1,21 @@
 ﻿using Shared.Contracts;
 using Shared.Contracts.Builders;
 using Shared.Domains;
+using Shared.Domains.Enumerations;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Shared.Services.Extensions
 {
     public static class MediatorExtensions
     {
+        public static async Task NotifyAsync<TEntity>(this IMediator mediator, EntityEventType entityEventType, 
+            TEntity result = null, IEnumerable<TEntity> results = null)
+            where TEntity: class
+        {
+            await mediator.NotifyAsync(DefaultEntityChangedEvent.Create(result, results, entityEventType));
+        }
         public static async Task NotifyAsync<TEntity>(this IMediator mediator, TEntity @event)
             where TEntity: class
         {
