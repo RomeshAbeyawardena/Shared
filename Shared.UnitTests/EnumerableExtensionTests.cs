@@ -1,11 +1,13 @@
 ﻿using Xunit;
 using Shared.Library.Extensions;
 using System;
+using System.Collections.Generic;
 
 namespace Shared.UnitTests
 {
     public class EnumerableExtensionTests
     {
+        
         [Theory]
         [InlineData("Rose", new [] { "Daisy", "Tulip", "Lily", "Gemini", "Orchid" }, new [] { "Rose" } )]
         [InlineData("Daisy", new [] { "Tulip", "Lily", "Gemini", "Orchid" }, new [] { "Daisy", "Rose" } )]
@@ -60,6 +62,11 @@ namespace Shared.UnitTests
             var flowerArray = new [] { "Rose", "Daisy", "Tulip", "Lily", "Gemini", "Orchid" };
             var actualIndex = flowerArray.GetIndex(a => a == value);
             Assert.Equal(expectedIndex, actualIndex);
+        }
+
+        public class MyTestCase
+        {
+
         }
     }
 }
