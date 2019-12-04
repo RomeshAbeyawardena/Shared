@@ -46,5 +46,19 @@ namespace Shared.UnitTests
             var newArray = flowerArray.SkipFrom(item);
             Assert.Equal(flowerArray, newArray);
         }
+
+        [Theory]
+        [InlineData("Rose", 0)]
+        [InlineData("Daisy", 1)]
+        [InlineData("Tulip", 2)]
+        [InlineData("Lily", 3)]
+        [InlineData("Gemini", 4)]
+        [InlineData("Orchid", 5)]
+        public void GetIndex(string value, int expectedIndex)
+        {
+            var flowerArray = new [] { "Rose", "Daisy", "Tulip", "Lily", "Gemini", "Orchid" };
+            var actualIndex = flowerArray.GetIndex(a => a == value);
+            Assert.Equal(expectedIndex, actualIndex);
+        }
     }
 }

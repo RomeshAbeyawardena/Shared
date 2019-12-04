@@ -16,5 +16,15 @@ namespace Shared.Library.Extensions
 
             return items.Skip(foundIndex + 1);
         }
+
+        public static int? GetIndex<T>(this IEnumerable<T> items, Func<T, bool> matchItem)
+        {
+            bool match(T obj)
+            {
+                return matchItem(obj);
+            }
+
+            return Array.FindIndex(items.ToArray(), match);
+        }
     }
 }
