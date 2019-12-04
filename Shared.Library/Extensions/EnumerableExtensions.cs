@@ -17,7 +17,18 @@ namespace Shared.Library.Extensions
             return items.Skip(foundIndex + 1);
         }
 
-        public static int? GetIndex<T>(this IEnumerable<T> items, Func<T, bool> matchItem)
+        public static IEnumerable<T> SkipFrom<T>(this IEnumerable<T> items, Func<T, bool> matchItem)
+        {
+            var itemArray = items.ToArray();
+            var foundIndex  = GetIndex(itemArray, matchItem);
+
+            if(foundIndex < 0)
+                return items;
+
+            return items.Skip(foundIndex + 1);
+        }
+
+        public static int GetIndex<T>(this IEnumerable<T> items, Func<T, bool> matchItem)
         {
             bool match(T obj)
             {
