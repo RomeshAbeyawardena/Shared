@@ -16,20 +16,20 @@ namespace Shared.Services
 
         public async Task NotifyAsync<TEvent>(TEvent @event)
         {
-            await _notificationHandlerFactory.NotifyAsync(@event);
+            await _notificationHandlerFactory.NotifyAsync(@event).ConfigureAwait(false);
         }
 
         public async Task<TEvent> Push<TEvent>(TEvent @event)
             where TEvent : IEvent
         {
-            return await _eventHandlerFactory.Push(@event);
+            return await _eventHandlerFactory.Push(@event).ConfigureAwait(false);
         }
 
         public async Task<TEvent> Send<TEvent, TCommand>(TCommand command) 
             where TEvent : IEvent
             where TCommand : ICommand
         {
-            return await _eventHandlerFactory.Send<TEvent,TCommand>(command);
+            return await _eventHandlerFactory.Send<TEvent,TCommand>(command).ConfigureAwait(false);
         }
 
         public Task<TEvent> Send<TEvent>(ICommand command) where TEvent : IEvent

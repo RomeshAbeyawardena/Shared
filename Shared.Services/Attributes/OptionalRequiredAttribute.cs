@@ -14,6 +14,9 @@ namespace Shared.Services.Attributes
 
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
+            if(validationContext == null)
+                throw new ArgumentNullException(nameof(validationContext));
+
             var valueType = validationContext.ObjectType ?? value?.GetType();
 
             var nullMembersList = new List<string>();

@@ -21,7 +21,7 @@ namespace Shared.Services
             where TEvent : IEvent
         {
             var eventHandler = GetEventHandler<TEvent>();
-            return await eventHandler.Push(@event);
+            return await eventHandler.Push(@event).ConfigureAwait(false);
         }
 
         public async Task<TEvent> Send<TEvent, TCommand>(TCommand command)
@@ -29,7 +29,7 @@ namespace Shared.Services
             where TCommand : ICommand
         {
             var eventHandler = GetEventHandler<TEvent>();
-            return await eventHandler.Send(command);
+            return await eventHandler.Send(command).ConfigureAwait(false);
         }
 
         public DefaultEventHandlerFactory(IServiceProvider serviceProvider)

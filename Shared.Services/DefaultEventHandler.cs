@@ -16,12 +16,12 @@ namespace Shared.Services
             if(foundCommand == null)
                 throw new MethodAccessException();
 
-            return await foundCommand(command);
+            return await foundCommand(command).ConfigureAwait(false);
         }
 
         public async Task<IEvent> Push(IEvent @event)
         {
-            return await Push((TEvent)@event);
+            return await Push((TEvent)@event).ConfigureAwait(false);
         }
         
         protected ISwitch<string, Func<ICommand, Task<TEvent>>> CommandSwitch;
@@ -29,7 +29,7 @@ namespace Shared.Services
 
         async Task<IEvent> IEventHandler.Send<TCommand>(TCommand command)
         {
-            return await Send(command);
+            return await Send(command).ConfigureAwait(false);
         }
 
         protected DefaultEventHandler()

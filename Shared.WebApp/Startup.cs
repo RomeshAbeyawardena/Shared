@@ -22,7 +22,7 @@ namespace Shared.WebApp
                 .AddAutoMapper(Assembly.GetExecutingAssembly())
                 .AddMvc();
 
-            foreach (var service in services.Where(a => a.ServiceType.FullName.Contains("IEventHandler")))
+            foreach (var service in services.Where(a => a.ServiceType.FullName.Contains("IEventHandler", StringComparison.InvariantCultureIgnoreCase)))
             {
                 Console.WriteLine("{2}|{0}:{1}", service.ServiceType.FullName, service.ImplementationType.FullName, service.Lifetime);
             }

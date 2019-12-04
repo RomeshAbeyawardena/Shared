@@ -21,7 +21,7 @@ namespace Shared.App
             while (IsRunning)
             {
                 if(tcpListener.Pending())
-                    onAcceptTcpClient(await tcpListener.AcceptTcpClientAsync());
+                    onAcceptTcpClient(await tcpListener.AcceptTcpClientAsync().ConfigureAwait(false));
             }
         }
 

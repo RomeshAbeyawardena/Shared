@@ -37,6 +37,7 @@ namespace Shared.Services.Builders
 
         public IListBuilder<T> AddRange(IEnumerable<T> values)
         {
+
             foreach(var value in values)
                 Add(value);
 

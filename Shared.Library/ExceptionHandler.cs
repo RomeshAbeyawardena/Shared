@@ -12,7 +12,7 @@ namespace Shared.Library
         {
             try
             {
-                @try();
+                @try.Invoke();
             }
             catch (Exception exception)
             {
@@ -32,7 +32,7 @@ namespace Shared.Library
         {
             try
             {
-                await @try();
+                await (@try?.Invoke()).ConfigureAwait(false);
             }
             catch (Exception exception)
             {
@@ -52,7 +52,7 @@ namespace Shared.Library
         {
             try
             {
-                return @try();
+                return @try.Invoke();
             }
             catch (Exception exception)
             {
@@ -72,7 +72,7 @@ namespace Shared.Library
         {
             try
             {
-                return await @try();
+                return await @try().ConfigureAwait(false);
             }
             catch (Exception exception)
             {
@@ -113,7 +113,7 @@ namespace Shared.Library
         {
             try
             {
-                await @try(value);
+                await @try(value).ConfigureAwait(false);
             }
             catch (Exception exception)
             {
@@ -133,7 +133,7 @@ namespace Shared.Library
         {
             try
             {
-                return await @try(value);
+                return await @try(value).ConfigureAwait(false);
             }
             catch (Exception exception)
             {

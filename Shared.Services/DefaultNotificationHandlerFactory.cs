@@ -34,7 +34,7 @@ namespace Shared.Services
         public async Task NotifyAsync<TEvent>(TEvent @event)
         {
             var notificationHandler = GetNotificationHandler<TEvent>();
-            await notificationHandler.NotifyAsync(@event);
+            await notificationHandler.NotifyAsync(@event).ConfigureAwait(false);
         }
 
         public DefaultNotificationHandlerFactory(IServiceProvider serviceProvider, 

@@ -21,9 +21,9 @@ namespace Shared.WebApp.Controllers
             if(!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            await _mediator.Push(new Test());
+            await _mediator.Push(new Test()).ConfigureAwait(false);
 
-            await _mediator.NotifyAsync(DefaultEntityChangedEvent.Create(test, entityEventType: EntityEventType.Added));
+            await _mediator.NotifyAsync(DefaultEntityChangedEvent.Create(test, entityEventType: EntityEventType.Added)).ConfigureAwait(false);
             return Ok();
         }
 

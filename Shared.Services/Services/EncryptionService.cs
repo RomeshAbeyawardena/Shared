@@ -47,11 +47,11 @@ namespace Shared.Services
                     using (var swEncrypt = new StreamWriter(csEncrypt))
                     {
                         //Write all data to the stream.
-                        await swEncrypt.WriteAsync(plainText);
+                        await swEncrypt.WriteAsync(plainText).ConfigureAwait(false);
                     }
                     encrypted = msEncrypt.ToArray();
                 }
-            });
+            }).ConfigureAwait(false);
 
             return encrypted;
         }
@@ -87,11 +87,11 @@ namespace Shared.Services
 
                             // Read the decrypted bytes from the decrypting stream
                             // and place them in a string.
-                            plaintext = await srDecrypt.ReadToEndAsync();
+                            plaintext = await srDecrypt.ReadToEndAsync().ConfigureAwait(false);
                         }
                     }
                 }
-            });
+            }).ConfigureAwait(false);
 
             return plaintext;
         }
@@ -105,7 +105,7 @@ namespace Shared.Services
         {
             using (var symmetricAlgorithm = GetSymmetricAlgorithm(symmetricAlgorithmType))
             {
-                await invokeAsync(symmetricAlgorithm);
+                await invokeAsync(symmetricAlgorithm).ConfigureAwait(false);
             }
         }
 

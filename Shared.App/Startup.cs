@@ -27,7 +27,7 @@ namespace Shared.App
         {
             public override async Task<IEvent<Customer>> Push(IEvent<Customer> @event)
             {
-                await Task.Delay(10);
+                await Task.Delay(10).ConfigureAwait(false);
                 Console.WriteLine("Pushing customer {0}", @event.Result.FirstName);
                 
                 return DefaultEvent.Create(true, result: @event.Result);
@@ -35,7 +35,7 @@ namespace Shared.App
 
             public override async Task<IEvent<Customer>> Send<TCommand>(TCommand command)
             {
-                await Task.Delay(10);
+                await Task.Delay(10).ConfigureAwait(false);
                 var customer = new Customer {
                 FirstName = "John",
                 LastName = "Doe"
@@ -56,7 +56,7 @@ namespace Shared.App
 
             public override async Task OnChangeAsync(IEvent<Customer> @event)
             {
-                await Task.Delay(100);
+                await Task.Delay(100).ConfigureAwait(false);
                 Console.WriteLine("Customer {0} {1} notified", @event.Result.FirstName, @event.Result.LastName);
             }
         }

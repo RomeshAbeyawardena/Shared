@@ -114,10 +114,10 @@ namespace Shared.Library.Extensions
 
         public static async Task AsLockAsync(this SemaphoreSlim semaphoreSlim , Func<Task> onLock)
         {
-            await semaphoreSlim.WaitAsync();
+            await semaphoreSlim.WaitAsync().ConfigureAwait(false);
             try
             {
-                await onLock();
+                await onLock().ConfigureAwait(false);
             }
             finally
             {
@@ -128,9 +128,9 @@ namespace Shared.Library.Extensions
 
         public static async Task<T> AsLockAsync<T>(this SemaphoreSlim semaphoreSlim , Func<Task<T>> onLock)
         {
-            await semaphoreSlim.WaitAsync();
+            await semaphoreSlim.WaitAsync().ConfigureAwait(false);
             try{
-                return await onLock();
+                return await onLock().ConfigureAwait(false);
             }
             finally
             {

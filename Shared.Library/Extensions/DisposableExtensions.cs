@@ -30,14 +30,14 @@ namespace Shared.Library.Extensions
         {
             using (disposable)
             {
-                await onUse(disposable);
+                await onUse(disposable).ConfigureAwait(false);
             }
         }
 
         public static async Task<TOut> UseAsync<T, TOut>(this T disposable, Func<T, Task<TOut>> onUse) 
             where T : IDisposable
         {
-            return await Use(disposable, onUse);
+            return await Use(disposable, onUse).ConfigureAwait(false);
         }
     }
 }

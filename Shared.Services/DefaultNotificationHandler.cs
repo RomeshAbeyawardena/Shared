@@ -36,13 +36,13 @@ namespace Shared.Services
         {
             foreach(var notificationSubscriber in _notificationSubscribersList)
             {
-                await notificationSubscriber.OnChangeAsync(@event);
+                await notificationSubscriber.OnChangeAsync(@event).ConfigureAwait(false);
             }
         }
 
         public async Task NotifyAsync(object @event)
         {
-            await NotifyAsync((TEvent)@event);
+            await NotifyAsync((TEvent)@event).ConfigureAwait(false);
         }
 
         public DefaultNotificationHandler()

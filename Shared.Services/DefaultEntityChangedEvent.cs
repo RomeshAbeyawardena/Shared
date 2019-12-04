@@ -5,7 +5,7 @@ using Shared.Domains.Enumerations;
 
 namespace Shared.Services
 {
-    public class DefaultEntityChangedEvent
+    public static class DefaultEntityChangedEvent
     {
         public static IEntityChangedEvent<T> Create<T>(T result, IEnumerable<T> results = null, EntityEventType entityEventType = EntityEventType.None)
             where T: class

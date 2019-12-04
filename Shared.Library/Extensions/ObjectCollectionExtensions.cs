@@ -34,7 +34,7 @@ namespace Shared.Library.Extensions
         {
             foreach (var item in collection)
             {
-                await asyncIterator(item);
+                await asyncIterator(item).ConfigureAwait(false);
             }
         }
 
@@ -43,7 +43,7 @@ namespace Shared.Library.Extensions
             var index = 0;
             foreach (var item in collection)
             {
-                await asyncIterator(item, index++);
+                await asyncIterator(item, index++).ConfigureAwait(false);
             }
         }
     }
