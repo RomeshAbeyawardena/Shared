@@ -54,6 +54,7 @@ namespace Shared.UnitTests
         [InlineData("Lily", 3)]
         [InlineData("Gemini", 4)]
         [InlineData("Orchid", 5)]
+        [InlineData("Pertunia", -1)]
         public void GetIndex(string value, int expectedIndex)
         {
             var flowerArray = new [] { "Rose", "Daisy", "Tulip", "Lily", "Gemini", "Orchid" };
