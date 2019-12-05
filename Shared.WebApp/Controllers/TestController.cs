@@ -5,6 +5,7 @@ using Shared.Services.Extensions;
 using Shared.WebApp.Handlers;
 using System.Threading.Tasks;
 using Shared.Domains.Enumerations;
+using Shared.Services.Exceptions;
 
 namespace Shared.WebApp.Controllers
 {
@@ -18,6 +19,8 @@ namespace Shared.WebApp.Controllers
 
         public async Task<ActionResult> Test([FromQuery]Test test)
         {
+            throw new ModelStateException(modelState => modelState.Add("cat", "invalid value"));
+
             if(!ModelState.IsValid)
                 return BadRequest(ModelState);
 

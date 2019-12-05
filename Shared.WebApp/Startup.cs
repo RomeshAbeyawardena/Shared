@@ -8,6 +8,7 @@ using Shared.Services;
 using Shared.Library.Extensions;
 using System.Reflection;
 using AutoMapper;
+using Shared.Services.Middleware;
 
 namespace Shared.WebApp
 {
@@ -20,7 +21,7 @@ namespace Shared.WebApp
             services
                 .RegisterServiceBroker<AppQueueServiceBroker>(ServiceLifetime.Scoped)
                 .AddAutoMapper(Assembly.GetExecutingAssembly())
-                .AddMvc();
+                .AddMvc(options => options.Filters.Add<HandleModelStateErrorFilter>());
 
             foreach (var service in services.Where(a => a.ServiceType.FullName.Contains("IEventHandler", StringComparison.InvariantCultureIgnoreCase)))
             {
@@ -35,7 +36,7 @@ namespace Shared.WebApp
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            
             app.UseRouting();
 
             app.UseEndpoints(endpoints =>
