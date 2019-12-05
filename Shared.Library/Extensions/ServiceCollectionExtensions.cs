@@ -58,7 +58,7 @@ namespace Shared.Library.Extensions
             where TServiceBroker : IServiceBroker
         {
             var serviceBroker = Activator.CreateInstance<TServiceBroker>();
-            serviceBroker.RegisterServiceAssemblies(services, serviceLifetime, serviceBroker.GetAssemblies);
+            serviceBroker.RegisterServiceAssemblies(services, serviceLifetime, serviceBroker.GetAssemblies.ToArray());
 
             return services;
         }

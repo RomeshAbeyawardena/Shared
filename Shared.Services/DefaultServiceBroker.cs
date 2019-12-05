@@ -9,7 +9,7 @@ namespace Shared.Services
 {
     public abstract class DefaultServiceBroker : IServiceBroker
     {
-        public abstract Assembly[] GetAssemblies {get;}
+        public abstract IEnumerable<Assembly> GetAssemblies {get;}
         public static Assembly DefaultAssembly => Assembly.GetAssembly(typeof(DefaultAppHost));
         
         public void RegisterServiceAssemblies(IServiceCollection services, ServiceLifetime serviceLifetime = ServiceLifetime.Singleton, params Assembly[] assemblies)

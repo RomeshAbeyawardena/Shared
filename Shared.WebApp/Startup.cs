@@ -9,6 +9,7 @@ using Shared.Library.Extensions;
 using System.Reflection;
 using AutoMapper;
 using Shared.Services.Middleware;
+using System.Collections.Generic;
 
 namespace Shared.WebApp
 {
@@ -49,7 +50,7 @@ namespace Shared.WebApp
 
     public class AppQueueServiceBroker : DefaultServiceBroker
     {
-        public override Assembly[] GetAssemblies => new [] { 
+        public override IEnumerable<Assembly> GetAssemblies => new [] { 
             DefaultAssembly, 
             Assembly.GetAssembly(typeof(AppQueueServiceBroker)) };
     }

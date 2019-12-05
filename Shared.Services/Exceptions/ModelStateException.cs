@@ -15,18 +15,18 @@ namespace Shared.Services.Exceptions
             memberExceptions?.Invoke(ModelStateBuilder);
         }
 
-        protected ModelStateException()
+        private ModelStateException()
         {
 
         }
 
-        protected ModelStateException(string message)
+        private ModelStateException(string message)
             : base(message)
         {
 
         }
 
-        protected ModelStateException(string message, Exception innerException)
+        private ModelStateException(string message, Exception innerException)
             : base(message, innerException)
         {
 

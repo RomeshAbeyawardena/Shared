@@ -11,6 +11,7 @@ using Shared.Contracts.Services;
 using Shared.Services.Builders;
 using Microsoft.Extensions.Configuration;
 using Shared.Services.Extensions;
+using System.Collections.Generic;
 
 namespace Shared.App
 {
@@ -116,6 +117,6 @@ namespace Shared.App
 
     public class MyServiceBroker : DefaultServiceBroker
     {
-        public override Assembly[] GetAssemblies => new [] { DefaultAssembly, Assembly.GetAssembly(typeof(CryptoData)) };
+        public override IEnumerable<Assembly> GetAssemblies => new [] { DefaultAssembly, Assembly.GetAssembly(typeof(CryptoData)) };
     }
 }
