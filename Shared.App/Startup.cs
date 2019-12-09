@@ -12,6 +12,13 @@ using Shared.Services.Builders;
 using Microsoft.Extensions.Configuration;
 using Shared.Services.Extensions;
 using System.Collections.Generic;
+using Shared.Services.DapperExtensions;
+using System.Data;
+using Shared.Contracts.DapperExtensions;
+using System.Globalization;
+using System.Data.Common;
+using System.Data.SqlClient;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Shared.App
 {
@@ -64,7 +71,16 @@ namespace Shared.App
 
         public async Task Start()
         {
-            var a = DictionaryBuilder.Create<string, object>().Add("Test", true).ToObject();
+            using (var dbConnection = new SqlConnection("Server=localhost;Database=Crm;Trusted_Connection=true;"))
+            using (var customerContext = new CustomerDapperContext(CultureInfo.InvariantCulture, dbConnection))
+            {
+                var customers = await customerContext
+                    .Customers
+                    .Where(ab => ab.EmailAddress == "a" && ab.LastName == "b")
+                    .ConfigureAwait(false);
+
+                
+            }
         }
 
         
@@ -80,24 +96,41 @@ namespace Shared.App
             this.configuraton = configuraton;
         }
     }
+
+    public class CustomerDapperContext : DapperContext
+    {
+        public CustomerDapperContext(IFormatProvider formatProvider, IDbConnection dbConnection)
+            : base(formatProvider, dbConnection)
+        {
+
+        }
+
+        public IMapping<Customer> Customers { get; set; }
+    }
+
     [MessagePackObject(true)]
+    [Table("Customer")]
     public class Customer
     {
+        [System.ComponentModel.DataAnnotations.Key]
         public int Id { get; set; }
-        public int InitialId { get; set; }
+        public int TitleId { get; set; }
+        public string EmailAddress { get; set; }
         public string FirstName { get; set; }
         public string MiddleName { get; set; }
         public string LastName { get; set; }
         public DateTimeOffset Created { get; set; }
         public DateTimeOffset Modified { get; set; }
         public DateTimeOffset? RegistrationDate { get;set; }
-        public virtual Initial Initial { get; set; }
+
+        [NotMapped]
+        public virtual Title Title { get; set; }
     }
     [MessagePackObject(true)]
-    public class Initial
+    public class Title
     {
         public int Id { get; set; }
-        public string Title { get; set; }
+        public string Name { get; set; }
         public string LongTitle { get; set; }
         public DateTimeOffset Created { get; set; }
         public DateTimeOffset Modified { get; set; }

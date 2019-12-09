@@ -20,6 +20,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionFiles", "SolutionFi
 		Increment-Version.ps1 = Increment-Version.ps1
 		Increment.ps1 = Increment.ps1
 		Install.ps1 = Install.ps1
+		install.sql = install.sql
 		README.md = README.md
 		UpdateVersion-Powershell.ps1 = UpdateVersion-Powershell.ps1
 	EndProjectSection
