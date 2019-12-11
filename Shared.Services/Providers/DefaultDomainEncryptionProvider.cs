@@ -24,12 +24,17 @@ namespace Shared.Services.Providers
             var destination = Activator.CreateInstance<TDest>();
             var encryptionKey = encryptionKeyProperty.GetValue(value) as byte[]; 
             
-            foreach(var property in encryptedProperties){
+            foreach(var property in sourceProperties){
                 var destinationProperty = GetProperty(destProperties, property.Name);
-                var encryptedValue = property.GetValue(value) as IEnumerable<byte>;
-                destinationProperty.SetValue(destination, await _encryptionService
-                    .DecryptBytes(symmetricAlgorithmType, encryptedValue.ToArray(), encryptionKey, initialVector)
-                    .ConfigureAwait(false));
+                var rawValue = property.GetValue(value);
+                var encryptedValue = rawValue as IEnumerable<byte>;
+
+                if(encryptedProperties.Contains(property))
+                    destinationProperty?.SetValue(destination, await _encryptionService
+                        .DecryptBytes(symmetricAlgorithmType, encryptedValue.ToArray(), encryptionKey, initialVector)
+                        .ConfigureAwait(false));
+                else
+                    destinationProperty?.SetValue(destination, rawValue);
             }
 
             return destination;

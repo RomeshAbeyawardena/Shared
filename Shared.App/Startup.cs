@@ -4,24 +4,19 @@ using System;
 using System.Reflection;
 using System.Threading.Tasks;
 using Shared.Contracts.Factories;
-using Shared.Domains;
 using MessagePack;
 using Shared.Contracts.Providers;
 using Shared.Contracts.Services;
-using Shared.Services.Builders;
 using Microsoft.Extensions.Configuration;
-using Shared.Services.Extensions;
 using System.Collections.Generic;
 using Shared.Services.DapperExtensions;
 using System.Data;
 using Shared.Contracts.DapperExtensions;
-using System.Globalization;
-using System.Data.Common;
-using System.Data.SqlClient;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using Shared.Library.Attributes;
 using System.Text;
+using Shared.Domains.Enumerations;
 
 namespace Shared.App
 {
@@ -41,15 +36,15 @@ namespace Shared.App
             var key = Guid.NewGuid().ToString().GetBytes(Encoding.ASCII);
             var salt = Guid.NewGuid().ToString().GetBytes(Encoding.ASCII);
             var initialVector = "abb6526e130b4a24".GetBytes(Encoding.ASCII);
-            var a = await domainEncryptionProvider.Encrypt<CustomerDto, Customer>(new CustomerDto { 
+            var encryptedCustomer = await domainEncryptionProvider.Encrypt<CustomerDto, Customer>(new CustomerDto { 
                 EmailAddress = "sarah.catlin@hotmail.com",
                 FirstName = "Sarah",
                 MiddleName = "Middleton",
                 LastName = "Catlin",
                 DateOfBirth = new DateTime(2019, 09, 11)
-                }, Domains.Enumerations.SymmetricAlgorithmType.Aes, key, salt, initialVector, 100000).ConfigureAwait(false);
+                }, SymmetricAlgorithmType.Aes, key, salt, initialVector, 100000).ConfigureAwait(false);
 
-            var decryptedCustomer = await domainEncryptionProvider.Decrypt<Customer, CustomerDto>(a, Domains.Enumerations.SymmetricAlgorithmType.Aes,
+            var decryptedCustomer = await domainEncryptionProvider.Decrypt<Customer, CustomerDto>(encryptedCustomer, SymmetricAlgorithmType.Aes,
                 initialVector).ConfigureAwait(false);
         }
 
@@ -137,6 +132,7 @@ namespace Shared.App
 
         [Encryptable]
         public string LastName { get; set; }
+
         public DateTime DateOfBirth { get; set; }
         public DateTimeOffset Created { get; set; }
         public DateTimeOffset Modified { get; set; }
