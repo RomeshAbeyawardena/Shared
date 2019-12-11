@@ -113,7 +113,12 @@ namespace Shared.App
     {
         public override ValidationResult Validate(Customer model)
         {
-            
+            ValidateModel(model)
+                .IsNotNull(member => member.EmailAddress)
+                .IsNotNull(member => member.FirstName)
+                .IsValid(member => member.DateOfBirth, DateTime.Now.AddYears(-11), (member, compare) => member < compare)
+                .IsInRange(member => member.RegistrationDate, DateTime.Now.AddYears(-5), DateTime.Now, 
+                    (member, minimumValue, maximimValue) => member >= minimumValue && member <= maximimValue);
             return ValidationResult.Success;
         }
     }
@@ -129,6 +134,7 @@ namespace Shared.App
         public string FirstName { get; set; }
         public string MiddleName { get; set; }
         public string LastName { get; set; }
+        public DateTime DateOfBirth { get; set; }
         public DateTimeOffset Created { get; set; }
         public DateTimeOffset Modified { get; set; }
         public DateTimeOffset? RegistrationDate { get;set; }

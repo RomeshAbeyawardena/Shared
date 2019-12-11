@@ -1,6 +1,7 @@
 using Shared.Contracts;
 using Shared.Library.Exceptions;
 using System.ComponentModel.DataAnnotations;
+using System.Text.RegularExpressions;
 
 namespace Shared.Library
 {
@@ -41,6 +42,18 @@ namespace Shared.Library
 
             if(!isInRangeComparer(member, minimumValue, maximumValue))
                 throw new ValidateException(memberName, $"{memberName} is not within the range of valid values");
+
+            return this;
+        }
+
+        public IValidate<T> Regex(System.Func<T, string> getMember, string regexPattern)
+        {
+            var regex = new Regex(regexPattern);
+            var member = getMember(_model);
+            var memberName = nameof(member);
+            
+            if(!regex.IsMatch(member))
+                throw new ValidateException(memberName, $"{memberName} does not match regex pattern");
 
             return this;
         }
