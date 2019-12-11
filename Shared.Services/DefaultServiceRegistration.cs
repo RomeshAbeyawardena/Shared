@@ -23,6 +23,7 @@ namespace Shared.Services
         {
             services
                 .AddOptions()
+                .AddSingleton<IValidationFactory, DefaultValidationFactory>()
                 .AddSingleton(s => new SemaphoreSlim(1,1))
                 .AddScoped<IList<INotificationUnsubscriber>>((a) => new List<INotificationUnsubscriber>())
                 .AddSingleton<ISystemClock, SystemClock>()

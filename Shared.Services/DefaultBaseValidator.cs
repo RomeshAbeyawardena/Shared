@@ -23,10 +23,12 @@ namespace Shared.Services
 
         protected IValidate<TModel> ValidateModel(TModel model) => new Validate<TModel>(model);
 
+        protected ValidationResult Success => ValidationResult.Success;
+
         protected ValidationResult Fail(string errorMessage, params string[] memberNames)
         {
             
-            return new ValidationResult(string.Empty, memberNames);
+            return new ValidationResult(errorMessage, memberNames);
         }
     }
 }
