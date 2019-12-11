@@ -20,6 +20,8 @@ using System.Data.Common;
 using System.Data.SqlClient;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using Shared.Library.Attributes;
+using System.Text;
 
 namespace Shared.App
 {
@@ -30,63 +32,31 @@ namespace Shared.App
         private readonly IEncryptionService encryptionService;
         private readonly IMediator mediator;
         private readonly IEncodingProvider encodingProvider;
+        private readonly IDomainEncryptionProvider domainEncryptionProvider;
         private readonly IConfiguration configuraton;
 
-        private class CustomerEventHandler : DefaultEventHandler<IEvent<Customer>>
-        {
-            public override async Task<IEvent<Customer>> Push(IEvent<Customer> @event)
-            {
-                await Task.Delay(10).ConfigureAwait(false);
-                Console.WriteLine("Pushing customer {0}", @event.Result.FirstName);
-                
-                return DefaultEvent.Create(true, result: @event.Result);
-            }
-
-            public override async Task<IEvent<Customer>> Send<TCommand>(TCommand command)
-            {
-                await Task.Delay(10).ConfigureAwait(false);
-                var customer = new Customer {
-                FirstName = "John",
-                LastName = "Doe"
-                };
-
-                Console.WriteLine("Command {0} requested", command.Name);
-                return DefaultEvent.Create(customer);
-            }
-        }
-
-
-        private class CustomerNotificationSubscriber : DefaultNotificationSubscriber<IEvent<Customer>>
-        {
-            public override void OnChange(IEvent<Customer> @event)
-            {
-                Console.WriteLine("Customer {0} {1} notified", @event.Result.FirstName, @event.Result.LastName);
-            }
-
-            public override async Task OnChangeAsync(IEvent<Customer> @event)
-            {
-                await Task.Delay(100).ConfigureAwait(false);
-                Console.WriteLine("Customer {0} {1} notified", @event.Result.FirstName, @event.Result.LastName);
-            }
-        }
-
+        
         public async Task Start()
         {
-            using (var dbConnection = new SqlConnection("Server=localhost;Database=Crm;Trusted_Connection=true;"))
-            using (var customerContext = new CustomerDapperContext(CultureInfo.InvariantCulture, dbConnection))
-            {
-                var customers = await customerContext
-                    .Customers
-                    .Where(customer => customer.EmailAddress == "a" && customer.LastName == "b")
-                    .ConfigureAwait(false);
+            var key = Guid.NewGuid().ToString().GetBytes(Encoding.ASCII);
+            var salt = Guid.NewGuid().ToString().GetBytes(Encoding.ASCII);
+            var initialVector = "abb6526e130b4a24".GetBytes(Encoding.ASCII);
+            var a = await domainEncryptionProvider.Encrypt<CustomerDto, Customer>(new CustomerDto { 
+                EmailAddress = "sarah.catlin@hotmail.com",
+                FirstName = "Sarah",
+                MiddleName = "Middleton",
+                LastName = "Catlin",
+                DateOfBirth = new DateTime(2019, 09, 11)
+                }, Domains.Enumerations.SymmetricAlgorithmType.Aes, key, salt, initialVector, 100000).ConfigureAwait(false);
 
-                
-            }
+            var decryptedCustomer = await domainEncryptionProvider.Decrypt<Customer, CustomerDto>(a, Domains.Enumerations.SymmetricAlgorithmType.Aes,
+                initialVector).ConfigureAwait(false);
         }
 
         
         public Startup(ISerializerFactory serializerFactory, ICryptographicProvider cryptographicProvider, 
             IEncryptionService encryptionService, IMediator mediator, IEncodingProvider encodingProvider,
+            IDomainEncryptionProvider domainEncryptionProvider,
             IConfiguration configuraton)
         {
             this.serializerFactory = serializerFactory;
@@ -94,6 +64,7 @@ namespace Shared.App
             this.encryptionService = encryptionService;
             this.mediator = mediator;
             this.encodingProvider = encodingProvider;
+            this.domainEncryptionProvider = domainEncryptionProvider;
             this.configuraton = configuraton;
         }
     }
@@ -130,9 +101,41 @@ namespace Shared.App
         [System.ComponentModel.DataAnnotations.Key]
         public int Id { get; set; }
         public int TitleId { get; set; }
+
+        [Encryptable]
+        public IEnumerable<byte> EmailAddress { get; set; }
+        [Encryptable]
+        public IEnumerable<byte> FirstName { get; set; }
+        [Encryptable]
+        public IEnumerable<byte> MiddleName { get; set; }
+        [Encryptable]
+        public IEnumerable<byte> LastName { get; set; }
+        
+        public DateTime DateOfBirth { get; set; }
+        public DateTimeOffset Created { get; set; }
+        public DateTimeOffset Modified { get; set; }
+        public DateTimeOffset? RegistrationDate { get;set; }
+        
+        [EncryptionKey]
+        public IEnumerable<byte> Key { get; set; }
+        
+    }
+
+     public class CustomerDto
+    {
+        
+        public int Id { get; set; }
+        public int TitleId { get; set; }
+        [Encryptable]
         public string EmailAddress { get; set; }
+
+        [Encryptable]
         public string FirstName { get; set; }
+
+        [Encryptable]
         public string MiddleName { get; set; }
+
+        [Encryptable]
         public string LastName { get; set; }
         public DateTime DateOfBirth { get; set; }
         public DateTimeOffset Created { get; set; }
@@ -142,6 +145,7 @@ namespace Shared.App
         [NotMapped]
         public virtual Title Title { get; set; }
     }
+
     [MessagePackObject(true)]
     public class Title
     {

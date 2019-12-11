@@ -27,7 +27,7 @@ namespace Shared.Services
                 var notificationSubscriberTypes = assemblyTypes.Where(type => type.GetInterfaces()
                     .Any(a => a.IsAssignableFrom(typeof(INotificationSubscriber))));
                 var validatorTypes = assemblyTypes.Where(type => type.GetInterfaces()
-                    .Any(a => a.IsAssignableFrom(typeof(IValidator))));
+                    .Any(a => a.IsAssignableFrom(typeof(IValidator)) && !a.IsAbstract));
 
                 RegisterEventHandlerTypes(services, eventHandlerTypes, serviceLifetime);
                 RegisterSubscriberTypes(services, notificationSubscriberTypes, serviceLifetime);
