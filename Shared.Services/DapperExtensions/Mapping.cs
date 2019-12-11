@@ -1,4 +1,8 @@
 ﻿using Dapper;
+using Microsoft.EntityFrameworkCore.Query.Sql;
+using Remotion.Linq;
+using Remotion.Linq.Parsing.Structure;
+using Remotion.Linq.SqlBackend.SqlGeneration;
 using Shared.Contracts.DapperExtensions;
 using Shared.Domains;
 using Shared.Domains.Enumerations;
@@ -19,12 +23,17 @@ namespace Shared.Services.DapperExtensions
 {
     public class Mapping<T> : IMapping<T>
     {
+        private readonly ISqlCommandBuilder _sqlCommandBuilder;
+        private readonly ISqlGenerationStage _sqlGenerationStage;
         private readonly IFormatProvider _formatProvider;
         private readonly IDbConnection _dbConnection;
         private IDbTransaction _dbTransaction;
 
         public Mapping(IFormatProvider formatProvider, IDbConnection dbConnection, string schema, string name)
         {
+            _sqlGenerationStage = new DefaultSqlGenerationStage();
+            _sqlCommandBuilder = new SqlCommandBuilder();
+            
             _formatProvider = formatProvider;
             _dbConnection = dbConnection;
             SchemaName = schema;
@@ -294,33 +303,14 @@ namespace Shared.Services.DapperExtensions
 
         public async Task<IEnumerable<T>> Where(Expression<Func<T, bool>> whereExpression)
         {
-            var expressionParameters = whereExpression.Parameters;
-            var expressionList = new List<Expression>();
-            var currentExpression = whereExpression.Body;
-            Expression remainingExpression = null;
+            var dapperQueryModel = new DapperQueryModelVisitor();
 
-            while(currentExpression != default)
-            {
-                if(currentExpression is ConstantExpression constantExpression)
-                    currentExpression = null;
+            var queryParser = QueryParser.CreateDefault();
+            
+            var query = queryParser.GetParsedQuery(whereExpression);
 
-                if (currentExpression is BinaryExpression binaryExpression){
-                    currentExpression = binaryExpression.Left;
-                    remainingExpression = binaryExpression.Right;
-                    continue;
-                }
-
-                if (currentExpression is MemberExpression memberExpression){
-                    expressionList.Add(memberExpression);
-                    currentExpression = null;
-                }
-
-                if(remainingExpression != null){
-                    currentExpression = remainingExpression;
-                    remainingExpression = null;
-                }
-            }
-
+            Console.WriteLine(_sqlCommandBuilder.GetCommandText());
+            
             return await ToList().ConfigureAwait(false);
         }
         

@@ -19,6 +19,7 @@ using System.Globalization;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
 namespace Shared.App
 {
@@ -76,7 +77,7 @@ namespace Shared.App
             {
                 var customers = await customerContext
                     .Customers
-                    .Where(ab => ab.EmailAddress == "a" && ab.LastName == "b")
+                    .Where(customer => customer.EmailAddress == "a" && customer.LastName == "b")
                     .ConfigureAwait(false);
 
                 
@@ -106,6 +107,15 @@ namespace Shared.App
         }
 
         public IMapping<Customer> Customers { get; set; }
+    }
+
+    public class CustomerValidator : DefaultBaseValidator<Customer>
+    {
+        public override ValidationResult Validate(Customer model)
+        {
+            
+            return ValidationResult.Success;
+        }
     }
 
     [MessagePackObject(true)]

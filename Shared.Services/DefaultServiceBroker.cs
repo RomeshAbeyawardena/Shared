@@ -14,6 +14,9 @@ namespace Shared.Services
         
         public void RegisterServiceAssemblies(IServiceCollection services, ServiceLifetime serviceLifetime = ServiceLifetime.Singleton, params Assembly[] assemblies)
         {
+            if(services == null)
+                throw new ArgumentNullException(nameof(services));
+
             foreach(var assembly in assemblies)
             {
                 var assemblyTypes = assembly.GetTypes();
@@ -23,8 +26,12 @@ namespace Shared.Services
                 var eventHandlerTypes = assemblyTypes.Where(type => type.GetInterfaces().Any(a => a.IsAssignableFrom(typeof(IEventHandler))));
                 var notificationSubscriberTypes = assemblyTypes.Where(type => type.GetInterfaces()
                     .Any(a => a.IsAssignableFrom(typeof(INotificationSubscriber))));
+                var validatorTypes = assemblyTypes.Where(type => type.GetInterfaces()
+                    .Any(a => a.IsAssignableFrom(typeof(IValidator))));
+
                 RegisterEventHandlerTypes(services, eventHandlerTypes, serviceLifetime);
                 RegisterSubscriberTypes(services, notificationSubscriberTypes, serviceLifetime);
+                RegisterValidators(services, validatorTypes);
 
                 foreach (var item in serviceRegistrationTypes)
                 {
@@ -73,6 +80,17 @@ namespace Shared.Services
             }
 
             services.AddSingleton<IList<Type>>(eventHandlerTypeListTypes);
+        }
+
+        private void RegisterValidators(IServiceCollection services, IEnumerable<Type> validatorTypes)
+        {
+            foreach(var validatorType in validatorTypes)
+            {
+                var genericServiceType = typeof(IValidator<>);
+                var genericArguments = validatorType.GetInterfaces().FirstOrDefault().GetGenericArguments();
+                var gServiceType = genericServiceType.MakeGenericType(genericArguments);
+                services.AddSingleton(gServiceType, validatorType);
+            }
         }
     }
 }
