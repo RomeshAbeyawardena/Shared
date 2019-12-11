@@ -7,12 +7,13 @@ using Shared.Library.Attributes;
 using Shared.Contracts.Services;
 using Shared.Domains.Enumerations;
 using System.Threading.Tasks;
+using Shared.Contracts;
 
 namespace Shared.Services.Providers
 {
     public class DefaultDomainEncryptionProvider : IDomainEncryptionProvider
     {
-        public async Task<TDest> Decrypt<TSource, TDest>(TSource value, SymmetricAlgorithmType symmetricAlgorithmType, byte[] initialVector)
+        public async Task<TDest> Decrypt<TSource, TDest>(TSource value, ICryptographicInfo cryptographicInfo)
         {
             var sourceProperties = value.GetType().GetProperties();
             var destProperties = typeof(TDest).GetProperties();
@@ -31,7 +32,7 @@ namespace Shared.Services.Providers
 
                 if(encryptedProperties.Contains(property))
                     destinationProperty?.SetValue(destination, await _encryptionService
-                        .DecryptBytes(symmetricAlgorithmType, encryptedValue.ToArray(), encryptionKey, initialVector)
+                        .DecryptBytes(cryptographicInfo.SymmetricAlgorithmType, encryptedValue.ToArray(), encryptionKey, cryptographicInfo.InitialVector.ToArray())
                         .ConfigureAwait(false));
                 else
                     destinationProperty?.SetValue(destination, rawValue);
@@ -40,15 +41,14 @@ namespace Shared.Services.Providers
             return destination;
         }
 
-        public async Task<TDest> Encrypt<TSource, TDest>(TSource value, SymmetricAlgorithmType symmetricAlgorithmType, byte[] key, byte[] salt, 
-            byte[] initialVector, int iterations)
+        public async Task<TDest> Encrypt<TSource, TDest>(TSource value, ICryptographicInfo cryptographicInfo)
         {
             var sourceProperties = value.GetType().GetProperties();
             var destProperties = typeof(TDest).GetProperties();
             var encryptionKeyProperties = GetPropertiesWithCustomAttribute<EncryptionKeyAttribute>(destProperties);
             var encryptionKeyProperty = encryptionKeyProperties.SingleOrDefault();
             var destination = Activator.CreateInstance<TDest>();
-            var generatedKey = _cryptographicProvider.GenerateKey(salt, key, iterations, 32);
+            var generatedKey = _cryptographicProvider.GenerateKey(cryptographicInfo.Salt, cryptographicInfo.Key, cryptographicInfo.Iterations, 32);
             encryptionKeyProperty.SetValue(destination, generatedKey);
 
             foreach (var sourceProperty in sourceProperties)
@@ -57,7 +57,7 @@ namespace Shared.Services.Providers
                 var destinationProperty = GetProperty(destProperties, sourceProperty.Name);
                 if(sourceProperty.GetCustomAttribute<EncryptableAttribute>() != null && propertyValue != null)
                     destinationProperty?.SetValue(destination, await _encryptionService
-                        .EncryptString(symmetricAlgorithmType, propertyValue.ToString(), generatedKey, initialVector)
+                        .EncryptString(cryptographicInfo.SymmetricAlgorithmType, propertyValue.ToString(), generatedKey, cryptographicInfo.InitialVector.ToArray())
                         .ConfigureAwait(false) );
                 else
                     destinationProperty?.SetValue(destination, propertyValue);

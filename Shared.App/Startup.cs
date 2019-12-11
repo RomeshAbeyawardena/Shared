@@ -30,22 +30,42 @@ namespace Shared.App
         private readonly IDomainEncryptionProvider domainEncryptionProvider;
         private readonly IConfiguration configuraton;
 
-        
+        public class CryptographicInfo : ICryptographicInfo
+        {
+            public CryptographicInfo(SymmetricAlgorithmType symmetricAlgorithmType, IEnumerable<byte> key, 
+                IEnumerable<byte> salt, IEnumerable<byte> initialVector, int iterations)
+            {
+                SymmetricAlgorithmType = symmetricAlgorithmType;
+                Key = key;
+                Salt = salt;
+                InitialVector = initialVector;
+                Iterations = iterations;
+            }
+
+            public SymmetricAlgorithmType SymmetricAlgorithmType { get; }
+            public IEnumerable<byte> Key { get; }
+            public IEnumerable<byte> Salt { get; }
+            public IEnumerable<byte> InitialVector { get; }
+            public int Iterations { get; }
+        }
+
         public async Task Start()
         {
-            var key = Guid.NewGuid().ToString().GetBytes(Encoding.ASCII);
-            var salt = Guid.NewGuid().ToString().GetBytes(Encoding.ASCII);
-            var initialVector = "abb6526e130b4a24".GetBytes(Encoding.ASCII);
+            var cryptographicInfo = new CryptographicInfo(SymmetricAlgorithmType.Aes,
+                                        Guid.NewGuid().ToString().GetBytes(Encoding.ASCII),
+                                        Guid.NewGuid().ToString().GetBytes(Encoding.ASCII),
+                                        "abb6526e130b4a24".GetBytes(Encoding.ASCII), 100000);
+            
+
             var encryptedCustomer = await domainEncryptionProvider.Encrypt<CustomerDto, Customer>(new CustomerDto { 
                 EmailAddress = "sarah.catlin@hotmail.com",
                 FirstName = "Sarah",
                 MiddleName = "Middleton",
                 LastName = "Catlin",
                 DateOfBirth = new DateTime(2019, 09, 11)
-                }, SymmetricAlgorithmType.Aes, key, salt, initialVector, 100000).ConfigureAwait(false);
+                }, cryptographicInfo).ConfigureAwait(false);
 
-            var decryptedCustomer = await domainEncryptionProvider.Decrypt<Customer, CustomerDto>(encryptedCustomer, SymmetricAlgorithmType.Aes,
-                initialVector).ConfigureAwait(false);
+            var decryptedCustomer = await domainEncryptionProvider.Decrypt<Customer, CustomerDto>(encryptedCustomer, cryptographicInfo).ConfigureAwait(false);
         }
 
         

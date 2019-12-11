@@ -5,7 +5,7 @@ namespace Shared.Contracts.Providers
 {
     public interface IDomainEncryptionProvider
     {
-        Task<TDest> Decrypt<TSource, TDest>(TSource value, SymmetricAlgorithmType symmetricAlgorithmType, byte[] initialVector);
-        Task<TDest> Encrypt<TSource, TDest>(TSource value, SymmetricAlgorithmType symmetricAlgorithmType, byte[] key, byte[] salt, byte[] initialVector, int iterations);
+        Task<TDest> Decrypt<TSource, TDest>(TSource value, ICryptographicInfo cryptographicInfo);
+        Task<TDest> Encrypt<TSource, TDest>(TSource value, ICryptographicInfo cryptographicInfo);
     }
 }
