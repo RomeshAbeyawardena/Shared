@@ -15,6 +15,7 @@
   
   <ItemGroup>
     <PackageReference Include="Dapper" Version="2.0.30" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.3" />
   </ItemGroup>
   
@@ -31,6 +32,7 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.0.0" />
     <PackageReference Include="Microsoft.IO.RecyclableMemoryStream" Version="1.3.0" />
+    <PackageReference Include="Remotion.Linq.SqlBackend" Version="2.0.1" />
   </ItemGroup>
 
   <ItemGroup>

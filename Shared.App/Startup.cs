@@ -4,21 +4,19 @@ using System;
 using System.Reflection;
 using System.Threading.Tasks;
 using Shared.Contracts.Factories;
-using Shared.Domains;
 using MessagePack;
 using Shared.Contracts.Providers;
 using Shared.Contracts.Services;
-using Shared.Services.Builders;
 using Microsoft.Extensions.Configuration;
-using Shared.Services.Extensions;
 using System.Collections.Generic;
 using Shared.Services.DapperExtensions;
 using System.Data;
 using Shared.Contracts.DapperExtensions;
-using System.Globalization;
-using System.Data.Common;
-using System.Data.SqlClient;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
+using Shared.Library.Attributes;
+using System.Text;
+using Shared.Domains.Enumerations;
 
 namespace Shared.App
 {
@@ -29,63 +27,51 @@ namespace Shared.App
         private readonly IEncryptionService encryptionService;
         private readonly IMediator mediator;
         private readonly IEncodingProvider encodingProvider;
+        private readonly IDomainEncryptionProvider domainEncryptionProvider;
         private readonly IConfiguration configuraton;
 
-        private class CustomerEventHandler : DefaultEventHandler<IEvent<Customer>>
+        public class CryptographicInfo : ICryptographicInfo
         {
-            public override async Task<IEvent<Customer>> Push(IEvent<Customer> @event)
+            public CryptographicInfo(SymmetricAlgorithmType symmetricAlgorithmType, IEnumerable<byte> key, 
+                IEnumerable<byte> salt, IEnumerable<byte> initialVector, int iterations)
             {
-                await Task.Delay(10).ConfigureAwait(false);
-                Console.WriteLine("Pushing customer {0}", @event.Result.FirstName);
-                
-                return DefaultEvent.Create(true, result: @event.Result);
+                SymmetricAlgorithmType = symmetricAlgorithmType;
+                Key = key;
+                Salt = salt;
+                InitialVector = initialVector;
+                Iterations = iterations;
             }
 
-            public override async Task<IEvent<Customer>> Send<TCommand>(TCommand command)
-            {
-                await Task.Delay(10).ConfigureAwait(false);
-                var customer = new Customer {
-                FirstName = "John",
-                LastName = "Doe"
-                };
-
-                Console.WriteLine("Command {0} requested", command.Name);
-                return DefaultEvent.Create(customer);
-            }
-        }
-
-
-        private class CustomerNotificationSubscriber : DefaultNotificationSubscriber<IEvent<Customer>>
-        {
-            public override void OnChange(IEvent<Customer> @event)
-            {
-                Console.WriteLine("Customer {0} {1} notified", @event.Result.FirstName, @event.Result.LastName);
-            }
-
-            public override async Task OnChangeAsync(IEvent<Customer> @event)
-            {
-                await Task.Delay(100).ConfigureAwait(false);
-                Console.WriteLine("Customer {0} {1} notified", @event.Result.FirstName, @event.Result.LastName);
-            }
+            public SymmetricAlgorithmType SymmetricAlgorithmType { get; }
+            public IEnumerable<byte> Key { get; }
+            public IEnumerable<byte> Salt { get; }
+            public IEnumerable<byte> InitialVector { get; }
+            public int Iterations { get; }
         }
 
         public async Task Start()
         {
-            using (var dbConnection = new SqlConnection("Server=localhost;Database=Crm;Trusted_Connection=true;"))
-            using (var customerContext = new CustomerDapperContext(CultureInfo.InvariantCulture, dbConnection))
-            {
-                var customers = await customerContext
-                    .Customers
-                    .Where(ab => ab.EmailAddress == "a" && ab.LastName == "b")
-                    .ConfigureAwait(false);
+            var cryptographicInfo = new CryptographicInfo(SymmetricAlgorithmType.Aes,
+                                        Guid.NewGuid().ToString().GetBytes(Encoding.ASCII),
+                                        Guid.NewGuid().ToString().GetBytes(Encoding.ASCII),
+                                        "abb6526e130b4a24".GetBytes(Encoding.ASCII), 100000);
+            
 
-                
-            }
+            var encryptedCustomer = await domainEncryptionProvider.Encrypt<CustomerDto, Customer>(new CustomerDto { 
+                EmailAddress = "sarah.catlin@hotmail.com",
+                FirstName = "Sarah",
+                MiddleName = "Middleton",
+                LastName = "Catlin",
+                DateOfBirth = new DateTime(2019, 09, 11)
+                }, cryptographicInfo).ConfigureAwait(false);
+
+            var decryptedCustomer = await domainEncryptionProvider.Decrypt<Customer, CustomerDto>(encryptedCustomer, cryptographicInfo).ConfigureAwait(false);
         }
 
         
         public Startup(ISerializerFactory serializerFactory, ICryptographicProvider cryptographicProvider, 
             IEncryptionService encryptionService, IMediator mediator, IEncodingProvider encodingProvider,
+            IDomainEncryptionProvider domainEncryptionProvider,
             IConfiguration configuraton)
         {
             this.serializerFactory = serializerFactory;
@@ -93,6 +79,7 @@ namespace Shared.App
             this.encryptionService = encryptionService;
             this.mediator = mediator;
             this.encodingProvider = encodingProvider;
+            this.domainEncryptionProvider = domainEncryptionProvider;
             this.configuraton = configuraton;
         }
     }
@@ -108,6 +95,20 @@ namespace Shared.App
         public IMapping<Customer> Customers { get; set; }
     }
 
+    public class CustomerValidator : DefaultBaseValidator<Customer>
+    {
+        public override ValidationResult Validate(Customer model)
+        {
+            ValidateModel(model)
+                .IsNotNull(member => member.EmailAddress)
+                .IsNotNull(member => member.FirstName)
+                .IsValid(member => member.DateOfBirth, DateTime.Now.AddYears(-11), (member, compare) => member < compare)
+                .IsInRange(member => member.RegistrationDate, DateTime.Now.AddYears(-5), DateTime.Now, 
+                    (member, minimumValue, maximimValue) => member >= minimumValue && member <= maximimValue);
+            return ValidationResult.Success;
+        }
+    }
+
     [MessagePackObject(true)]
     [Table("Customer")]
     public class Customer
@@ -115,10 +116,44 @@ namespace Shared.App
         [System.ComponentModel.DataAnnotations.Key]
         public int Id { get; set; }
         public int TitleId { get; set; }
+
+        [Encryptable]
+        public IEnumerable<byte> EmailAddress { get; set; }
+        [Encryptable]
+        public IEnumerable<byte> FirstName { get; set; }
+        [Encryptable]
+        public IEnumerable<byte> MiddleName { get; set; }
+        [Encryptable]
+        public IEnumerable<byte> LastName { get; set; }
+        
+        public DateTime DateOfBirth { get; set; }
+        public DateTimeOffset Created { get; set; }
+        public DateTimeOffset Modified { get; set; }
+        public DateTimeOffset? RegistrationDate { get;set; }
+        
+        [EncryptionKey]
+        public IEnumerable<byte> Key { get; set; }
+        
+    }
+
+     public class CustomerDto
+    {
+        
+        public int Id { get; set; }
+        public int TitleId { get; set; }
+        [Encryptable]
         public string EmailAddress { get; set; }
+
+        [Encryptable]
         public string FirstName { get; set; }
+
+        [Encryptable]
         public string MiddleName { get; set; }
+
+        [Encryptable]
         public string LastName { get; set; }
+
+        public DateTime DateOfBirth { get; set; }
         public DateTimeOffset Created { get; set; }
         public DateTimeOffset Modified { get; set; }
         public DateTimeOffset? RegistrationDate { get;set; }
@@ -126,6 +161,7 @@ namespace Shared.App
         [NotMapped]
         public virtual Title Title { get; set; }
     }
+
     [MessagePackObject(true)]
     public class Title
     {

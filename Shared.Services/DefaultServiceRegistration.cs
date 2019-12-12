@@ -23,6 +23,8 @@ namespace Shared.Services
         {
             services
                 .AddOptions()
+                .AddSingleton<IDomainEncryptionProvider, DefaultDomainEncryptionProvider>()
+                .AddSingleton<IValidationFactory, DefaultValidationFactory>()
                 .AddSingleton(s => new SemaphoreSlim(1,1))
                 .AddScoped<IList<INotificationUnsubscriber>>((a) => new List<INotificationUnsubscriber>())
                 .AddSingleton<ISystemClock, SystemClock>()
@@ -62,7 +64,6 @@ namespace Shared.Services
                 .AddSingleton<RSACryptoServiceProvider>()
                 .AddSingleton<TripleDESCryptoServiceProvider>()
                 .AddSingleton<RNGCryptoServiceProvider>()
-                
                 .AddSingleton(DefaultSwitch.Create<SymmetricAlgorithmType, Type>()
                     .CaseWhen(SymmetricAlgorithmType.Aes, typeof(AesCryptoServiceProvider))
                     .CaseWhen(SymmetricAlgorithmType.Rsa, typeof(RSACryptoServiceProvider))
