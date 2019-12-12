@@ -5,6 +5,7 @@ using System.Collections.Generic;
 
 namespace Shared.Services
 {
+    [Route("{controller}/{action}", Order = 99)]
     public abstract class ControllerBase : Controller
     {
         protected IMediator Mediator => GetRequiredService<IMediator>();
