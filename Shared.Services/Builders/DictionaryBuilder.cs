@@ -1,6 +1,7 @@
 ﻿using Shared.Contracts.Builders;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Shared.Services.Builders
 {
@@ -62,7 +63,7 @@ namespace Shared.Services.Builders
 
         public IDictionary<TKey, TValue> ToDictionary()
         {
-            return _dictionary;
+            return _dictionary.ToDictionary(dictionary => dictionary.Key, dictionary => dictionary.Value);
         }
 
         public DictionaryBuilder()
