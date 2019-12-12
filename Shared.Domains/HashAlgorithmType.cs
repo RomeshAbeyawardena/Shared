@@ -1,6 +1,6 @@
 ﻿namespace Shared.Domains.Enumerations
 {
-    public static class HashAlgorithm
+    public static class HashAlgorithmType
     {
         public const string SHA512 = "SHA-512";
     }

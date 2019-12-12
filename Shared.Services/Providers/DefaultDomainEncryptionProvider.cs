@@ -48,7 +48,7 @@ namespace Shared.Services.Providers
             var encryptionKeyProperties = GetPropertiesWithCustomAttribute<EncryptionKeyAttribute>(destProperties);
             var encryptionKeyProperty = encryptionKeyProperties.SingleOrDefault();
             var destination = Activator.CreateInstance<TDest>();
-            var generatedKey = _cryptographicProvider.GenerateKey(cryptographicInfo.Salt, cryptographicInfo.Key, cryptographicInfo.Iterations, 32);
+            var generatedKey = _cryptographicProvider.GenerateKey(cryptographicInfo, 32);
             encryptionKeyProperty.SetValue(destination, generatedKey);
 
             foreach (var sourceProperty in sourceProperties)
@@ -75,6 +75,46 @@ namespace Shared.Services.Providers
             where TCustomAttribute : Attribute
         {
             return properties.Where(property => property.GetCustomAttribute<TCustomAttribute>() != null);
+        }
+
+        public async Task<IEnumerable<TDest>> Decrypt<TSource, TDest>(IEnumerable<TSource> values, ICryptographicInfo cryptographicInfo)
+        {
+            if(values == null)
+                throw new ArgumentNullException(nameof(values));
+
+            if(cryptographicInfo == null)
+                throw new ArgumentNullException(nameof(cryptographicInfo));
+
+            var decryptedItems = new List<TDest>();
+
+            foreach (var value in values)
+            {
+                decryptedItems.Add(
+                    await Decrypt<TSource, TDest>(value, cryptographicInfo)
+                        .ConfigureAwait(false));
+            }
+
+            return decryptedItems.ToArray();
+        }
+
+        public async Task<IEnumerable<TDest>> Encrypt<TSource, TDest>(IEnumerable<TSource> values, ICryptographicInfo cryptographicInfo)
+        {
+            if(values == null)
+                throw new ArgumentNullException(nameof(values));
+
+            if(cryptographicInfo == null)
+                throw new ArgumentNullException(nameof(cryptographicInfo));
+
+            var decryptedItems = new List<TDest>();
+
+            foreach (var value in values)
+            {
+                decryptedItems.Add(
+                    await Encrypt<TSource, TDest>(value, cryptographicInfo)
+                        .ConfigureAwait(false));
+            }
+
+            return decryptedItems.ToArray();
         }
 
         public DefaultDomainEncryptionProvider(ICryptographicProvider cryptographicProvider, IEncryptionService encryptionService)
