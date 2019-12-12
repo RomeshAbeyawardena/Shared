@@ -37,7 +37,7 @@ namespace Shared.Services.Attributes
 
             var totalInvalid = nullMembersList.Count;
 
-            if(totalInvalid > _minimumNumber)
+            if(totalInvalid > _optionalMembers.Length - _minimumNumber)
                 return new ValidationResult("Parameter must not be null", nullMembersList.ToArray());
 
             return ValidationResult.Success;

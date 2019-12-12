@@ -25,10 +25,12 @@ CREATE TABLE [dbo].[Customer] (
 	,[TitleId] INT NOT NULL
 		CONSTRAINT FK_Customer_Title
 		REFERENCES [dbo].[Title]([Id])
+	,[Key] VARBINARY(MAX) NOT NULL
 	,[FirstName] VARBINARY(MAX) NOT NULL
 	,[MiddleName] VARBINARY(MAX) NULL
 	,[LastName] VARBINARY(MAX) NOT NULL
 	,[EmailAddress] VARBINARY(MAX) NOT NULL
+	,[DateOfBirth] DATETIME NOT NULL
 	,[RegistrationDate] DATETIMEOFFSET NOT NULL
 	,[Created] DATETIMEOFFSET NOT NULL
 	,[Modified] DATETIMEOFFSET NOT NULL

@@ -28,8 +28,7 @@ namespace Shared.Services
 
         private void SetTableName(IMutableEntityType mutableEntityType)
         {
-            var sqlEntityType = mutableEntityType.SqlServer();
-                sqlEntityType.TableName = sqlEntityType.TableName.Singularize();
+            mutableEntityType.SetTableName(mutableEntityType.GetTableName().Singularize());
         }
     }
 }

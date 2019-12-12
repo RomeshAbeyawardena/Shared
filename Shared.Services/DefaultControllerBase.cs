@@ -1,11 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Shared.Contracts;
+using Shared.Services.Attributes;
 using System.Collections.Generic;
 
 namespace Shared.Services
 {
-    [Route("{controller}/{action}", Order = 99)]
+    [BadRequestOnInvalidModelState, Route("{controller}/{action}", Order = 99)]
     public abstract class ControllerBase : Controller
     {
         protected IMediator Mediator => GetRequiredService<IMediator>();
