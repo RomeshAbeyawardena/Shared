@@ -31,7 +31,7 @@ namespace Shared.Services
 
                 RegisterEventHandlerTypes(services, eventHandlerTypes, serviceLifetime);
                 RegisterSubscriberTypes(services, notificationSubscriberTypes, serviceLifetime);
-                RegisterValidators(services, validatorTypes);
+                RegisterValidators(services, validatorTypes, serviceLifetime);
 
                 foreach (var item in serviceRegistrationTypes)
                 {
@@ -82,7 +82,7 @@ namespace Shared.Services
             services.AddSingleton<IList<Type>>(eventHandlerTypeListTypes);
         }
 
-        private void RegisterValidators(IServiceCollection services, IEnumerable<Type> validatorTypes)
+        private void RegisterValidators(IServiceCollection services, IEnumerable<Type> validatorTypes, ServiceLifetime serviceLifetime)
         {
             foreach(var validatorType in validatorTypes)
             {
@@ -92,7 +92,7 @@ namespace Shared.Services
 
                 Console.WriteLine(gServiceType.FullName);
                 Console.WriteLine(validatorType.FullName);
-                services.AddSingleton(gServiceType, validatorType);
+                services.Add(new ServiceDescriptor(gServiceType, validatorType, serviceLifetime));
             }
         }
     }

@@ -103,7 +103,7 @@ namespace Shared.App
 
         }
 
-        public override ValidationResult Validate(Customer model)
+        protected override void OnValidate(Customer model)
         {
             ValidateModel(model)
                 .IsNotNull(member => member.EmailAddress)
@@ -111,19 +111,13 @@ namespace Shared.App
                 .IsValid(member => member.DateOfBirth, DateTime.Now.AddYears(-11), (member, compare) => member < compare)
                 .IsInRange(member => member.RegistrationDate, DateTime.Now.AddYears(-5), DateTime.Now, 
                     (member, minimumValue, maximimValue) => member >= minimumValue && member <= maximimValue);
-            return ValidationResult.Success;
         }
 
-        public override async Task<ValidationResult> ValidateAsync(Customer model)
+        protected override async Task OnValidateAsync(Customer model)
         {
-            await base.ValidateAsync(model)
-                .ConfigureAwait(false);
-
             await ValidateModel(model)
                 .IsDuplicateEntryAsync(a => a.FirstName, async(serviceProvider, member) => { return true; })
                 .ConfigureAwait(false);
-
-            return Success;
         }
     }
 

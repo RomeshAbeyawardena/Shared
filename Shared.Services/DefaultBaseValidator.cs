@@ -1,6 +1,7 @@
 using Shared.Contracts;
 using Shared.Contracts.Factories;
 using Shared.Library;
+using Shared.Library.Exceptions;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
@@ -9,12 +10,36 @@ namespace Shared.Services
 {
     public abstract class DefaultBaseValidator<TModel> : IValidator<TModel>
     {
-        public abstract ValidationResult Validate(TModel model);
+        protected abstract void OnValidate(TModel model);
 
-        public virtual async Task<ValidationResult> ValidateAsync(TModel model)
+        protected abstract Task OnValidateAsync(TModel model);
+
+        public ValidationResult Validate(TModel model)
         {
-            await Task.CompletedTask.ConfigureAwait(false);
-            return Validate(model);
+            try
+            {
+                OnValidate(model);
+                return Success;
+            }
+            catch(ValidateException validateException)
+            {
+                return Fail(validateException.ErrorMessage, validateException.MemberName);
+            }
+        }
+
+        public async Task<ValidationResult> ValidateAsync(TModel model)
+        {
+            try
+            {
+                OnValidate(model);
+                await OnValidateAsync(model)
+                    .ConfigureAwait(false);
+                return Success;
+            }
+            catch(ValidateException validateException)
+            {
+                return Fail(validateException.ErrorMessage, validateException.MemberName);
+            }
         }
 
         ValidationResult IValidator.Validate(object model)
@@ -31,7 +56,7 @@ namespace Shared.Services
         protected IValidate<TModel> ValidateModel(TModel model) => new Validate<TModel>(model, _serviceProvider);
 
         protected ValidationResult Success => ValidationResult.Success;
-
+        
         protected ValidationResult Fail(string errorMessage, params string[] memberNames)
         {
             return new ValidationResult(errorMessage, memberNames);
