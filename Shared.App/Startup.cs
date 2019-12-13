@@ -97,6 +97,12 @@ namespace Shared.App
 
     public class CustomerValidator : DefaultBaseValidator<Customer>
     {
+        public CustomerValidator(IServiceProvider serviceProvider) 
+            : base(serviceProvider)
+        {
+
+        }
+
         public override ValidationResult Validate(Customer model)
         {
             ValidateModel(model)
@@ -106,6 +112,12 @@ namespace Shared.App
                 .IsInRange(member => member.RegistrationDate, DateTime.Now.AddYears(-5), DateTime.Now, 
                     (member, minimumValue, maximimValue) => member >= minimumValue && member <= maximimValue);
             return ValidationResult.Success;
+        }
+
+        public override async Task<ValidationResult> ValidateAsync(Customer model)
+        {
+            return await BaseValidateAsync(model, ValidationResult.Success)
+                .ConfigureAwait(false);
         }
     }
 

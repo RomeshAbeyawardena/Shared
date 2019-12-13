@@ -27,7 +27,7 @@ namespace Shared.Services
                 var notificationSubscriberTypes = assemblyTypes.Where(type => type.GetInterfaces()
                     .Any(a => a.IsAssignableFrom(typeof(INotificationSubscriber))));
                 var validatorTypes = assemblyTypes.Where(type => type.GetInterfaces()
-                    .Any(a => a.IsAssignableFrom(typeof(IValidator)) && !a.IsAbstract));
+                    .Any(a => a.IsAssignableFrom(typeof(IValidator)) && !type.IsAbstract));
 
                 RegisterEventHandlerTypes(services, eventHandlerTypes, serviceLifetime);
                 RegisterSubscriberTypes(services, notificationSubscriberTypes, serviceLifetime);
@@ -89,6 +89,9 @@ namespace Shared.Services
                 var genericServiceType = typeof(IValidator<>);
                 var genericArguments = validatorType.GetInterfaces().FirstOrDefault().GetGenericArguments();
                 var gServiceType = genericServiceType.MakeGenericType(genericArguments);
+
+                Console.WriteLine(gServiceType.FullName);
+                Console.WriteLine(validatorType.FullName);
                 services.AddSingleton(gServiceType, validatorType);
             }
         }

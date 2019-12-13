@@ -21,7 +21,6 @@ CREATE TABLE [dbo].[Title] (
 CREATE TABLE [dbo].[Customer] (
 	[Id] INT NOT NULL IDENTITY(1,1)
 		CONSTRAINT PK_Customer PRIMARY KEY
-	,[UniqueId] UNIQUEIDENTIFIER NOT NULL
 	,[TitleId] INT NOT NULL
 		CONSTRAINT FK_Customer_Title
 		REFERENCES [dbo].[Title]([Id])
