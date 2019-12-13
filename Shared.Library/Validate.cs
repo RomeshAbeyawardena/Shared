@@ -95,6 +95,8 @@ namespace Shared.Library
             if(getMember == null)
                 throw new ArgumentNullException(nameof(getMember));
 
+            if(checkDuplicateServiceComparer == null)
+                throw new ArgumentNullException(nameof(checkDuplicateServiceComparer));
 
             var member = getMember(_model);
             
@@ -103,6 +105,29 @@ namespace Shared.Library
             if(await checkDuplicateServiceComparer(_serviceProvider, member)
                 .ConfigureAwait(false))
                 throw new ValidateException(memberName, "Duplicate entries found.");
+
+            return this;
+        }
+
+        public IValidate<T> IsDuplicateEntry(Func<IServiceProvider, T, bool> checkDuplicateServiceComparer)
+        {
+            if(checkDuplicateServiceComparer == null)
+                throw new ArgumentNullException(nameof(checkDuplicateServiceComparer));
+
+            if (checkDuplicateServiceComparer(_serviceProvider, _model))
+                throw new ValidateException(nameof(_model), "Duplicate entries found.");
+
+            return this;
+        }
+
+        public async Task<IValidate<T>> IsDuplicateEntryAsync(Func<IServiceProvider, T, Task<bool>> checkDuplicateServiceComparer)
+        {
+            if(checkDuplicateServiceComparer == null)
+                throw new ArgumentNullException(nameof(checkDuplicateServiceComparer));
+
+            if (await checkDuplicateServiceComparer(_serviceProvider, _model)
+                .ConfigureAwait(false))
+                throw new ValidateException(nameof(_model), "Duplicate entries found.");
 
             return this;
         }

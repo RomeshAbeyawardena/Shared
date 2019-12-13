@@ -12,5 +12,9 @@ namespace Shared.Contracts
         IValidate<T> IsValid<TMember>(Func<T, TMember> member, TMember value, Func<TMember, TMember, bool> equalityComparer);
         IValidate<T> IsDuplicateEntry<TMember>(Func<T, TMember> member, Func<IServiceProvider, TMember, bool> checkDuplicateServiceComparer);
         Task<IValidate<T>> IsDuplicateEntryAsync<TMember>(Func<T, TMember> member, Func<IServiceProvider, TMember, Task<bool>> checkDuplicateServiceComparer);
+
+        IValidate<T> IsDuplicateEntry(Func<IServiceProvider, T, bool> checkDuplicateServiceComparer);
+        Task<IValidate<T>> IsDuplicateEntryAsync(Func<IServiceProvider, T, Task<bool>> checkDuplicateServiceComparer);
+        
     }
 }

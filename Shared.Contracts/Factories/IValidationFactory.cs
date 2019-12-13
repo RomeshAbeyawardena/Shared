@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.Threading.Tasks;
 
 namespace Shared.Contracts.Factories
 {
@@ -6,5 +7,6 @@ namespace Shared.Contracts.Factories
     {
         IValidator<TModel> GetValidator<TModel>();
         ValidationResult Validate<TModel>(TModel model);
+        Task<ValidationResult> ValidateAsync<TModel>(TModel model);
     }
 }

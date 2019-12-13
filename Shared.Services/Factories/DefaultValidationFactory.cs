@@ -3,6 +3,7 @@ using Shared.Contracts;
 using Shared.Contracts.Factories;
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Threading.Tasks;
 
 namespace Shared.Services.Factories
 {
@@ -17,6 +18,13 @@ namespace Shared.Services.Factories
         {
             var modelValidator = GetValidator<TModel>();
             return modelValidator.Validate(model);
+        }
+
+        public async Task<ValidationResult> ValidateAsync<TModel>(TModel model)
+        {
+            var modelValidator = GetValidator<TModel>();
+            return await modelValidator.ValidateAsync(model)
+                .ConfigureAwait(false);
         }
 
         public DefaultValidationFactory(IServiceProvider serviceProvider)
