@@ -116,8 +116,14 @@ namespace Shared.App
 
         public override async Task<ValidationResult> ValidateAsync(Customer model)
         {
-            return await BaseValidateAsync(model, ValidationResult.Success)
+            await base.ValidateAsync(model)
                 .ConfigureAwait(false);
+
+            await ValidateModel(model)
+                .IsDuplicateEntryAsync(a => a.FirstName, async(serviceProvider, member) => { return true; })
+                .ConfigureAwait(false);
+
+            return Success;
         }
     }
 

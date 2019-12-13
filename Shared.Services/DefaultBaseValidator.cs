@@ -34,20 +34,7 @@ namespace Shared.Services
 
         protected ValidationResult Fail(string errorMessage, params string[] memberNames)
         {
-            
             return new ValidationResult(errorMessage, memberNames);
-        }
-
-        protected async Task<ValidationResult> BaseValidateAsync(TModel model, ValidationResult validationResult)
-        {
-            if(validationResult == null)
-                throw new ArgumentNullException(nameof(validationResult));
-
-            var baseResult = await ValidateAsync(model).ConfigureAwait(false);
-            if (baseResult != ValidationResult.Success)
-                 return baseResult;
-
-            return validationResult;
         }
 
         protected DefaultBaseValidator(IServiceProvider serviceProvider)

@@ -75,32 +75,32 @@ namespace Shared.Library
             return this;
         }
 
-        public IValidate<T> IsDuplicateEntry<TMember, TService>(Func<T, TMember> getMember, Func<TService, TMember, bool> checkDuplicateServiceComparer)
+        public IValidate<T> IsDuplicateEntry<TMember>(Func<T, TMember> getMember, Func<IServiceProvider, TMember, bool> checkDuplicateServiceComparer)
         {
             if(getMember == null)
                 throw new ArgumentNullException(nameof(getMember));
 
             var member = getMember(_model);
-            var service = _serviceProvider.GetRequiredService<TService>();
+            
             var memberName = nameof(member);
 
-            if(checkDuplicateServiceComparer(service, member))
+            if(checkDuplicateServiceComparer(_serviceProvider, member))
                 throw new ValidateException(memberName, "Duplicate entries found.");
 
             return this;
         }
 
-        public async Task<IValidate<T>> IsDuplicateEntryAsync<TMember, TService>(Func<T, TMember> getMember, Func<TService, TMember, Task<bool>> checkDuplicateServiceComparer)
+        public async Task<IValidate<T>> IsDuplicateEntryAsync<TMember>(Func<T, TMember> getMember, Func<IServiceProvider, TMember, Task<bool>> checkDuplicateServiceComparer)
         {
             if(getMember == null)
                 throw new ArgumentNullException(nameof(getMember));
 
 
             var member = getMember(_model);
-            var service = _serviceProvider.GetRequiredService<TService>();
+            
             var memberName = nameof(member);
 
-            if(await checkDuplicateServiceComparer(service, member)
+            if(await checkDuplicateServiceComparer(_serviceProvider, member)
                 .ConfigureAwait(false))
                 throw new ValidateException(memberName, "Duplicate entries found.");
 
