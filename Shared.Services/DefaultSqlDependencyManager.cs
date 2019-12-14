@@ -9,7 +9,7 @@ namespace Shared.Services
 {
     public sealed class DefaultSqlDependencyManager : ISqlDependencyManager
     {
-        public event EventHandler<CommandEntry> OnChange;
+        public event EventHandler<CommandEntrySqlNotificationEventArgs> OnChange;
 
         public IDictionary<string, CommandEntry> CommandEntries
         {
@@ -54,17 +54,22 @@ namespace Shared.Services
         public void Stop(string connectionString)
         {
             SqlDependency.Stop(connectionString);
+            End();
         }
 
         
         private void Dispose(bool gc)
         {
+            End();
             _sqlConnection.Dispose();
         }
 
 
         private async Task Begin()
         {
+            await _sqlConnection.OpenAsync()
+                .ConfigureAwait(false);
+
             for(var entryIndex = 0; entryIndex < _commandEntries.Count; entryIndex++)
             {
                 var entry = _commandEntries[entryIndex];
@@ -73,15 +78,24 @@ namespace Shared.Services
 
         }
 
+        private async void End()
+        {
+            foreach (var entry in _commandEntries)
+            {
+                entry.Dispose();
+            }
+        }
+
         private async Task<SqlDependency> CreateSqlDependency(CommandEntry commandEntry)
         {
             var sqlDependency = new SqlDependency();
             sqlDependency.OnChange += SqlDependency_OnChange;
-            using (var sqlCommand = new SqlCommand(commandEntry.Command, _sqlConnection)){
-                sqlDependency.AddCommandDependency(sqlCommand);
-                await sqlCommand.ExecuteReaderAsync()
+            
+            commandEntry.DbCommand = new SqlCommand(commandEntry.Command, _sqlConnection);
+                sqlDependency.AddCommandDependency(commandEntry.DbCommand);
+                await commandEntry.DbCommand.ExecuteReaderAsync()
                     .ConfigureAwait(false);
-            }
+            
             return sqlDependency;
         }
 
@@ -93,8 +107,8 @@ namespace Shared.Services
             var commandEntries = from commandEntry in _commandEntries 
                                  where commandEntry.SqlDependency.Id == sqlDependency.Id
                                  select commandEntry;
-
-            OnChange?.Invoke(this, commandEntries.FirstOrDefault());
+            Console.WriteLine(e);
+            OnChange?.Invoke(this, new CommandEntrySqlNotificationEventArgs(commandEntries.FirstOrDefault(), e.Type, e.Info, e.Source));
         }
 
         public DefaultSqlDependencyManager()

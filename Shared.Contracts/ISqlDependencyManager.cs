@@ -7,7 +7,7 @@ namespace Shared.Contracts
 {
     public interface ISqlDependencyManager : IDisposable
     {
-        event EventHandler<CommandEntry> OnChange;
+        event EventHandler<CommandEntrySqlNotificationEventArgs> OnChange;
         void AddCommandEntry(string name, string command);
         void AddCommandEntry(CommandEntry commandEntry);
         Task Start(string connectionString);
