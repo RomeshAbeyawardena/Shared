@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Reflection;
 using Shared.Contracts;
 using Shared.Contracts.Factories;
-using Shared.Domains;
 using Shared.Library;
 using Shared.Library.Extensions;
+using Shared.Domains.Enumerations;
 
 namespace Shared.Services
 {

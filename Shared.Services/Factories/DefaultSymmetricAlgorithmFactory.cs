@@ -1,8 +1,8 @@
 ﻿using Shared.Contracts;
 using Shared.Contracts.Factories;
-using Shared.Domains;
 using System;
 using System.Security.Cryptography;
+using Shared.Domains.Enumerations;
 
 namespace Shared.Services.Factories
 {

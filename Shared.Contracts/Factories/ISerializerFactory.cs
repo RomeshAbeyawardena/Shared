@@ -1,4 +1,4 @@
-﻿using Shared.Domains;
+﻿using Shared.Domains.Enumerations;
 
 namespace Shared.Contracts.Factories
 {

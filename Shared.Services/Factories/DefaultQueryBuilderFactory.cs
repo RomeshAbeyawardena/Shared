@@ -2,9 +2,7 @@
 using Shared.Contracts.Builders;
 using Shared.Contracts.Factories;
 using System;
-using System.Collections.Generic;
 using System.Linq.Expressions;
-using System.Text;
 
 namespace Shared.Services.Factories
 {

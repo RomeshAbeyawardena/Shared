@@ -1,5 +1,5 @@
 ﻿using Shared.Contracts.Services;
-using Shared.Domains;
+using Shared.Domains.Enumerations;
 
 namespace Shared.Contracts.Factories
 {

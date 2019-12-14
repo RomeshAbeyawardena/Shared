@@ -1,10 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
 using Shared.Contracts;
-using Shared.Domains;
 using Shared.Services;
 using Shared.Services.Extensions;
 using Shared.WebApp.Handlers;
 using System.Threading.Tasks;
+using Shared.Domains.Enumerations;
+using Shared.Services.Exceptions;
 
 namespace Shared.WebApp.Controllers
 {
@@ -16,11 +17,16 @@ namespace Shared.WebApp.Controllers
             _mediator = mediator;
         }
 
-        public async Task<ActionResult> Test()
+        public async Task<ActionResult> Test([FromQuery]Test test)
         {
-            await _mediator.Push(new Test());
+            throw new ModelStateException(modelState => modelState.Add("cat", "invalid value"));
 
-            await _mediator.NotifyAsync(DefaultEntityChangedEvent.Create(new Test(), entityEventType: EntityEventType.Added));
+            if(!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            await _mediator.Push(new Test()).ConfigureAwait(false);
+
+            await _mediator.NotifyAsync(DefaultEntityChangedEvent.Create(test, entityEventType: EntityEventType.Added)).ConfigureAwait(false);
             return Ok();
         }
 

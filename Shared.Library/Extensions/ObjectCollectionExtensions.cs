@@ -6,15 +6,13 @@ namespace Shared.Library.Extensions
 {
     public static class ObjectCollectionExtensions
     {
-        public static IEnumerable<T> Append<T>(this IEnumerable<T> items, T entry)
+        public static IEnumerable<T> Remove<T>(this IEnumerable<T> items, T entry)
         {
-            var itemList = new List<T>(items)
-            {
-                entry
-            };
-
+            var itemList = new List<T>(items);
+            itemList.Remove(entry);
             return itemList.ToArray();
         }
+
         public static void ForEach<T>(this IEnumerable<T> collection, Action<T> iterator)
         {
             foreach (var item in collection)
@@ -36,7 +34,7 @@ namespace Shared.Library.Extensions
         {
             foreach (var item in collection)
             {
-                await asyncIterator(item);
+                await asyncIterator(item).ConfigureAwait(false);
             }
         }
 
@@ -45,7 +43,7 @@ namespace Shared.Library.Extensions
             var index = 0;
             foreach (var item in collection)
             {
-                await asyncIterator(item, index++);
+                await asyncIterator(item, index++).ConfigureAwait(false);
             }
         }
     }

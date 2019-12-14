@@ -1,4 +1,6 @@
-﻿using Shared.Contracts.Providers;
+﻿using Shared.Contracts;
+using Shared.Contracts.Providers;
+using Shared.Domains.Enumerations;
 using Shared.Library.Extensions;
 using System;
 using System.Collections.Generic;
@@ -10,13 +12,15 @@ namespace Shared.Services
 {
     public class DefaultCryptographicProvider : ICryptographicProvider
     {
-        public byte[] GenerateKey(IEnumerable<byte> salt, 
-            IEnumerable<byte> password, 
-            int iterations, 
-            int cb, 
-            HashAlgorithmName? hashAlgorithmName = null)
+        public byte[] GenerateKey(ICryptographicInfo cryptographicInfo,
+            int cb)
         {
-            using (var pdb = new Rfc2898DeriveBytes (password.ToArray(), salt.ToArray(), iterations))
+            if(cryptographicInfo == null)
+                throw new ArgumentNullException(nameof(cryptographicInfo));
+
+            using (var pdb = new Rfc2898DeriveBytes(cryptographicInfo.Key.ToArray(), 
+                cryptographicInfo.Salt.ToArray(),  
+                cryptographicInfo.Iterations))
             {
                 return pdb.GetBytes(cb);
             }

@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Shared.Contracts;
 using Shared.Contracts.Factories;
-using Shared.Contracts.Providers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -59,7 +58,7 @@ namespace Shared.Library.Extensions
             where TServiceBroker : IServiceBroker
         {
             var serviceBroker = Activator.CreateInstance<TServiceBroker>();
-            serviceBroker.RegisterServiceAssemblies(services, serviceLifetime, serviceBroker.GetAssemblies);
+            serviceBroker.RegisterServiceAssemblies(services, serviceLifetime, serviceBroker.GetAssemblies.ToArray());
 
             return services;
         }

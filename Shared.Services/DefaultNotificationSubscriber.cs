@@ -16,7 +16,7 @@ namespace Shared.Services
 
         public async Task OnChangeAsync(object @event)
         {
-            await OnChangeAsync((TEvent)@event);
+            await OnChangeAsync((TEvent)@event).ConfigureAwait(false);
         }
     }
 }

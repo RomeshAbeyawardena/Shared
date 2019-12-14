@@ -1,8 +1,8 @@
 ﻿using Shared.Contracts.Builders;
-using Shared.Domains;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using Shared.Domains.Enumerations;
 
 namespace Shared.Services.Builders
 {
@@ -58,7 +58,7 @@ namespace Shared.Services.Builders
 
             foreach (var keyValue in expressionParameterDictionary)
             {
-                var constantExpression = Expression.Constant(keyValue.Value);
+                var constantExpression = Expression.Constant(keyValue.Value.Value);
 
                 var memberAccess = Expression.PropertyOrField(parameterExpression, keyValue.Key);
 

@@ -1,20 +1,35 @@
 ﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Shared.Library.Extensions
 {
     public static class ObjectExtensions
     {
-        public static T AssignOrDefault<T>(this T value, T defaultValue)
+        public static bool IsNullOrDefault(this object o)
         {
-            return (T)AssignOrDefault((object)value, (object)defaultValue);
+            return (o == null
+                    || (o is uint oUInt && oUInt == default)
+                    || (o is int oInt && oInt == default)
+                    || (o is float oFloat && oFloat == default)
+                    || (o is double oDouble && oDouble == default)
+                    || (o is decimal odecimal && odecimal == default)
+                    || (o is short oShort && oShort == default)
+                    || (o is long oLong && oLong == default)
+                    || (o is DateTime oDateTime && oDateTime == default)
+                    || (o is DateTimeOffset oDateTimeOffset && oDateTimeOffset == default)
+                    || (o is string oString && string.IsNullOrEmpty(oString))
+                   );
         }
-        public static object AssignOrDefault(this object value, object defaultValue)
-        {
-            if(value == null || value == default)
-                return defaultValue;
 
+        public static object ValueOrDefault(this object value, object @default)
+        {
+            if (IsNullOrDefault(value)) 
+                return @default;
+            
             return value;
         }
+
         public static bool TryParse(this string value, out int result)
         {
             return int.TryParse(value, out result);
@@ -79,6 +94,48 @@ namespace Shared.Library.Extensions
             result = tResult;
             
             return true;
+        }
+
+        public static void AsLock(this object value, Action onLock)
+        {
+            lock (value)
+            {
+                onLock();
+            }
+        }
+
+        public static T AsLock<T>(this object value, Func<T> onLock)
+        {
+            lock (value)
+            {
+                return onLock();
+            }
+        }
+
+        public static async Task AsLockAsync(this SemaphoreSlim semaphoreSlim , Func<Task> onLock)
+        {
+            await semaphoreSlim.WaitAsync().ConfigureAwait(false);
+            try
+            {
+                await onLock().ConfigureAwait(false);
+            }
+            finally
+            {
+                semaphoreSlim.Release();
+            }
+            
+        }
+
+        public static async Task<T> AsLockAsync<T>(this SemaphoreSlim semaphoreSlim , Func<Task<T>> onLock)
+        {
+            await semaphoreSlim.WaitAsync().ConfigureAwait(false);
+            try{
+                return await onLock().ConfigureAwait(false);
+            }
+            finally
+            {
+                semaphoreSlim.Release();
+            }
         }
     }
 }

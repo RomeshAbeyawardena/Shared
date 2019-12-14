@@ -1,17 +1,15 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Shared.Services;
-using Shared.Library;
 using Shared.Library.Extensions;
 using System.Reflection;
 using AutoMapper;
+using Shared.Services.Middleware;
+using System.Collections.Generic;
 
 namespace Shared.WebApp
 {
@@ -24,9 +22,9 @@ namespace Shared.WebApp
             services
                 .RegisterServiceBroker<AppQueueServiceBroker>(ServiceLifetime.Scoped)
                 .AddAutoMapper(Assembly.GetExecutingAssembly())
-                .AddMvc();
+                .AddMvc(options => options.Filters.Add<HandleModelStateErrorFilter>());
 
-            foreach (var service in services.Where(a => a.ServiceType.FullName.Contains("IEventHandler")))
+            foreach (var service in services.Where(a => a.ServiceType.FullName.Contains("IEventHandler", StringComparison.InvariantCultureIgnoreCase)))
             {
                 Console.WriteLine("{2}|{0}:{1}", service.ServiceType.FullName, service.ImplementationType.FullName, service.Lifetime);
             }
@@ -39,7 +37,7 @@ namespace Shared.WebApp
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            
             app.UseRouting();
 
             app.UseEndpoints(endpoints =>
@@ -52,7 +50,7 @@ namespace Shared.WebApp
 
     public class AppQueueServiceBroker : DefaultServiceBroker
     {
-        public override Assembly[] GetAssemblies => new [] { 
+        public override IEnumerable<Assembly> GetAssemblies => new [] { 
             DefaultAssembly, 
             Assembly.GetAssembly(typeof(AppQueueServiceBroker)) };
     }

@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using Shared.Contracts;
-using Shared.Domains;
 using Shared.Services;
+using Shared.Services.Attributes;
 
 namespace Shared.WebApp.Handlers
 {
@@ -13,8 +13,14 @@ namespace Shared.WebApp.Handlers
         }
     }
 
+    [OptionalRequired(1, nameof(PetTypeId), nameof(PetType))]
     public class Test
     {
-
+        public int Id { get; set; }
+        public int PetTypeId { get; set; }
+        public string PetType { get; set; }
+        public string Samuel { get; set; }
+        public string Tom { get; set; }
+        public string Harry { get; set; }
     }
 }

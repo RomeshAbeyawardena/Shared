@@ -6,6 +6,7 @@ using System;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using System.Transactions;
 
 namespace Shared.Services
 {
@@ -26,12 +27,12 @@ namespace Shared.Services
 
         public async Task<TEntity> FindAsync(object key)
         {
-            return await DbSet.FindAsync(key);
+            return await DbSet.FindAsync(key).ConfigureAwait(false);
         }
 
         public async Task<TEntity> FindAsync(params object[] key)
         {
-            return await DbSet.FindAsync(key);
+            return await DbSet.FindAsync(key).ConfigureAwait(false);
         }
 
         public async Task<int> Remove(TEntity entity, bool saveChanges = true)
@@ -40,13 +41,13 @@ namespace Shared.Services
                 throw new ArgumentNullException(nameof(entity));
 
             dbContext.Remove(entity);
-            return await dbContext.SaveChangesAsync();
+            return await dbContext.SaveChangesAsync().ConfigureAwait(false);
         }
 
         public async Task<int> RemoveAsync(bool saveChanges = true, params object[] keys)
         {
-            var entity = await FindAsync(keys);
-            return await Remove(entity);
+            var entity = await FindAsync(keys).ConfigureAwait(false);
+            return await Remove(entity).ConfigureAwait(false);
         }
 
         private EntityState GetEntityState(TEntity entity)
@@ -88,14 +89,14 @@ namespace Shared.Services
                 DbSet.Update(entity);
 
             if(saveChanges)
-                await SaveChangesAsync();
+                await SaveChangesAsync().ConfigureAwait(false);
 
             return entity;
         }
 
         public async Task<int> SaveChangesAsync()
         {
-            return await dbContext.SaveChangesAsync();
+            return await dbContext.SaveChangesAsync().ConfigureAwait(false);
         }
 
         public IQueryable<TEntity> Where(Expression<Func<TEntity, bool>> whereExpression = null, bool detachEntities = true)
@@ -108,6 +109,18 @@ namespace Shared.Services
                 return query;
             
             return query.Where(whereExpression);
+        }
+
+        public async Task BeginTransaction(TransactionScopeOption transactionScopeOption, Func<TransactionScope,Task> transactionScope)
+        {
+            using (var scope = new TransactionScope(transactionScopeOption))
+                await transactionScope(scope).ConfigureAwait(false);
+        }
+
+        public async Task<T> BeginTransaction<T>(TransactionScopeOption transactionScopeOption, Func<TransactionScope, Task<T>> transactionScope)
+        {
+            using (var scope = new TransactionScope(transactionScopeOption))
+                return await transactionScope(scope).ConfigureAwait(false);
         }
     }
 }

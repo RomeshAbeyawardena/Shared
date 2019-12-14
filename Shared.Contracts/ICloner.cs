@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
-using Shared.Domains;
+using Shared.Domains.Enumerations;
 
 namespace Shared.Contracts
 {

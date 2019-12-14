@@ -1,11 +1,6 @@
 ﻿using Humanizer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.Extensions.DependencyInjection;
-using Shared.Contracts.Providers;
-using System;
 
 namespace Shared.Services
 {
@@ -33,8 +28,7 @@ namespace Shared.Services
 
         private void SetTableName(IMutableEntityType mutableEntityType)
         {
-            var sqlEntityType = mutableEntityType.SqlServer();
-                sqlEntityType.TableName = sqlEntityType.TableName.Singularize();
+            mutableEntityType.SetTableName(mutableEntityType.GetTableName().Singularize());
         }
     }
 }

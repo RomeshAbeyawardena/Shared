@@ -12,7 +12,7 @@ namespace Shared.App
     {
         public static async Task Main()
         {
-            await AppHostBuilder.RunAsync(startup => startup.Start());
+            await AppHostBuilder.RunAsync(startup => startup.Start()).ConfigureAwait(false);
         }
 
         public static IAppHost<Startup> AppHostBuilder => AppHost

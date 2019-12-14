@@ -1,4 +1,4 @@
-﻿namespace Shared.Domains
+﻿namespace Shared.Domains.Enumerations
 {
     public enum SerializerType
     {

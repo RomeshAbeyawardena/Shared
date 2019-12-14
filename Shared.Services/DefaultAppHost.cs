@@ -31,13 +31,13 @@ namespace Shared.Services
         public async Task RunAsync(string methodName)
         {
             var runMethod = Run(methodName) as Task;
-            await runMethod;
+            await runMethod.ConfigureAwait(false);
         }
 
         public async Task<T> RunAsync<T>(string methodName)
         {
             var runMethod = Run(methodName) as Task<T>;
-            return await runMethod;
+            return await runMethod.ConfigureAwait(false);
         }
     }
 
@@ -58,12 +58,12 @@ namespace Shared.Services
 
         public async Task RunAsync(Func<TStartup, Task> getMemberTask)
         {
-            await getMemberTask.TryAsync(StartupService, ex => logger.LogError(ex, "An error occurred"), catchAll: true);
+            await getMemberTask.TryAsync(StartupService, ex => logger.LogError(ex, "An error occurred"), catchAll: true).ConfigureAwait(false);
         }
 
         public async Task<T> RunAsync<T>(Func<TStartup, Task<T>> getMemberTask)
         {
-            return await getMemberTask.TryAsync(StartupService, ex => logger.LogError(ex, "An error occurred"), catchAll: true);
+            return await getMemberTask.TryAsync(StartupService, ex => logger.LogError(ex, "An error occurred"), catchAll: true).ConfigureAwait(false);
         }
     }
 }

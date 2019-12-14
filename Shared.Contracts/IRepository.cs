@@ -3,6 +3,7 @@ using System;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using System.Transactions;
 
 namespace Shared.Contracts
 {
@@ -17,5 +18,8 @@ namespace Shared.Contracts
         Task<TEntity> SaveChangesAsync(TEntity entity, bool saveChanges = true);
         Task<int> Remove(TEntity entity, bool saveChanges = true);
         Task<int> RemoveAsync(bool saveChanges = true, params object[] keys);
+
+        Task BeginTransaction(TransactionScopeOption transactionScopeOption, Func<TransactionScope,Task> transactionScope);
+        Task<T> BeginTransaction<T>(TransactionScopeOption transactionScopeOption, Func<TransactionScope,Task<T>> transactionScope);
     }
 }

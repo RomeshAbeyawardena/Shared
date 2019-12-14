@@ -15,6 +15,9 @@ namespace Shared.Services
 
         public static ICommand Create<T>(string name, Action<IDictionaryBuilder<string, object>> commandParameters)
         {
+            if(commandParameters == null)
+                throw new ArgumentNullException(nameof(commandParameters));
+
             var parameters = DictionaryBuilder.Create<string, object>();
             commandParameters(parameters);
             return new DefaultCommand<T>(name, parameters.ToDictionary());
@@ -29,6 +32,6 @@ namespace Shared.Services
         }
 
         public string Name { get; set; }
-        public IDictionary<string, object> Parameters { get; set; }
+        public IDictionary<string, object> Parameters { get; }
     }
 }

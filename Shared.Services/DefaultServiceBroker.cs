@@ -9,11 +9,14 @@ namespace Shared.Services
 {
     public abstract class DefaultServiceBroker : IServiceBroker
     {
-        public abstract Assembly[] GetAssemblies {get;}
+        public abstract IEnumerable<Assembly> GetAssemblies {get;}
         public static Assembly DefaultAssembly => Assembly.GetAssembly(typeof(DefaultAppHost));
         
         public void RegisterServiceAssemblies(IServiceCollection services, ServiceLifetime serviceLifetime = ServiceLifetime.Singleton, params Assembly[] assemblies)
         {
+            if(services == null)
+                throw new ArgumentNullException(nameof(services));
+
             foreach(var assembly in assemblies)
             {
                 var assemblyTypes = assembly.GetTypes();
@@ -23,8 +26,12 @@ namespace Shared.Services
                 var eventHandlerTypes = assemblyTypes.Where(type => type.GetInterfaces().Any(a => a.IsAssignableFrom(typeof(IEventHandler))));
                 var notificationSubscriberTypes = assemblyTypes.Where(type => type.GetInterfaces()
                     .Any(a => a.IsAssignableFrom(typeof(INotificationSubscriber))));
+                var validatorTypes = assemblyTypes.Where(type => type.GetInterfaces()
+                    .Any(a => a.IsAssignableFrom(typeof(IValidator)) && !type.IsAbstract));
+
                 RegisterEventHandlerTypes(services, eventHandlerTypes, serviceLifetime);
                 RegisterSubscriberTypes(services, notificationSubscriberTypes, serviceLifetime);
+                RegisterValidators(services, validatorTypes, serviceLifetime);
 
                 foreach (var item in serviceRegistrationTypes)
                 {
@@ -73,6 +80,20 @@ namespace Shared.Services
             }
 
             services.AddSingleton<IList<Type>>(eventHandlerTypeListTypes);
+        }
+
+        private void RegisterValidators(IServiceCollection services, IEnumerable<Type> validatorTypes, ServiceLifetime serviceLifetime)
+        {
+            foreach(var validatorType in validatorTypes)
+            {
+                var genericServiceType = typeof(IValidator<>);
+                var genericArguments = validatorType.GetInterfaces().FirstOrDefault().GetGenericArguments();
+                var gServiceType = genericServiceType.MakeGenericType(genericArguments);
+
+                Console.WriteLine(gServiceType.FullName);
+                Console.WriteLine(validatorType.FullName);
+                services.Add(new ServiceDescriptor(gServiceType, validatorType, serviceLifetime));
+            }
         }
     }
 }
