@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Shared.Contracts;
 using Shared.Contracts.Providers;
@@ -122,5 +123,6 @@ namespace Shared.Services
             using (var scope = new TransactionScope(transactionScopeOption))
                 return await transactionScope(scope).ConfigureAwait(false);
         }
+
     }
 }
