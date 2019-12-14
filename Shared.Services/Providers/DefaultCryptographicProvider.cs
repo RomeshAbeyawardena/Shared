@@ -1,6 +1,5 @@
 ﻿using Shared.Contracts;
 using Shared.Contracts.Providers;
-using Shared.Domains.Enumerations;
 using Shared.Library.Extensions;
 using System;
 using System.Collections.Generic;

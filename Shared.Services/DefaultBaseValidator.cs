@@ -1,5 +1,4 @@
 using Shared.Contracts;
-using Shared.Contracts.Factories;
 using Shared.Library;
 using Shared.Library.Exceptions;
 using System;

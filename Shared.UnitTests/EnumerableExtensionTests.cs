@@ -1,7 +1,6 @@
 ﻿using Xunit;
 using Shared.Library.Extensions;
 using System;
-using System.Collections.Generic;
 
 namespace Shared.UnitTests
 {

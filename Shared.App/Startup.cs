@@ -13,7 +13,6 @@ using Shared.Services.DapperExtensions;
 using System.Data;
 using Shared.Contracts.DapperExtensions;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
 using Shared.Library.Attributes;
 using System.Text;
 using Shared.Domains.Enumerations;

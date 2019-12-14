@@ -1,11 +1,9 @@
 using Shared.Contracts.DapperExtensions;
 using Shared.Services.Attributes;
-using Shared.Services.Extensions;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data;
-using System.Linq;
 using System.Reflection;
 
 namespace Shared.Services.DapperExtensions
