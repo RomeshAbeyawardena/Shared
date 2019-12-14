@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
 using System;
+
 namespace Shared.Services
 {
     public sealed class DefaultSqlDependencyManager : ISqlDependencyManager
