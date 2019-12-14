@@ -18,9 +18,9 @@ namespace Shared.Services
             {
                 var dictionary = new Dictionary<string, CommandEntry>();
 
-                foreach(var commandEntry in _commandEntries)
+                foreach (var commandEntry in _commandEntries)
                 {
-                    if(commandEntry.SqlDependency == null)
+                    if (commandEntry.SqlDependency == null)
                         throw new NotSupportedException("SqlDependencyManager not started!");
                     dictionary.Add(commandEntry.SqlDependency.Id, commandEntry);
                 }
@@ -41,7 +41,7 @@ namespace Shared.Services
         public void Dispose()
         {
             Dispose(true);
-            
+
         }
 
         public async Task Start(string connectionString)
@@ -58,7 +58,7 @@ namespace Shared.Services
             End();
         }
 
-        
+
         private void Dispose(bool gc)
         {
             End();
@@ -71,7 +71,7 @@ namespace Shared.Services
             await _sqlConnection.OpenAsync()
                 .ConfigureAwait(false);
 
-            for(var entryIndex = 0; entryIndex < _commandEntries.Count; entryIndex++)
+            for (var entryIndex = 0; entryIndex < _commandEntries.Count; entryIndex++)
             {
                 var entry = _commandEntries[entryIndex];
                 entry.SqlDependency = await CreateSqlDependency(entry).ConfigureAwait(false);
@@ -79,7 +79,7 @@ namespace Shared.Services
 
         }
 
-        private async void End()
+        private void End()
         {
             foreach (var entry in _commandEntries)
             {
@@ -91,21 +91,21 @@ namespace Shared.Services
         {
             var sqlDependency = new SqlDependency();
             sqlDependency.OnChange += SqlDependency_OnChange;
-            
+
             commandEntry.DbCommand = new SqlCommand(commandEntry.Command, _sqlConnection);
-                sqlDependency.AddCommandDependency(commandEntry.DbCommand);
-                await commandEntry.DbCommand.ExecuteReaderAsync()
-                    .ConfigureAwait(false);
-            
+            sqlDependency.AddCommandDependency(commandEntry.DbCommand);
+            await commandEntry.DbCommand.ExecuteReaderAsync()
+                .ConfigureAwait(false);
+
             return sqlDependency;
         }
 
         private void SqlDependency_OnChange(object sender, SqlNotificationEventArgs e)
         {
-            if(!(sender is SqlDependency sqlDependency))
+            if (!(sender is SqlDependency sqlDependency))
                 throw new InvalidOperationException();
 
-            var commandEntries = from commandEntry in _commandEntries 
+            var commandEntries = from commandEntry in _commandEntries
                                  where commandEntry.SqlDependency.Id == sqlDependency.Id
                                  select commandEntry;
             Console.WriteLine(e);
