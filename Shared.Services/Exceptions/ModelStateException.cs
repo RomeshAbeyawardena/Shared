@@ -1,9 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Shared.Contracts.Builders;
+﻿using Shared.Contracts.Builders;
 using Shared.Services.Builders;
 using System;
-using System.Collections.Generic;
-using System.Text;
+using System.ComponentModel.DataAnnotations;
 
 namespace Shared.Services.Exceptions
 {
@@ -13,6 +11,16 @@ namespace Shared.Services.Exceptions
         {
             ModelStateBuilder = DictionaryBuilder.Create<string, string>();
             memberExceptions?.Invoke(ModelStateBuilder);
+        }
+
+        public ModelStateException(ValidationResult validationResult)
+        {
+            if(validationResult == null)
+                throw new ArgumentNullException(nameof(validationResult));
+
+            ModelStateBuilder = DictionaryBuilder.Create<string, string>();
+            foreach(var validationResultMember in validationResult.MemberNames) 
+                ModelStateBuilder.Add(validationResultMember, validationResult.ErrorMessage);
         }
 
         private ModelStateException()

@@ -12,6 +12,11 @@ namespace Shared.Services.Middleware
     {
         public async Task OnExceptionAsync(ExceptionContext context)
         {
+            if(context == null)
+                throw new ArgumentNullException(nameof(context));
+
+            await Task.CompletedTask.ConfigureAwait(false);
+
             if (context.Exception is ModelStateException modelStateException)
             {
                 context.ExceptionHandled = true;
