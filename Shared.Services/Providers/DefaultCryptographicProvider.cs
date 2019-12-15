@@ -6,23 +6,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 
 namespace DotNetInsights.Shared.Services
 {
     public class DefaultCryptographicProvider : ICryptographicProvider
     {
-        public byte[] GenerateKey(ICryptographicInfo cryptographicInfo,
+        public byte[] GenerateKey(string uniqueKey, ICryptographicInfo cryptographicInfo,
             int cb)
         {
             if(cryptographicInfo == null)
                 throw new ArgumentNullException(nameof(cryptographicInfo));
 
-            using (var pdb = new Rfc2898DeriveBytes(cryptographicInfo.Key.ToArray(), 
-                cryptographicInfo.Salt.ToArray(),  
-                cryptographicInfo.Iterations))
-            {
-                return pdb.GetBytes(cb);
-            }
+            return KeyDerivation.Pbkdf2($"{uniqueKey}{cryptographicInfo.Password}", 
+                cryptographicInfo.Salt.ToArray(), 
+                KeyDerivationPrf.HMACSHA512, 
+                cryptographicInfo.Iterations, cb);
+
         }
 
         public byte[] ComputeHash(byte[] raw, string algName)

@@ -7,7 +7,7 @@ namespace DotNetInsights.Shared.Contracts.Providers
     {
         bool IsHashValid(byte[] hash, byte[] compareHash);
         byte[] ComputeHash(byte[] raw, string algName);
-        byte[] GenerateKey(ICryptographicInfo cryptographicInfo, int keyLength);
+        byte[] GenerateKey(string uniqueKey, ICryptographicInfo cryptographicInfo, int keyLength);
         IEnumerable<byte[]> ExtractDigestValues(Encoding encoding, string base64value, char separator); 
     }
 }

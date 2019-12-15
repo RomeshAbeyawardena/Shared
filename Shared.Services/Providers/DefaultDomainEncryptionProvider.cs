@@ -7,6 +7,7 @@ using DotNetInsights.Shared.Library.Attributes;
 using DotNetInsights.Shared.Contracts.Services;
 using System.Threading.Tasks;
 using DotNetInsights.Shared.Contracts;
+using System.Text;
 
 namespace DotNetInsights.Shared.Services.Providers
 {
@@ -49,9 +50,15 @@ namespace DotNetInsights.Shared.Services.Providers
             var sourceProperties = value.GetType().GetProperties();
             var destProperties = typeof(TDest).GetProperties();
             var encryptionKeyProperties = GetPropertiesWithCustomAttribute<EncryptionKeyAttribute>(destProperties);
+            
+            var encryptionCandidateProperties = GetPropertiesWithCustomAttribute<EncryptionKeyCandidateAttribute>(sourceProperties);
+
+            var encryptionKey = GenerateUniqueKeyFromEncryptionKeyCandidates(value, encryptionCandidateProperties);
+
             var encryptionKeyProperty = encryptionKeyProperties.SingleOrDefault();
             var destination = Activator.CreateInstance<TDest>();
-            var generatedKey = _cryptographicProvider.GenerateKey(cryptographicInfo, 32);
+            var generatedKey = _cryptographicProvider.GenerateKey(encryptionKey, cryptographicInfo, 32);
+
             encryptionKeyProperty.SetValue(destination, generatedKey);
 
             foreach (var sourceProperty in sourceProperties)
@@ -67,6 +74,19 @@ namespace DotNetInsights.Shared.Services.Providers
             }
 
             return destination;
+        }
+
+        private string GenerateUniqueKeyFromEncryptionKeyCandidates<TSource>(TSource value, IEnumerable<PropertyInfo> encryptionCandidateProperties)
+        {
+            var uniqueKeyStringBuilder = new StringBuilder();
+
+            foreach(var encryptedCandidateProperty in encryptionCandidateProperties)
+            {
+                var encryptionKeyCandidate = encryptedCandidateProperty.GetCustomAttribute<EncryptionKeyCandidateAttribute>();
+                uniqueKeyStringBuilder.AppendFormat(encryptionKeyCandidate.FormatProvider, encryptionKeyCandidate.Format, encryptedCandidateProperty.GetValue(value));
+            }
+
+            return uniqueKeyStringBuilder.ToString();
         }
 
         private PropertyInfo GetProperty(IEnumerable<PropertyInfo> properties, string propertyName)

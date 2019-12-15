@@ -31,16 +31,16 @@ namespace DotNetInsights.Shared.App
 
         public class CryptographicInfo : ICryptographicInfo
         {
-            public CryptographicInfo(SymmetricAlgorithmType symmetricAlgorithmType, IEnumerable<byte> key, 
+            public CryptographicInfo(SymmetricAlgorithmType symmetricAlgorithmType, string password, 
                 IEnumerable<byte> salt, IEnumerable<byte> initialVector, int iterations)
             {
                 SymmetricAlgorithmType = symmetricAlgorithmType;
-                Key = key;
+                Password = password;
                 Salt = salt;
                 InitialVector = initialVector;
                 Iterations = iterations;
             }
-
+            public string Password { get; set; }
             public SymmetricAlgorithmType SymmetricAlgorithmType { get; }
             public IEnumerable<byte> Key { get; }
             public IEnumerable<byte> Salt { get; }
@@ -51,7 +51,7 @@ namespace DotNetInsights.Shared.App
         public async Task Start()
         {
             var cryptographicInfo = new CryptographicInfo(SymmetricAlgorithmType.Aes,
-                                        Guid.NewGuid().ToString().GetBytes(Encoding.ASCII),
+                                        Guid.NewGuid().ToString(),
                                         Guid.NewGuid().ToString().GetBytes(Encoding.ASCII),
                                         "abb6526e130b4a24".GetBytes(Encoding.ASCII), 100000);
             
@@ -69,7 +69,7 @@ namespace DotNetInsights.Shared.App
                 FirstName = "Sarah",
                 MiddleName = null,
                 LastName = "Catlin",
-                DateOfBirth = new DateTime(2019, 09, 11)
+                DateOfBirth = new DateTime(1987, 11, 01)
                 }, cryptographicInfo).ConfigureAwait(false);
 
             var encryptedCustomers = new [] { encryptedCustomer, encryptedCustomer2 };
@@ -130,7 +130,7 @@ namespace DotNetInsights.Shared.App
         }
     }
 
-    [MessagePackObject(true)]
+    
     [Table("Customer")]
     public class Customer
     {
@@ -174,6 +174,7 @@ namespace DotNetInsights.Shared.App
         [Encryptable]
         public string LastName { get; set; }
 
+        //[EncryptionKeyCandidate("{0:yyyy-MM-dd}")]
         public DateTime DateOfBirth { get; set; }
         public DateTimeOffset Created { get; set; }
         public DateTimeOffset Modified { get; set; }
