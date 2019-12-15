@@ -17,40 +17,41 @@ namespace Shared.Library
         private readonly IServiceProvider _serviceProvider;
         private readonly T _model;
 
-        public IValidate<T> IsNotNull<TMember>(System.Func<T, TMember> getMember)
+        public IValidate<T> IsNotNull<TMember>(Func<T, TMember> getMember)
         {
             if (getMember == null)
                 throw new ArgumentNullException(nameof(getMember));
 
             var member = getMember(_model);
 
-            var memberName = nameof(member);
+            var memberName = GetMemberName(getMember);
             if (member == null)
                 throw new ValidateException(memberName, $"{memberName} must not be null");
 
             return this;
         }
 
-        public IValidate<T> IsValid<TMember>(System.Func<T, TMember> getMember, TMember value, System.Func<TMember, TMember, bool> equalityComparer)
+        public IValidate<T> IsValid<TMember>(Func<T, TMember> getMember, TMember value, Func<TMember, TMember, bool> equalityComparer)
         {
             if (getMember == null)
                 throw new ArgumentNullException(nameof(getMember));
 
             var member = getMember(_model);
-            var memberName = getMember.Method.Name;
+            var memberName = GetMemberName(getMember);
 
             if (!equalityComparer(member, value))
                 throw new ValidateException(memberName, $"{memberName} invalid");
             return this;
         }
 
-        public IValidate<T> IsInRange<TMember>(System.Func<T, TMember> getMember, TMember minimumValue, TMember maximumValue, System.Func<TMember, TMember, TMember, bool> isInRangeComparer)
+        public IValidate<T> IsInRange<TMember>(Func<T, TMember> getMember, TMember minimumValue, 
+            TMember maximumValue, Func<TMember, TMember, TMember, bool> isInRangeComparer)
         {
             if (getMember == null)
                 throw new ArgumentNullException(nameof(getMember));
 
             var member = getMember(_model);
-            var memberName = nameof(member);
+            var memberName = GetMemberName(getMember);
 
             if (!isInRangeComparer(member, minimumValue, maximumValue))
                 throw new ValidateException(memberName, $"{memberName} is not within the range of valid values");
@@ -58,7 +59,7 @@ namespace Shared.Library
             return this;
         }
 
-        public IValidate<T> Regex(System.Func<T, string> getMember, string regexPattern)
+        public IValidate<T> Regex(Func<T, string> getMember, string regexPattern)
         {
             if (getMember == null)
                 throw new ArgumentNullException(nameof(getMember));
@@ -80,7 +81,7 @@ namespace Shared.Library
 
             var member = getMember(_model);
 
-            var memberName = nameof(TMember);
+            var memberName = GetMemberName(getMember);
 
             if (checkDuplicateServiceComparer(_serviceProvider, member))
                 throw new ValidateException(memberName, "Duplicate entries found.");
@@ -98,7 +99,7 @@ namespace Shared.Library
 
             var member = getMember(_model);
 
-            var memberName = nameof(TMember);
+            var memberName = GetMemberName(getMember);
 
             if (await checkDuplicateServiceComparer(_serviceProvider, member)
                 .ConfigureAwait(false))

@@ -14,6 +14,7 @@ if ($output -eq [System.String]::Empty){
 
 cd $directory
 dotnet clean
+dotnet build
 dotnet test
 
 &"$directory\UpdateVersion-Powershell.ps1" -FileName $directory\Directory.Build.Props -Version $version  
