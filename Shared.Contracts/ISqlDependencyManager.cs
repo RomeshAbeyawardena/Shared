@@ -8,8 +8,8 @@ namespace Shared.Contracts
     public interface ISqlDependencyManager : IDisposable
     {
         event EventHandler<CommandEntrySqlNotificationEventArgs> OnChange;
-        void AddCommandEntry(string name, string command);
-        void AddCommandEntry(CommandEntry commandEntry);
+        ISqlDependencyManager AddCommandEntry(string name, string command);
+        ISqlDependencyManager AddCommandEntry(CommandEntry commandEntry);
         Task Start(string connectionString);
         void Stop(string connectionString);
         IDictionary<string, CommandEntry> CommandEntries { get; }

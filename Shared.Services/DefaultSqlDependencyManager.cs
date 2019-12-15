@@ -24,18 +24,21 @@ namespace Shared.Services
                         throw new NotSupportedException("SqlDependencyManager not started!");
                     dictionary.Add(commandEntry.SqlDependency.Id, commandEntry);
                 }
+
                 return dictionary;
             }
         }
 
-        public void AddCommandEntry(string name, string command)
+        public ISqlDependencyManager AddCommandEntry(string name, string command)
         {
             AddCommandEntry(CommandEntry.Create(name, command));
+            return this;
         }
 
-        public void AddCommandEntry(CommandEntry commandEntry)
+        public ISqlDependencyManager AddCommandEntry(CommandEntry commandEntry)
         {
             _commandEntries.Add(commandEntry);
+            return this;
         }
 
         public void Dispose()
@@ -74,7 +77,8 @@ namespace Shared.Services
             for (var entryIndex = 0; entryIndex < _commandEntries.Count; entryIndex++)
             {
                 var entry = _commandEntries[entryIndex];
-                entry.SqlDependency = await CreateSqlDependency(entry).ConfigureAwait(false);
+                entry.SqlDependency = await CreateSqlDependency(entry)
+                    .ConfigureAwait(false);
             }
 
         }
