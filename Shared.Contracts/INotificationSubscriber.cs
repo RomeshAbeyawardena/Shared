@@ -1,9 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 namespace DotNetInsights.Shared.Contracts
 {
     public interface INotificationSubscriber
     {
+        Type NotificationType { get; }
         void OnChange(object @event);
         Task OnChangeAsync(object @event);
     }

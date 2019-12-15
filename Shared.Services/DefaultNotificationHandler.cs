@@ -1,6 +1,8 @@
 ﻿using DotNetInsights.Shared.Contracts;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace DotNetInsights.Shared.Services
 {
@@ -36,7 +38,16 @@ namespace DotNetInsights.Shared.Services
         {
             foreach(var notificationSubscriber in _notificationSubscribersList)
             {
-                await notificationSubscriber.OnChangeAsync(@event).ConfigureAwait(false);
+                var eventType = @event.GetType();
+                var notificationType = notificationSubscriber.NotificationType;
+
+                var t = eventType.GetGenericArguments();
+                var m = notificationType.GetGenericArguments();
+
+                Console.WriteLine("{0}: {1}", eventType, notificationType);
+
+                if(t.All(ty => m.Contains(ty)))
+                    await notificationSubscriber.OnChangeAsync(@event).ConfigureAwait(false);
             }
         }
 
