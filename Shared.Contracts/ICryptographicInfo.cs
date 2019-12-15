@@ -1,7 +1,7 @@
-using Shared.Domains.Enumerations;
+using DotNetInsights.Shared.Domains.Enumerations;
 using System.Collections.Generic;
 
-namespace Shared.Contracts
+namespace DotNetInsights.Shared.Contracts
 {
     public interface ICryptographicInfo
     {

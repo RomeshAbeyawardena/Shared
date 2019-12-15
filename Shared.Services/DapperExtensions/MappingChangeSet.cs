@@ -1,9 +1,9 @@
-using Shared.Contracts.DapperExtensions;
-using Shared.Domains.Enumerations;
+using DotNetInsights.Shared.Contracts.DapperExtensions;
+using DotNetInsights.Shared.Domains.Enumerations;
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace Shared.Services.DapperExtensions
+namespace DotNetInsights.Shared.Services.DapperExtensions
 {
     public class MappingChangeSet<T> : IChangeSet<T>
     {

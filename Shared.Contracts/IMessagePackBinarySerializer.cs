@@ -1,4 +1,4 @@
-﻿namespace Shared.Contracts
+﻿namespace DotNetInsights.Shared.Contracts
 {
     public interface IMessagePackBinarySerializer : IBinarySerializer
     {

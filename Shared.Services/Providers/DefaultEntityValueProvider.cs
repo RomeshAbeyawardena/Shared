@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Shared.Contracts;
-using Shared.Contracts.Providers;
+using DotNetInsights.Shared.Contracts;
+using DotNetInsights.Shared.Contracts.Providers;
 using System;
 
-namespace Shared.Services.Providers
+namespace DotNetInsights.Shared.Services.Providers
 {
     public static class DefaultEntityValueProvider
     {

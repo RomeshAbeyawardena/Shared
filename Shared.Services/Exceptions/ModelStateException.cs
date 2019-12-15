@@ -1,9 +1,9 @@
-﻿using Shared.Contracts.Builders;
-using Shared.Services.Builders;
+﻿using DotNetInsights.Shared.Contracts.Builders;
+using DotNetInsights.Shared.Services.Builders;
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace Shared.Services.Exceptions
+namespace DotNetInsights.Shared.Services.Exceptions
 {
     public sealed class ModelStateException : Exception
     {

@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.Internal;
-using Shared.Contracts.Providers;
+using DotNetInsights.Shared.Contracts.Providers;
 using System;
 
-namespace Shared.Services.Providers
+namespace DotNetInsights.Shared.Services.Providers
 {
     public class DefaultSystemClockProvider : IClockProvider
     {

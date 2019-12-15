@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace Shared.Contracts.Factories
+namespace DotNetInsights.Shared.Contracts.Factories
 {
     public interface INotificationHandlerFactory : IDisposable
     {

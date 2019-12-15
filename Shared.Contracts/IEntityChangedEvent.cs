@@ -1,6 +1,6 @@
-﻿using Shared.Domains.Enumerations;
+﻿using DotNetInsights.Shared.Domains.Enumerations;
 
-namespace Shared.Contracts
+namespace DotNetInsights.Shared.Contracts
 {
     public interface IEntityChangedEvent<TEntity> : IEvent<TEntity>
         where TEntity : class

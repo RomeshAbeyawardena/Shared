@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text;
 
-namespace Shared.Contracts.Providers
+namespace DotNetInsights.Shared.Contracts.Providers
 {
     public interface ICryptographicProvider
     {

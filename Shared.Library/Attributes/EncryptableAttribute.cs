@@ -1,6 +1,6 @@
 using System;
 
-namespace Shared.Library.Attributes
+namespace DotNetInsights.Shared.Library.Attributes
 {
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
     public sealed class EncryptableAttribute : Attribute

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace Shared.Contracts
+namespace DotNetInsights.Shared.Contracts
 {
     public interface IAppHost
     {

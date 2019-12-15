@@ -1,7 +1,7 @@
-﻿using Shared.Contracts;
+﻿using DotNetInsights.Shared.Contracts;
 using System.Threading.Tasks;
 
-namespace Shared.Services
+namespace DotNetInsights.Shared.Services
 {
     public abstract class DefaultNotificationSubscriber<TEvent> : INotificationSubscriber<TEvent>
     {

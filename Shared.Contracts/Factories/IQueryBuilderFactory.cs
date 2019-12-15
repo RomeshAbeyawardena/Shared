@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq.Expressions;
 
-namespace Shared.Contracts.Factories
+namespace DotNetInsights.Shared.Contracts.Factories
 {
     public interface IQueryBuilderFactory
     {

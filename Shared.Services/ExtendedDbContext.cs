@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace Shared.Services
+namespace DotNetInsights.Shared.Services
 {
     public abstract class ExtendedDbContext : DbContext
     {

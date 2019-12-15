@@ -1,11 +1,11 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Shared.Contracts;
-using Shared.Contracts.Builders;
+using DotNetInsights.Shared.Contracts;
+using DotNetInsights.Shared.Contracts.Builders;
 using System;
 
-namespace Shared.Services.Builders
+namespace DotNetInsights.Shared.Services.Builders
 {
     internal class DefaultAppHostBuilder : IAppHostBuilder
     {

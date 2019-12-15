@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
-namespace Shared.WebApp
+namespace DotNetInsights.Shared.WebApp
 {
     public static class Program
     {

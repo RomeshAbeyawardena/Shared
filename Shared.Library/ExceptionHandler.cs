@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Shared.Library
+namespace DotNetInsights.Shared.Library
 {
     public static class ExceptionHandler
     {

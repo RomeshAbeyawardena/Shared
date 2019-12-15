@@ -1,10 +1,10 @@
-﻿using Shared.Contracts;
-using Shared.Contracts.Builders;
-using Shared.Services.Builders;
+﻿using DotNetInsights.Shared.Contracts;
+using DotNetInsights.Shared.Contracts.Builders;
+using DotNetInsights.Shared.Services.Builders;
 using System;
 using System.Collections.Generic;
 
-namespace Shared.Services
+namespace DotNetInsights.Shared.Services
 {
     public static class DefaultCommand
     {

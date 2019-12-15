@@ -1,10 +1,10 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Shared.Contracts.Builders;
-using Shared.Contracts.Factories;
+using DotNetInsights.Shared.Contracts.Builders;
+using DotNetInsights.Shared.Contracts.Factories;
 using System;
 using System.Linq.Expressions;
 
-namespace Shared.Services.Factories
+namespace DotNetInsights.Shared.Services.Factories
 {
     public sealed class DefaultQueryBuilderFactory : IQueryBuilderFactory
     {

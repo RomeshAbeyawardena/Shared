@@ -1,4 +1,4 @@
-namespace Shared.Domains
+namespace DotNetInsights.Shared.Domains
 {
     public enum QueryCondition
     {

@@ -1,10 +1,10 @@
-using Shared.Contracts;
-using Shared.Library.Exceptions;
+using DotNetInsights.Shared.Contracts;
+using DotNetInsights.Shared.Library.Exceptions;
 using System;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace Shared.Library
+namespace DotNetInsights.Shared.Library
 {
     public sealed class Validate<T> : IValidate<T>
     {

@@ -1,6 +1,6 @@
 using System;
 
-namespace Shared.Services.Attributes
+namespace DotNetInsights.Shared.Services.Attributes
 {
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
     public class IdentityAttribute: Attribute

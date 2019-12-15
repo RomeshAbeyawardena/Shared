@@ -1,13 +1,13 @@
 using Microsoft.AspNetCore.Mvc;
-using Shared.Contracts;
-using Shared.Services;
-using Shared.Services.Extensions;
-using Shared.WebApp.Handlers;
+using DotNetInsights.Shared.Contracts;
+using DotNetInsights.Shared.Services;
+using DotNetInsights.Shared.Services.Extensions;
+using DotNetInsights.Shared.WebApp.Handlers;
 using System.Threading.Tasks;
-using Shared.Domains.Enumerations;
-using Shared.Services.Exceptions;
+using DotNetInsights.Shared.Domains.Enumerations;
+using DotNetInsights.Shared.Services.Exceptions;
 
-namespace Shared.WebApp.Controllers
+namespace DotNetInsights.Shared.WebApp.Controllers
 {
     [Route("{controller}/{action}")]
     public class TestController : Controller

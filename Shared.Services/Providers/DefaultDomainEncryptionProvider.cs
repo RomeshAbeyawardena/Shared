@@ -1,14 +1,14 @@
-﻿using Shared.Contracts.Providers;
+﻿using DotNetInsights.Shared.Contracts.Providers;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Linq;
-using Shared.Library.Attributes;
-using Shared.Contracts.Services;
+using DotNetInsights.Shared.Library.Attributes;
+using DotNetInsights.Shared.Contracts.Services;
 using System.Threading.Tasks;
-using Shared.Contracts;
+using DotNetInsights.Shared.Contracts;
 
-namespace Shared.Services.Providers
+namespace DotNetInsights.Shared.Services.Providers
 {
     public class DefaultDomainEncryptionProvider : IDomainEncryptionProvider
     {
@@ -27,6 +27,10 @@ namespace Shared.Services.Providers
             foreach(var property in sourceProperties){
                 var destinationProperty = GetProperty(destProperties, property.Name);
                 var rawValue = property.GetValue(value);
+
+                if(rawValue == null)
+                    continue;
+
                 var encryptedValue = rawValue as IEnumerable<byte>;
 
                 if(encryptedProperties.Contains(property))

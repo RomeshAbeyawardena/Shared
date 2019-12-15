@@ -1,11 +1,11 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Shared.Contracts;
-using Shared.Contracts.Factories;
+using DotNetInsights.Shared.Contracts;
+using DotNetInsights.Shared.Contracts.Factories;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Shared.Services
+namespace DotNetInsights.Shared.Services
 {
     public class DefaultNotificationHandlerFactory : INotificationHandlerFactory
     {

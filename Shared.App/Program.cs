@@ -1,12 +1,12 @@
 ﻿using Microsoft.Extensions.Configuration;
-using Shared.Contracts;
-using Shared.Library.Extensions;
-using Shared.Services;
+using DotNetInsights.Shared.Contracts;
+using DotNetInsights.Shared.Library.Extensions;
+using DotNetInsights.Shared.Services;
 using System;
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-namespace Shared.App
+namespace DotNetInsights.Shared.App
 {
     public static class Program
     {

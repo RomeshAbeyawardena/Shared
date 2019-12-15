@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
-using Shared.Domains.Enumerations;
+using DotNetInsights.Shared.Domains.Enumerations;
 
-namespace Shared.Contracts
+namespace DotNetInsights.Shared.Contracts
 {
     public interface ICloner<T> where T: class
     {

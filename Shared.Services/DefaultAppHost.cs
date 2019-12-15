@@ -1,11 +1,11 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Shared.Contracts;
-using Shared.Library;
+using DotNetInsights.Shared.Contracts;
+using DotNetInsights.Shared.Library;
 using System;
 using System.Threading.Tasks;
 
-namespace Shared.Services
+namespace DotNetInsights.Shared.Services
 {
     internal class DefaultAppHost : IAppHost
     {

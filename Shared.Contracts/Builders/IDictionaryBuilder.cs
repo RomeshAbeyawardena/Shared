@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Shared.Contracts.Builders
+namespace DotNetInsights.Shared.Contracts.Builders
 {
     public interface IDictionaryBuilder<TKey, TValue> : IReadOnlyDictionary<TKey, TValue>
     {

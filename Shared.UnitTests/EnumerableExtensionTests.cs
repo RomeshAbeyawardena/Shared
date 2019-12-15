@@ -1,8 +1,8 @@
 ﻿using Xunit;
-using Shared.Library.Extensions;
+using DotNetInsights.Shared.Library.Extensions;
 using System;
 
-namespace Shared.UnitTests
+namespace DotNetInsights.Shared.UnitTests
 {
     public class EnumerableExtensionTests
     {

@@ -1,7 +1,7 @@
 ﻿using System;
-using Shared.Contracts;
+using DotNetInsights.Shared.Contracts;
 
-namespace Shared.Services
+namespace DotNetInsights.Shared.Services
 {
     public class MessagePackBinarySerializer : IMessagePackBinarySerializer
     {

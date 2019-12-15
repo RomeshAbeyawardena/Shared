@@ -1,9 +1,9 @@
-using Shared.Domains;
+using DotNetInsights.Shared.Domains;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Shared.Contracts
+namespace DotNetInsights.Shared.Contracts
 {
     public interface ISqlDependencyManager : IDisposable
     {

@@ -1,13 +1,13 @@
 using Dapper;
-using Shared.Contracts.DapperExtensions;
-using Shared.Domains;
-using Shared.Domains.Enumerations;
+using DotNetInsights.Shared.Contracts.DapperExtensions;
+using DotNetInsights.Shared.Domains;
+using DotNetInsights.Shared.Domains.Enumerations;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 
-namespace Shared.Services.DapperExtensions
+namespace DotNetInsights.Shared.Services.DapperExtensions
 {
     public class QueryParameters<T>: IQueryParameters<T>
     {

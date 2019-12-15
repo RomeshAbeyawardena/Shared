@@ -1,4 +1,4 @@
-using Shared.Domains;
+using DotNetInsights.Shared.Domains;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -7,7 +7,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace Shared.Contracts.DapperExtensions
+namespace DotNetInsights.Shared.Contracts.DapperExtensions
 {
     public interface IMapping<T> : IDisposable
     {

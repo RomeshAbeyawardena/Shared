@@ -1,9 +1,9 @@
 using System.Threading.Tasks;
-using Shared.Contracts;
-using Shared.Services;
-using Shared.Services.Attributes;
+using DotNetInsights.Shared.Contracts;
+using DotNetInsights.Shared.Services;
+using DotNetInsights.Shared.Services.Attributes;
 
-namespace Shared.WebApp.Handlers
+namespace DotNetInsights.Shared.WebApp.Handlers
 {
     public class TestHandler : DefaultEventHandler<IEvent<Test>>
     {

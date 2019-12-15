@@ -1,8 +1,8 @@
 using System.Threading.Tasks;
-using Shared.Contracts;
-using Shared.Services;
+using DotNetInsights.Shared.Contracts;
+using DotNetInsights.Shared.Services;
 
-namespace Shared.WebApp.Handlers
+namespace DotNetInsights.Shared.WebApp.Handlers
 {
     public class TestSubscriber : DefaultNotificationSubscriber<IEvent<Test>>
     {

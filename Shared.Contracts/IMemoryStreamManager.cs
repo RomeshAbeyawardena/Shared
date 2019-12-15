@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace Shared.Contracts
+namespace DotNetInsights.Shared.Contracts
 {
     public interface IMemoryStreamManager
     {

@@ -1,8 +1,8 @@
-﻿using Shared.Contracts;
+﻿using DotNetInsights.Shared.Contracts;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Shared.Services
+namespace DotNetInsights.Shared.Services
 {
     public sealed class DefaultNotificationHandler<TEvent> : INotificationHandler<TEvent>
     {

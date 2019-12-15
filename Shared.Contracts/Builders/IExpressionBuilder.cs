@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq.Expressions;
-using Shared.Domains.Enumerations;
+using DotNetInsights.Shared.Domains.Enumerations;
 
-namespace Shared.Contracts.Builders
+namespace DotNetInsights.Shared.Contracts.Builders
 {
     public interface IExpressionBuilder
     {

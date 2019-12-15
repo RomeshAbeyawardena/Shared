@@ -1,6 +1,6 @@
-﻿using Shared.Domains.Enumerations;
+﻿using DotNetInsights.Shared.Domains.Enumerations;
 
-namespace Shared.Library
+namespace DotNetInsights.Shared.Library
 {
     public class DefaultCloneOptions
     {

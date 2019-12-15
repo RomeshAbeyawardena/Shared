@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
-using Shared.Contracts;
-using Shared.Contracts.Factories;
-using Shared.Library;
-using Shared.Library.Extensions;
-using Shared.Domains.Enumerations;
+using DotNetInsights.Shared.Contracts;
+using DotNetInsights.Shared.Contracts.Factories;
+using DotNetInsights.Shared.Library;
+using DotNetInsights.Shared.Library.Extensions;
+using DotNetInsights.Shared.Domains.Enumerations;
 
-namespace Shared.Services
+namespace DotNetInsights.Shared.Services
 {
     public class DefaultCloner<T> : ICloner<T> where T : class
     {

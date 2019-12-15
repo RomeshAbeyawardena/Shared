@@ -1,12 +1,12 @@
-﻿using Shared.Contracts;
-using Shared.Contracts.Builders;
-using Shared.Domains;
-using Shared.Domains.Enumerations;
+﻿using DotNetInsights.Shared.Contracts;
+using DotNetInsights.Shared.Contracts.Builders;
+using DotNetInsights.Shared.Domains;
+using DotNetInsights.Shared.Domains.Enumerations;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Shared.Services.Extensions
+namespace DotNetInsights.Shared.Services.Extensions
 {
     public static class MediatorExtensions
     {

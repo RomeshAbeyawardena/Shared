@@ -1,9 +1,9 @@
-﻿using Shared.Contracts;
-using Shared.Contracts.Factories;
+﻿using DotNetInsights.Shared.Contracts;
+using DotNetInsights.Shared.Contracts.Factories;
 using System;
-using Shared.Domains.Enumerations;
+using DotNetInsights.Shared.Domains.Enumerations;
 
-namespace Shared.Services.Factories
+namespace DotNetInsights.Shared.Services.Factories
 {
     public sealed class DefaultSerializerFactory : ISerializerFactory
     {

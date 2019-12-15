@@ -1,6 +1,6 @@
 using Microsoft.Data.SqlClient;
 
-namespace Shared.Domains
+namespace DotNetInsights.Shared.Domains
 {
     public class CommandEntrySqlNotificationEventArgs : SqlNotificationEventArgs
     {

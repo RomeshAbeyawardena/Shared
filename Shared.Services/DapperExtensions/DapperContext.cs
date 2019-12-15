@@ -1,12 +1,12 @@
-using Shared.Contracts.DapperExtensions;
-using Shared.Services.Attributes;
+using DotNetInsights.Shared.Contracts.DapperExtensions;
+using DotNetInsights.Shared.Services.Attributes;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data;
 using System.Reflection;
 
-namespace Shared.Services.DapperExtensions
+namespace DotNetInsights.Shared.Services.DapperExtensions
 {
     public abstract class DapperContext : IDapperContext
     {

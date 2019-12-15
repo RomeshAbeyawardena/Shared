@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Shared.Contracts
+namespace DotNetInsights.Shared.Contracts
 {
     public interface ISwitch<TKey, TValue> : IReadOnlyDictionary<TKey, TValue>
     {

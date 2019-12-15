@@ -1,9 +1,9 @@
-﻿using Shared.Services.Attributes;
+﻿using DotNetInsights.Shared.Services.Attributes;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Xunit;
 
-namespace Shared.UnitTests
+namespace DotNetInsights.Shared.UnitTests
 {
     public class OptionalRequiredAttributeTests
     {

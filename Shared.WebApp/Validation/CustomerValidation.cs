@@ -1,4 +1,4 @@
-namespace Shared.WebApp.Validation
+namespace DotNetInsights.Shared.WebApp.Validation
 {
 
 }

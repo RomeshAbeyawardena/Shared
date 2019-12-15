@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace Shared.Library.Extensions
+namespace DotNetInsights.Shared.Library.Extensions
 {
     public static class DisposableExtensions
     {

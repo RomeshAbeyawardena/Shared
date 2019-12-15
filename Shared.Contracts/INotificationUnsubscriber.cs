@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Shared.Contracts
+namespace DotNetInsights.Shared.Contracts
 {
     public interface INotificationUnsubscriber : IDisposable
     {

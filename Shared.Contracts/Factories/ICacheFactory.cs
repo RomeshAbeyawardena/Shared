@@ -1,7 +1,7 @@
-﻿using Shared.Contracts.Services;
-using Shared.Domains.Enumerations;
+﻿using DotNetInsights.Shared.Contracts.Services;
+using DotNetInsights.Shared.Domains.Enumerations;
 
-namespace Shared.Contracts.Factories
+namespace DotNetInsights.Shared.Contracts.Factories
 {
     public interface ICacheFactory
     {

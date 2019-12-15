@@ -1,6 +1,6 @@
 using System;
 
-namespace Shared.Library.Exceptions
+namespace DotNetInsights.Shared.Library.Exceptions
 {
     public sealed class ValidateException : Exception
     {

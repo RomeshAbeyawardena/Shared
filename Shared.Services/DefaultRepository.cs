@@ -1,15 +1,15 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Shared.Contracts;
-using Shared.Contracts.Providers;
+using DotNetInsights.Shared.Contracts;
+using DotNetInsights.Shared.Contracts.Providers;
 using System;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using System.Transactions;
 
-namespace Shared.Services
+namespace DotNetInsights.Shared.Services
 {
     public class DefaultRepository<TDbContext, TEntity> : IRepository<TEntity>
         where TDbContext : DbContext

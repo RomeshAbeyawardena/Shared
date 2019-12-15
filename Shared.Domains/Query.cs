@@ -1,7 +1,7 @@
-using Shared.Domains.Enumerations;
+using DotNetInsights.Shared.Domains.Enumerations;
 using System.Data;
 
-namespace Shared.Domains
+namespace DotNetInsights.Shared.Domains
 {
     public class Query
     {

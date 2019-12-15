@@ -1,9 +1,9 @@
-﻿using Shared.Library.Extensions;
+﻿using DotNetInsights.Shared.Library.Extensions;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace Shared.Services.Attributes
+namespace DotNetInsights.Shared.Services.Attributes
 {
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     public class OptionalRequiredAttribute : ValidationAttribute

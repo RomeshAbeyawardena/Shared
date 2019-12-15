@@ -4,14 +4,14 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Shared.Services;
-using Shared.Library.Extensions;
+using DotNetInsights.Shared.Services;
+using DotNetInsights.Shared.Library.Extensions;
 using System.Reflection;
 using AutoMapper;
-using Shared.Services.Middleware;
+using DotNetInsights.Shared.Services.Middleware;
 using System.Collections.Generic;
 
-namespace Shared.WebApp
+namespace DotNetInsights.Shared.WebApp
 {
     public class Startup
     {

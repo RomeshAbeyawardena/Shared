@@ -1,7 +1,7 @@
-﻿using Shared.Contracts.Builders;
-using Shared.Services.Builders;
+﻿using DotNetInsights.Shared.Contracts.Builders;
+using DotNetInsights.Shared.Services.Builders;
 
-namespace Shared.Services
+namespace DotNetInsights.Shared.Services
 {
     public static class AppHost
     {

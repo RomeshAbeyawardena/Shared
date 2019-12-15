@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Shared.Library.Extensions
+namespace DotNetInsights.Shared.Library.Extensions
 {
     public static class ObjectExtensions
     {

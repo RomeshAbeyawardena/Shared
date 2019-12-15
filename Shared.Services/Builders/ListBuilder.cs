@@ -1,9 +1,9 @@
-﻿using Shared.Contracts.Providers;
+﻿using DotNetInsights.Shared.Contracts.Providers;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Shared.Services.Builders
+namespace DotNetInsights.Shared.Services.Builders
 {
     public static class ListBuilder
     {

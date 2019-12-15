@@ -3,7 +3,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
 
-namespace Shared.App
+namespace DotNetInsights.Shared.App
 {
     class Server : IDisposable
     {

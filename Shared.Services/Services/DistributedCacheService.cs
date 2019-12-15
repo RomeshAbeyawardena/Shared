@@ -1,9 +1,9 @@
 ﻿using Microsoft.Extensions.Caching.Distributed;
-using Shared.Contracts;
-using Shared.Contracts.Services;
+using DotNetInsights.Shared.Contracts;
+using DotNetInsights.Shared.Contracts.Services;
 using System.Threading.Tasks;
 
-namespace Shared.Services
+namespace DotNetInsights.Shared.Services
 {
     public class DistributedMemoryCacheService : ICacheService
     {

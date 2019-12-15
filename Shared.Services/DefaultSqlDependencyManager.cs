@@ -1,12 +1,12 @@
 using Microsoft.Data.SqlClient;
-using Shared.Contracts;
-using Shared.Domains;
+using DotNetInsights.Shared.Contracts;
+using DotNetInsights.Shared.Domains;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
 using System;
 
-namespace Shared.Services
+namespace DotNetInsights.Shared.Services
 {
     public sealed class DefaultSqlDependencyManager : ISqlDependencyManager
     {

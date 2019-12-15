@@ -1,6 +1,6 @@
-﻿using Shared.Domains.Enumerations;
+﻿using DotNetInsights.Shared.Domains.Enumerations;
 
-namespace Shared.Contracts.Factories
+namespace DotNetInsights.Shared.Contracts.Factories
 {
     public interface ISerializerFactory
     {

@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
 using System.Threading.Tasks;
 
-namespace Shared.Services.Attributes
+namespace DotNetInsights.Shared.Services.Attributes
 {
     [AttributeUsage(AttributeTargets.Class)]
     public sealed class BadRequestOnInvalidModelStateAttribute : Attribute, IActionFilter, IAsyncActionFilter

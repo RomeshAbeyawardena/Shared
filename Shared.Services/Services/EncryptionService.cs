@@ -1,14 +1,14 @@
-﻿using Shared.Contracts;
-using Shared.Contracts.Factories;
-using Shared.Contracts.Services;
+﻿using DotNetInsights.Shared.Contracts;
+using DotNetInsights.Shared.Contracts.Factories;
+using DotNetInsights.Shared.Contracts.Services;
 using System;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-using Shared.Domains.Enumerations;
+using DotNetInsights.Shared.Domains.Enumerations;
 
-namespace Shared.Services
+namespace DotNetInsights.Shared.Services
 {
     public class EncryptionService : IEncryptionService
     {

@@ -1,11 +1,11 @@
 ﻿using System;
-using Shared.Contracts.Providers;
+using DotNetInsights.Shared.Contracts.Providers;
 using System.Linq;
 using System.Collections.Generic;
 using System.Text;
-using Shared.Contracts;
+using DotNetInsights.Shared.Contracts;
 
-namespace Shared.Services.Providers
+namespace DotNetInsights.Shared.Services.Providers
 {
     public class DefaultEncodingProvider : IEncodingProvider
     {

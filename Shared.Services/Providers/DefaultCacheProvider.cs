@@ -1,11 +1,11 @@
-﻿using Shared.Contracts.Factories;
-using Shared.Contracts.Providers;
-using Shared.Contracts.Services;
+﻿using DotNetInsights.Shared.Contracts.Factories;
+using DotNetInsights.Shared.Contracts.Providers;
+using DotNetInsights.Shared.Contracts.Services;
 using System;
 using System.Threading.Tasks;
-using Shared.Domains.Enumerations;
+using DotNetInsights.Shared.Domains.Enumerations;
 
-namespace Shared.Services.Providers
+namespace DotNetInsights.Shared.Services.Providers
 {
     public class DefaultCacheProvider : ICacheProvider
     {

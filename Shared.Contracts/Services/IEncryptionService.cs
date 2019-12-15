@@ -1,8 +1,8 @@
-﻿using Shared.Domains.Enumerations;
+﻿using DotNetInsights.Shared.Domains.Enumerations;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Shared.Contracts.Services
+namespace DotNetInsights.Shared.Contracts.Services
 {
     public interface IEncryptionService
     {

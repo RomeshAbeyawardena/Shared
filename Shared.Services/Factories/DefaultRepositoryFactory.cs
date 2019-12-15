@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Shared.Contracts;
-using Shared.Contracts.Factories;
-using Shared.Library.Extensions;
+using DotNetInsights.Shared.Contracts;
+using DotNetInsights.Shared.Contracts.Factories;
+using DotNetInsights.Shared.Library.Extensions;
 using System;
 
-namespace Shared.Services.Factories
+namespace DotNetInsights.Shared.Services.Factories
 {
     public class DefaultRepositoryFactory : IRepositoryFactory
     {

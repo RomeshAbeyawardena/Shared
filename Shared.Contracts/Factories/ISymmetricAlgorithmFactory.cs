@@ -1,7 +1,7 @@
-﻿using Shared.Domains.Enumerations;
+﻿using DotNetInsights.Shared.Domains.Enumerations;
 using System.Security.Cryptography;
 
-namespace Shared.Contracts.Factories
+namespace DotNetInsights.Shared.Contracts.Factories
 {
     public interface ISymmetricAlgorithmFactory
     {

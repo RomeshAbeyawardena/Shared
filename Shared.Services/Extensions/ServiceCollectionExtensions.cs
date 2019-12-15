@@ -1,9 +1,9 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Shared.Contracts.Providers;
-using Shared.Services.Providers;
+using DotNetInsights.Shared.Contracts.Providers;
+using DotNetInsights.Shared.Services.Providers;
 using System;
 
-namespace Shared.Services.Extensions
+namespace DotNetInsights.Shared.Services.Extensions
 {
     public static class ServiceCollectionExtensions
     {

@@ -1,8 +1,8 @@
-using Shared.Domains.Enumerations;
+using DotNetInsights.Shared.Domains.Enumerations;
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace Shared.Contracts.DapperExtensions
+namespace DotNetInsights.Shared.Contracts.DapperExtensions
 {
     public interface IChangeSet<T>
     {

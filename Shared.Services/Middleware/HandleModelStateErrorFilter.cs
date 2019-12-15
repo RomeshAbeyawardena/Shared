@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc.Filters;
-using Shared.Services.Exceptions;
+using DotNetInsights.Shared.Services.Exceptions;
 using System;
 using System.Threading.Tasks;
 
-namespace Shared.Services.Middleware
+namespace DotNetInsights.Shared.Services.Middleware
 {
     public class HandleModelStateErrorFilter : IAsyncExceptionFilter
     {

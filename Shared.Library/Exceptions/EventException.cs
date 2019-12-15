@@ -1,7 +1,7 @@
-﻿using Shared.Contracts;
+﻿using DotNetInsights.Shared.Contracts;
 using System;
 
-namespace Shared.Library.Exceptions
+namespace DotNetInsights.Shared.Library.Exceptions
 {
     public class EventException : Exception
     {

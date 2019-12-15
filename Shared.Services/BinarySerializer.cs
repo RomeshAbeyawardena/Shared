@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Runtime.Serialization.Formatters.Binary;
-using Shared.Contracts;
+using DotNetInsights.Shared.Contracts;
 
-namespace Shared.Services
+namespace DotNetInsights.Shared.Services
 {
     public class BinarySerializer : IBinarySerializer
     {

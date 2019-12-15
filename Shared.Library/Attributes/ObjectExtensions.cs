@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Shared.Library.Attributes
+namespace DotNetInsights.Shared.Library.Attributes
 {
     public static class ObjectExtensions
     {

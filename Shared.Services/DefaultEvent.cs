@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Shared.Contracts;
+using DotNetInsights.Shared.Contracts;
 
-namespace Shared.Domains
+namespace DotNetInsights.Shared.Domains
 {
     public static class DefaultEvent
     {

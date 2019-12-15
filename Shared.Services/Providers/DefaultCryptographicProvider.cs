@@ -1,13 +1,13 @@
-﻿using Shared.Contracts;
-using Shared.Contracts.Providers;
-using Shared.Library.Extensions;
+﻿using DotNetInsights.Shared.Contracts;
+using DotNetInsights.Shared.Contracts.Providers;
+using DotNetInsights.Shared.Library.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace Shared.Services
+namespace DotNetInsights.Shared.Services
 {
     public class DefaultCryptographicProvider : ICryptographicProvider
     {

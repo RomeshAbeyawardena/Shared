@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Shared.Contracts.Providers
+namespace DotNetInsights.Shared.Contracts.Providers
 {
     public interface IDomainEncryptionProvider
     {

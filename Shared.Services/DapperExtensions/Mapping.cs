@@ -1,8 +1,8 @@
 ﻿using Dapper;
-using Shared.Contracts.DapperExtensions;
-using Shared.Domains;
-using Shared.Domains.Enumerations;
-using Shared.Services.Attributes;
+using DotNetInsights.Shared.Contracts.DapperExtensions;
+using DotNetInsights.Shared.Domains;
+using DotNetInsights.Shared.Domains.Enumerations;
+using DotNetInsights.Shared.Services.Attributes;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -14,7 +14,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace Shared.Services.DapperExtensions
+namespace DotNetInsights.Shared.Services.DapperExtensions
 {
     public class Mapping<T> : IMapping<T>
     {

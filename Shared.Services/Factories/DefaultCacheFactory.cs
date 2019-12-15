@@ -1,11 +1,11 @@
-﻿using Shared.Contracts;
-using Shared.Contracts.Factories;
-using Shared.Contracts.Services;
-using Shared.Library.Extensions;
+﻿using DotNetInsights.Shared.Contracts;
+using DotNetInsights.Shared.Contracts.Factories;
+using DotNetInsights.Shared.Contracts.Services;
+using DotNetInsights.Shared.Library.Extensions;
 using System;
-using Shared.Domains.Enumerations;
+using DotNetInsights.Shared.Domains.Enumerations;
 
-namespace Shared.Services.Factories
+namespace DotNetInsights.Shared.Services.Factories
 {
     public class DefaultCacheFactory : ICacheFactory
     {

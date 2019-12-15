@@ -1,10 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
-using Shared.Contracts;
-using Shared.Services.Attributes;
+using DotNetInsights.Shared.Contracts;
+using DotNetInsights.Shared.Services.Attributes;
 using System.Collections.Generic;
 
-namespace Shared.Services
+namespace DotNetInsights.Shared.Services
 {
     [BadRequestOnInvalidModelState, Route("{controller}/{action}", Order = 99)]
     public abstract class ControllerBase : Controller

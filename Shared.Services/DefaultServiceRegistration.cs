@@ -1,21 +1,21 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IO;
-using Shared.Contracts;
-using Shared.Contracts.Providers;
-using Shared.Services.Providers;
+using DotNetInsights.Shared.Contracts;
+using DotNetInsights.Shared.Contracts.Providers;
+using DotNetInsights.Shared.Services.Providers;
 using System;
 using Microsoft.Extensions.Internal;
-using Shared.Contracts.Factories;
-using Shared.Services.Factories;
+using DotNetInsights.Shared.Contracts.Factories;
+using DotNetInsights.Shared.Services.Factories;
 using System.Security.Cryptography;
-using Shared.Contracts.Services;
+using DotNetInsights.Shared.Contracts.Services;
 using System.Text;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
-using Shared.Domains.Enumerations;
+using DotNetInsights.Shared.Domains.Enumerations;
 using System.Threading;
 
-namespace Shared.Services
+namespace DotNetInsights.Shared.Services
 {
     public class DefaultServiceRegistration : IServiceRegistration
     {

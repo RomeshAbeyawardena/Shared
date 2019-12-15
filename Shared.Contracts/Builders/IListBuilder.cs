@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Shared.Contracts.Providers
+namespace DotNetInsights.Shared.Contracts.Providers
 {
     public interface IListBuilder<T> : IReadOnlyList<T>
     {

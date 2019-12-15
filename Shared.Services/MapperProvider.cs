@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using Shared.Contracts;
+using DotNetInsights.Shared.Contracts;
 using System.Collections.Generic;
 
-namespace Shared.Services
+namespace DotNetInsights.Shared.Services
 {
     public sealed class MapperProvider : IMapperProvider
     {

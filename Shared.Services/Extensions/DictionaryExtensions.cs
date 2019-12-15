@@ -1,9 +1,9 @@
-﻿using Shared.Contracts.Builders;
+﻿using DotNetInsights.Shared.Contracts.Builders;
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
 
-namespace Shared.Services.Extensions
+namespace DotNetInsights.Shared.Services.Extensions
 {
     public static class DictionaryExtensions
     {

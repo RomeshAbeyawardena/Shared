@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
 
-namespace Shared.Contracts.Providers
+namespace DotNetInsights.Shared.Contracts.Providers
 {
     public interface IDefaultEntityValueProvider<TEntity>
         where TEntity : class

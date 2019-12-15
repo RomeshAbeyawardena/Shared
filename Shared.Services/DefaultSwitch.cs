@@ -1,9 +1,9 @@
-﻿using Shared.Contracts;
+﻿using DotNetInsights.Shared.Contracts;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Shared.Services
+namespace DotNetInsights.Shared.Services
 {
     public static class DefaultSwitch
     {

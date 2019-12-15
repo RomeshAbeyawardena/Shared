@@ -1,11 +1,11 @@
-using Shared.Contracts;
-using Shared.Library;
-using Shared.Library.Exceptions;
+using DotNetInsights.Shared.Contracts;
+using DotNetInsights.Shared.Library;
+using DotNetInsights.Shared.Library.Exceptions;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 
-namespace Shared.Services
+namespace DotNetInsights.Shared.Services
 {
     public abstract class DefaultBaseValidator<TModel> : IValidator<TModel>
     {

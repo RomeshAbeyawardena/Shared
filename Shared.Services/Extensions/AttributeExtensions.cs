@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Reflection;
 
-namespace Shared.Services.Extensions
+namespace DotNetInsights.Shared.Services.Extensions
 {
     public static class AttributeExtensions
     {

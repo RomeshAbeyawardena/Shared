@@ -1,10 +1,10 @@
-﻿using Shared.Contracts.Services;
+﻿using DotNetInsights.Shared.Contracts.Services;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
 
-namespace Shared.Library.Extensions
+namespace DotNetInsights.Shared.Library.Extensions
 {
     public static class CacheServiceExtensions
     {

@@ -1,8 +1,8 @@
 ﻿using Microsoft.IO;
-using Shared.Contracts;
+using DotNetInsights.Shared.Contracts;
 using System.IO;
 
-namespace Shared.Services
+namespace DotNetInsights.Shared.Services
 {
     public class MemoryStreamManager : IMemoryStreamManager
     {

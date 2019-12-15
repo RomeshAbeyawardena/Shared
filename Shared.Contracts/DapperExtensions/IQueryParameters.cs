@@ -1,9 +1,9 @@
 using Dapper;
-using Shared.Domains;
-using Shared.Domains.Enumerations;
+using DotNetInsights.Shared.Domains;
+using DotNetInsights.Shared.Domains.Enumerations;
 using System.Data;
 
-namespace Shared.Contracts.DapperExtensions
+namespace DotNetInsights.Shared.Contracts.DapperExtensions
 {
     public interface IQueryParameters<T>
     {

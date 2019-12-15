@@ -1,8 +1,8 @@
-﻿using Shared.Contracts;
+﻿using DotNetInsights.Shared.Contracts;
 using System;
 using System.Threading.Tasks;
 
-namespace Shared.Services
+namespace DotNetInsights.Shared.Services
 {
     public abstract class DefaultEventHandler<TEvent> : IEventHandler<TEvent>
         where TEvent : IEvent

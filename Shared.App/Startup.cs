@@ -1,23 +1,23 @@
-﻿using Shared.Contracts;
-using Shared.Services;
+﻿using DotNetInsights.Shared.Contracts;
+using DotNetInsights.Shared.Services;
 using System;
 using System.Reflection;
 using System.Threading.Tasks;
-using Shared.Contracts.Factories;
+using DotNetInsights.Shared.Contracts.Factories;
 using MessagePack;
-using Shared.Contracts.Providers;
-using Shared.Contracts.Services;
+using DotNetInsights.Shared.Contracts.Providers;
+using DotNetInsights.Shared.Contracts.Services;
 using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
-using Shared.Services.DapperExtensions;
+using DotNetInsights.Shared.Services.DapperExtensions;
 using System.Data;
-using Shared.Contracts.DapperExtensions;
+using DotNetInsights.Shared.Contracts.DapperExtensions;
 using System.ComponentModel.DataAnnotations.Schema;
-using Shared.Library.Attributes;
+using DotNetInsights.Shared.Library.Attributes;
 using System.Text;
-using Shared.Domains.Enumerations;
+using DotNetInsights.Shared.Domains.Enumerations;
 
-namespace Shared.App
+namespace DotNetInsights.Shared.App
 {
     public class Startup
     {
@@ -64,7 +64,17 @@ namespace Shared.App
                 DateOfBirth = new DateTime(2019, 09, 11)
                 }, cryptographicInfo).ConfigureAwait(false);
 
-            var decryptedCustomer = await domainEncryptionProvider.Decrypt<Customer, CustomerDto>(encryptedCustomer, cryptographicInfo).ConfigureAwait(false);
+            var encryptedCustomer2 = await domainEncryptionProvider.Encrypt<CustomerDto, Customer>(new CustomerDto { 
+                EmailAddress = "sarah.catlin@hotmail.com",
+                FirstName = "Sarah",
+                MiddleName = null,
+                LastName = "Catlin",
+                DateOfBirth = new DateTime(2019, 09, 11)
+                }, cryptographicInfo).ConfigureAwait(false);
+
+            var encryptedCustomers = new [] { encryptedCustomer, encryptedCustomer2 };
+
+            var decryptedCustomer = await domainEncryptionProvider.Decrypt<Customer, CustomerDto>(encryptedCustomers, cryptographicInfo).ConfigureAwait(false);
         }
 
         
@@ -143,7 +153,7 @@ namespace Shared.App
         public DateTimeOffset? RegistrationDate { get;set; }
         
         [EncryptionKey]
-        public IEnumerable<byte> Key { get; set; }
+        public byte[] Key { get; set; }
         
     }
 

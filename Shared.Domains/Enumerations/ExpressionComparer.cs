@@ -1,4 +1,4 @@
-﻿namespace Shared.Domains.Enumerations
+﻿namespace DotNetInsights.Shared.Domains.Enumerations
 {
     public enum ExpressionComparer
     {

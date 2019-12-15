@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq.Expressions;
 
-namespace Shared.Contracts.Builders
+namespace DotNetInsights.Shared.Contracts.Builders
 {
     public interface IQueryBuilder<TEntity, TEnum>
         where TEntity : class

@@ -1,6 +1,6 @@
 using System;
 
-namespace Shared.Contracts.DapperExtensions
+namespace DotNetInsights.Shared.Contracts.DapperExtensions
 {
     public interface IDapperContext : IDisposable
     {

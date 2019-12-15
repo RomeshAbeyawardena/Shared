@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
 
-namespace Shared.Contracts.Builders
+namespace DotNetInsights.Shared.Contracts.Builders
 {
     public interface IAppHostBuilder
     {

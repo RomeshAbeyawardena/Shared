@@ -1,11 +1,11 @@
-﻿using Shared.Contracts;
+﻿using DotNetInsights.Shared.Contracts;
 using System;
 using System.Reflection;
 using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Generic;
 
-namespace Shared.Services
+namespace DotNetInsights.Shared.Services
 {
     public abstract class DefaultServiceBroker : IServiceBroker
     {

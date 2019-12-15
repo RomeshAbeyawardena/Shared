@@ -1,7 +1,7 @@
 using Microsoft.Data.SqlClient;
 using System;
 
-namespace Shared.Domains
+namespace DotNetInsights.Shared.Domains
 {
     public sealed class CommandEntry : IDisposable
     {

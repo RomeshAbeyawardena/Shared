@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 
-namespace Shared.Library.Extensions
+namespace DotNetInsights.Shared.Library.Extensions
 {
     public static class TypeExtensions
     {
