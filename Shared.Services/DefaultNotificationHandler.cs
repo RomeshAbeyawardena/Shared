@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
 using System.Collections.Concurrent;
+using DotNetInsights.Shared.Services.HostedServices;
 
 namespace DotNetInsights.Shared.Services
 {
@@ -14,7 +15,7 @@ namespace DotNetInsights.Shared.Services
             foreach(var notificationSubscriber in _notificationSubscribersList)
             {
                 _notificationSubscriberQueue
-                    .Enqueue(Tuple.Create<INotificationSubscriber, object>(notificationSubscriber, @event));
+                    .Enqueue(NotificationSubscriberQueueItem.Create(notificationSubscriber, @event));
             }
         }
 
@@ -49,7 +50,7 @@ namespace DotNetInsights.Shared.Services
                 Console.WriteLine("{0}: {1}", eventType, notificationType);
 
                 if(t.All(ty => m.Contains(ty)))
-                    _notificationSubscriberQueue.Enqueue(Tuple.Create<INotificationSubscriber, object>(notificationSubscriber, @event));
+                    _notificationSubscriberQueue.Enqueue(NotificationSubscriberQueueItem.Create(notificationSubscriber, @event));
             }
         }
 
@@ -58,13 +59,13 @@ namespace DotNetInsights.Shared.Services
             await NotifyAsync((TEvent)@event).ConfigureAwait(false);
         }
 
-        public DefaultNotificationHandler(ConcurrentQueue<Tuple<INotificationSubscriber, object>> notificationSubscriberQueue)
+        public DefaultNotificationHandler(ConcurrentQueue<NotificationSubscriberQueueItem> notificationSubscriberQueue)
         {
             _notificationSubscriberQueue = notificationSubscriberQueue;
             _notificationSubscribersList = new List<INotificationSubscriber>();
         }
 
-        private readonly ConcurrentQueue<Tuple<INotificationSubscriber, object>> _notificationSubscriberQueue;
+        private readonly ConcurrentQueue<NotificationSubscriberQueueItem> _notificationSubscriberQueue;
         private readonly IList<INotificationSubscriber> _notificationSubscribersList;
     }
 }

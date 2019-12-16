@@ -11,6 +11,7 @@ using AutoMapper;
 using DotNetInsights.Shared.Services.Middleware;
 using System.Collections.Generic;
 using DotNetInsights.Shared.Services.HostedServices;
+using DotNetInsights.Shared.Services.Extensions;
 
 namespace DotNetInsights.Shared.WebApp
 {
@@ -24,6 +25,10 @@ namespace DotNetInsights.Shared.WebApp
                 .RegisterServiceBroker<AppQueueServiceBroker>(ServiceLifetime.Scoped)
                 .AddAutoMapper(Assembly.GetExecutingAssembly())
                 .AddScoped<IMyScopedService, MyScopedService>()
+                .ConfigureNotificationsHostedServiceOptions(options => {
+                    options.PollingInterval = 60000;
+                    options.ProcessingInterval = 60;
+                })
                 .AddHostedService<NotificationsHostedService>()
                 .AddMvc(options => options.Filters.Add<HandleModelStateErrorFilter>());
 

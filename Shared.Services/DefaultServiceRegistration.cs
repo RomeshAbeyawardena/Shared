@@ -3,18 +3,20 @@ using Microsoft.IO;
 using DotNetInsights.Shared.Contracts;
 using DotNetInsights.Shared.Contracts.Providers;
 using DotNetInsights.Shared.Services.Providers;
-using System;
-using Microsoft.Extensions.Internal;
 using DotNetInsights.Shared.Contracts.Factories;
 using DotNetInsights.Shared.Services.Factories;
-using System.Security.Cryptography;
 using DotNetInsights.Shared.Contracts.Services;
+using DotNetInsights.Shared.Services.HostedServices;
+using DotNetInsights.Shared.Domains.Enumerations;
+using System;
+using Microsoft.Extensions.Internal;
+using System.Security.Cryptography;
 using System.Text;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
-using DotNetInsights.Shared.Domains.Enumerations;
 using System.Threading;
 using System.Collections.Concurrent;
+
 
 namespace DotNetInsights.Shared.Services
 {
@@ -74,7 +76,7 @@ namespace DotNetInsights.Shared.Services
                     .CaseWhen(SerializerType.Binary, typeof(IBinarySerializer))
                     .CaseWhen(SerializerType.MessagePack, typeof(IMessagePackBinarySerializer)))
                 .AddSingleton(typeof(ICloner<>), typeof(DefaultCloner<>))
-                .AddSingleton(new ConcurrentQueue<Tuple<INotificationSubscriber, object>>());
+                .AddSingleton(new ConcurrentQueue<NotificationSubscriberQueueItem>());
         }
     }
 }
