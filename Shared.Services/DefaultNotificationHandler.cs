@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
+using System.Collections.Concurrent;
 
 namespace DotNetInsights.Shared.Services
 {
@@ -12,7 +13,8 @@ namespace DotNetInsights.Shared.Services
         {
             foreach(var notificationSubscriber in _notificationSubscribersList)
             {
-                notificationSubscriber.OnChange(@event);
+                _notificationSubscriberQueue
+                    .Enqueue(Tuple.Create<INotificationSubscriber, object>(notificationSubscriber, @event));
             }
         }
 
@@ -47,7 +49,7 @@ namespace DotNetInsights.Shared.Services
                 Console.WriteLine("{0}: {1}", eventType, notificationType);
 
                 if(t.All(ty => m.Contains(ty)))
-                    await notificationSubscriber.OnChangeAsync(@event).ConfigureAwait(false);
+                    _notificationSubscriberQueue.Enqueue(Tuple.Create<INotificationSubscriber, object>(notificationSubscriber, @event));
             }
         }
 
@@ -56,11 +58,13 @@ namespace DotNetInsights.Shared.Services
             await NotifyAsync((TEvent)@event).ConfigureAwait(false);
         }
 
-        public DefaultNotificationHandler()
+        public DefaultNotificationHandler(ConcurrentQueue<Tuple<INotificationSubscriber, object>> notificationSubscriberQueue)
         {
+            _notificationSubscriberQueue = notificationSubscriberQueue;
             _notificationSubscribersList = new List<INotificationSubscriber>();
         }
 
+        private readonly ConcurrentQueue<Tuple<INotificationSubscriber, object>> _notificationSubscriberQueue;
         private readonly IList<INotificationSubscriber> _notificationSubscribersList;
     }
 }

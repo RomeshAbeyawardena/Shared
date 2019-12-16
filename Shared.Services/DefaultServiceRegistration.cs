@@ -14,6 +14,7 @@ using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using DotNetInsights.Shared.Domains.Enumerations;
 using System.Threading;
+using System.Collections.Concurrent;
 
 namespace DotNetInsights.Shared.Services
 {
@@ -72,7 +73,8 @@ namespace DotNetInsights.Shared.Services
                 .AddSingleton(DefaultSwitch.Create<SerializerType, Type>()
                     .CaseWhen(SerializerType.Binary, typeof(IBinarySerializer))
                     .CaseWhen(SerializerType.MessagePack, typeof(IMessagePackBinarySerializer)))
-                .AddSingleton(typeof(ICloner<>), typeof(DefaultCloner<>));
+                .AddSingleton(typeof(ICloner<>), typeof(DefaultCloner<>))
+                .AddSingleton(new ConcurrentQueue<Tuple<INotificationSubscriber, object>>());
         }
     }
 }

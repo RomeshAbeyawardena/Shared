@@ -10,6 +10,7 @@ using System.Reflection;
 using AutoMapper;
 using DotNetInsights.Shared.Services.Middleware;
 using System.Collections.Generic;
+using DotNetInsights.Shared.Services.HostedServices;
 
 namespace DotNetInsights.Shared.WebApp
 {
@@ -22,12 +23,9 @@ namespace DotNetInsights.Shared.WebApp
             services
                 .RegisterServiceBroker<AppQueueServiceBroker>(ServiceLifetime.Scoped)
                 .AddAutoMapper(Assembly.GetExecutingAssembly())
+                .AddHostedService<NotificationsHostedService>()
                 .AddMvc(options => options.Filters.Add<HandleModelStateErrorFilter>());
 
-            foreach (var service in services.Where(a => a.ServiceType.FullName.Contains("IEventHandler", StringComparison.InvariantCultureIgnoreCase)))
-            {
-                Console.WriteLine("{2}|{0}:{1}", service.ServiceType.FullName, service.ImplementationType.FullName, service.Lifetime);
-            }
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

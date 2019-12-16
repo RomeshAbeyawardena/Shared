@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using DotNetInsights.Shared.Contracts;
 using DotNetInsights.Shared.Services;
@@ -11,9 +12,9 @@ namespace DotNetInsights.Shared.WebApp.Handlers
             throw new System.NotImplementedException();
         }
 
-        public override Task OnChangeAsync(IEvent<Test> @event)
+        public override async Task OnChangeAsync(IEvent<Test> @event)
         {
-            throw new System.NotImplementedException();
+            Console.WriteLine("Subscriber OnChange called!");
         }
     }
 }

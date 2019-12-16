@@ -24,6 +24,6 @@ namespace DotNetInsights.Shared.App
             })
             .ConfigureLogging(logBuilder => logBuilder.AddConsole())
             .ConfigureAppConfiguration(configurationBuilder => configurationBuilder.AddJsonFile(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "app.json")))
-            .Build<Startup>(serviceProvider: serviceProvider => serviceProvider.SubscribeToAllNotifications());
+            .Build<Startup>();
         }
 }

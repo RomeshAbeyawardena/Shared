@@ -19,8 +19,6 @@ namespace DotNetInsights.Shared.WebApp.Controllers
 
         public async Task<ActionResult> Test([FromQuery]Test test)
         {
-            throw new ModelStateException(modelState => modelState.Add("cat", "invalid value"));
-
             if(!ModelState.IsValid)
                 return BadRequest(ModelState);
 
