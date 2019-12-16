@@ -25,7 +25,12 @@ namespace DotNetInsights.Shared.WebApp.Controllers
             await _mediator.Push(new Test()).ConfigureAwait(false);
 
             await _mediator.NotifyAsync(DefaultEntityChangedEvent.Create(test, entityEventType: EntityEventType.Added)).ConfigureAwait(false);
-            return Ok();
+            return Ok(test);
+        }
+
+        public ActionResult Index()
+        {
+            return View();
         }
 
         private readonly IMediator _mediator;

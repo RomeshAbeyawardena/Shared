@@ -7,11 +7,12 @@ using System.Threading.Tasks;
 
 namespace DotNetInsights.Shared.Services.HostedServices
 {
-    public sealed class NotificationsHostedService : IHostedService
+    public sealed class NotificationsHostedService : IHostedService, IDisposable
     {
         public async Task StartAsync(CancellationToken cancellationToken)
         {
-            _backgroundTaskTimer = new Timer(async(state) => await Work(state).ConfigureAwait(false), null, interval, Timeout.Infinite);
+            _backgroundTaskTimer = new Timer(async(state) => await Work(state)
+                .ConfigureAwait(false), null, interval, Timeout.Infinite);
         }
 
         private async Task Work(object state)
@@ -19,12 +20,13 @@ namespace DotNetInsights.Shared.Services.HostedServices
                 if(!_notificationSubscriberQueue.IsEmpty 
                     && _notificationSubscriberQueue.TryDequeue(out var queueitem))
                 {
-                    Console.WriteLine("Queue Items pending : {0}", _notificationSubscriberQueue.Count);
                     await queueitem.Item1
                         .OnChangeAsync(queueitem.Item2)
                         .ConfigureAwait(false);
                     
-                    _backgroundTaskTimer.Change(processingInterval, Timeout.Infinite);
+                    _backgroundTaskTimer.Change(_notificationSubscriberQueue.Count > 0 
+                            ? processingInterval 
+                            : interval, Timeout.Infinite);
                     return;
                 }
             
@@ -33,8 +35,16 @@ namespace DotNetInsights.Shared.Services.HostedServices
 
         public async Task StopAsync(CancellationToken cancellationToken)
         {
+            while(!_notificationSubscriberQueue.IsEmpty 
+                    && _notificationSubscriberQueue.TryDequeue(out var queueitem))
+                await queueitem.Item1
+                        .OnChangeAsync(queueitem.Item2)
+                        .ConfigureAwait(false);
+        }
+
+        public void Dispose()
+        {
             _backgroundTaskTimer.Dispose();
-            
         }
 
         public NotificationsHostedService(ConcurrentQueue<Tuple<INotificationSubscriber, object>> notificationSubscriberQueue)
@@ -44,8 +54,8 @@ namespace DotNetInsights.Shared.Services.HostedServices
         }
 
         private Timer _backgroundTaskTimer;
-        private int interval = 10000;
-        private int processingInterval = 50;
+        private int interval = 60000;
+        private int processingInterval = 60;
         private readonly ConcurrentQueue<Tuple<INotificationSubscriber, object>> _notificationSubscriberQueue;
     }
 }

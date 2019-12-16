@@ -7,6 +7,8 @@ namespace DotNetInsights.Shared.WebApp.Handlers
 {
     public class TestSubscriber : DefaultNotificationSubscriber<IEvent<Test>>
     {
+        private readonly IMyScopedService _myScopedService;
+
         public override void OnChange(IEvent<Test> @event)
         {
             throw new System.NotImplementedException();
@@ -14,7 +16,12 @@ namespace DotNetInsights.Shared.WebApp.Handlers
 
         public override async Task OnChangeAsync(IEvent<Test> @event)
         {
-            Console.WriteLine("Subscriber OnChange called!");
+            _myScopedService.Execute();
+        }
+
+        public TestSubscriber(IMyScopedService myScopedService)
+        {
+            _myScopedService = myScopedService;
         }
     }
 }

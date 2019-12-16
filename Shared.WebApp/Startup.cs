@@ -23,6 +23,7 @@ namespace DotNetInsights.Shared.WebApp
             services
                 .RegisterServiceBroker<AppQueueServiceBroker>(ServiceLifetime.Scoped)
                 .AddAutoMapper(Assembly.GetExecutingAssembly())
+                .AddScoped<IMyScopedService, MyScopedService>()
                 .AddHostedService<NotificationsHostedService>()
                 .AddMvc(options => options.Filters.Add<HandleModelStateErrorFilter>());
 
@@ -43,6 +44,20 @@ namespace DotNetInsights.Shared.WebApp
                 endpoints
                     .MapControllers();
             });
+        }
+    }
+
+    public interface IMyScopedService
+    {
+        void Execute();
+    }
+
+
+    public class MyScopedService : IMyScopedService
+    {
+        public void Execute()
+        {
+            Console.WriteLine("Subscriber OnChange called!");
         }
     }
 
